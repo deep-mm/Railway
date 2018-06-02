@@ -1,11 +1,9 @@
 package com.example.amey.loginfirebase.Activity;
 
-<<<<<<< HEAD
+
 import android.support.v7.app.AppCompatActivity;
 
-public class ImageActivity extends AppCompatActivity {
-}
-=======
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -165,4 +163,3 @@ public class ImageActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
->>>>>>> eb7054469749acd0369f1de24e210821f26b98d7
