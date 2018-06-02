@@ -20,16 +20,19 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.StoreCard;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CheckBoxAdapter.ViewHolder>{
     private final ArrayList<String> Mvalues;
     private Boolean isChecked;
+    private List<Boolean> type_list;
 
     Context context;
     int flag =1;
@@ -56,6 +59,11 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
 
         holder.check_box.setText(Mvalues.get(position));
 
+        SharedData sd = new SharedData(context);
+        type_list = sd.getTypeList();
+        type_list.set(position,isChecked);
+        sd.setTypeList(type_list);
+
         holder.check_box.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +74,10 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
                     holder.check_box.setChecked(true);
 
                 isChecked = holder.check_box.isChecked();
+
+                type_list = sd.getTypeList();
+                type_list.set(position,isChecked);
+                sd.setTypeList(type_list);
             }
         });
 

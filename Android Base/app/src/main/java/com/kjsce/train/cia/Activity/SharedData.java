@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -60,6 +61,30 @@ public class SharedData {
         Type listType = new TypeToken<List<String>>() {}.getType();
         List<String> coach_list = gson.fromJson(json, listType);
         return coach_list;
+    }
+
+    public void setTypeList(List<Boolean> type_list){
+        String type = gson.toJson(type_list);
+        editor.putString("type_list",type).commit();
+    }
+
+    public List<Boolean> getTypeList(){
+        String json = pref.getString("type_list", "");
+        Type listType = new TypeToken<List<Boolean>>() {}.getType();
+        List<Boolean> type_list = gson.fromJson(json, listType);
+        return type_list;
+    }
+
+    public void setDetailedCards(List<DetailedCard> cards){
+        String card = gson.toJson(cards);
+        editor.putString("card_list",card).commit();
+    }
+
+    public List<DetailedCard> getDetailedCard(){
+        String json = pref.getString("card_list", "");
+        Type listType = new TypeToken<List<DetailedCard>>() {}.getType();
+        List<DetailedCard> card_list = gson.fromJson(json, listType);
+        return card_list;
     }
 
     public void clearAll(){
