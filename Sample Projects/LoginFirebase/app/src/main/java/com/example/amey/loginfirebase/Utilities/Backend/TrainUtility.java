@@ -14,15 +14,15 @@ public class TrainUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mTrainDatabaseReference;
 
-    public void getTrain(final TrainEntity trainEntity, final GetTrainListener getTrainListener){
-        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Train").child(trainEntity.getTrainNumber());
+    public void getTrain(String trainNumber, final GetTrainListener getTrainListener){
+        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Train").child(trainNumber);
 
         mTrainDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                TrainEntity trainEntity1 = dataSnapshot.getValue(TrainEntity.class);
-                System.out.println("Train:"+trainEntity1);
-                getTrainListener.onCompleteTask(trainEntity1);
+                TrainEntity trainEntity = dataSnapshot.getValue(TrainEntity.class);
+                System.out.println("Train:"+trainEntity);
+                getTrainListener.onCompleteTask(trainEntity);
             }
 
             @Override

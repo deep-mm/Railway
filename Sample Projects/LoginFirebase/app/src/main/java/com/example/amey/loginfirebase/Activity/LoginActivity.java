@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signIn(){
-        mAuth.signInWithEmailAndPassword("cia.kjsce@gmail.com", "ameymeher")
+        mAuth.signInWithEmailAndPassword("test@email.com", "password")
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {

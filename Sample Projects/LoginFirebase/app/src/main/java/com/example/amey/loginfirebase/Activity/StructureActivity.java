@@ -15,13 +15,16 @@ import com.example.amey.loginfirebase.Entity.Report.GeneralReport;
 import com.example.amey.loginfirebase.Entity.UserEntity;
 import com.example.amey.loginfirebase.Listener.AddDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralReportListener;
+import com.example.amey.loginfirebase.Listener.AddUserListener;
 import com.example.amey.loginfirebase.Listener.GetDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
+import com.example.amey.loginfirebase.Listener.GetUserListener;
 import com.example.amey.loginfirebase.Listener.RemoveDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.RemoveGeneralReportListener;
 import com.example.amey.loginfirebase.R;
 import com.example.amey.loginfirebase.Utilities.Backend.DetailedReportUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.GeneralReportUtility;
+import com.example.amey.loginfirebase.Utilities.Backend.UserUtility;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -92,5 +95,24 @@ public class StructureActivity extends AppCompatActivity {
         {
             intent = new Intent(this , ImageActivity.class);
             startActivity(intent);
+        }
+        public void toUser(View view){
+            System.out.println("uuu");
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            UserEntity userEntity = new UserEntity(uid,"test","test@email.com","password","null","designation");
+            UserUtility userUtility = new UserUtility();
+            AddUserListener addUserListener = new AddUserListener() {
+                @Override
+                public void onCompleteTask(String result) {
+
+                }
+            };
+            userUtility.addUser(userEntity,addUserListener);
+            userUtility.getUser(uid, new GetUserListener() {
+                @Override
+                public void onCompleteTask(UserEntity userEntity) {
+                    System.out.println("nameee:"+userEntity.getName());
+                }
+            });
         }
     }
