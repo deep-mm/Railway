@@ -1,0 +1,1 @@
+Here, the design assets should be arranged properly.
