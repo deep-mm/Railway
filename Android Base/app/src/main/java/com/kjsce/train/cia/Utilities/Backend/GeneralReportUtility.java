@@ -1,6 +1,5 @@
 package com.kjsce.train.cia.Utilities.Backend;
 
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,9 +16,9 @@ public class GeneralReportUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGeneralReportDatabaseReference;
 
-    public void getGeneralReport(GeneralReport generalReport, final GetGeneralReportListener getGeneralReportListener)
+    public void getGeneralReport(String trainNumber,String dateTime, final GetGeneralReportListener getGeneralReportListener)
     {
-        mGeneralReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("GeneralReport").child(generalReport.getTrainNumber()+generalReport.getDateTime());
+        mGeneralReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("GeneralReport").child(trainNumber + dateTime);
         mGeneralReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -30,19 +29,29 @@ public class GeneralReportUtility {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                getGeneralReportListener.onCompleteTask(null);
             }
         });
     }
 
-    public void addGeneralReport(GeneralReport generalReport,AddGeneralReportListener listener)
+    public void addGeneralReport(final GeneralReport generalReport,AddGeneralReportListener listener)
     {
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child("G"+generalReport.getTrainNumber()+generalReport.getDateTime());
-        mGeneralReportDatabaseReference.setValue(generalReport);
+        getGeneralReport(generalReport.getTrainNumber(), generalReport.getDateTime(), new GetGeneralReportListener() {
+            @Override
+            public void onCompleteTask(GeneralReport databaseReport) {
+                if(databaseReport==null)
+                {
+                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                    mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child(generalReport.getTrainNumber()+generalReport.getDateTime());
+                    mGeneralReportDatabaseReference.setValue(generalReport);
+                }
+
+            }
+        });
+
 
     }
-    public void removeGeneralReport(GeneralReport generalReport,RemoveGeneralReportListener listener)
+    public void removeGeneralReport(GeneralReport generalReport, RemoveGeneralReportListener listener)
     {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseDatabase.getReference().child("GeneralReport").child(generalReport.getTrainNumber() + generalReport.getDateTime()).removeValue();

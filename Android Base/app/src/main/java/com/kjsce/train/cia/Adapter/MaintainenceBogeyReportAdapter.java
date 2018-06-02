@@ -2,31 +2,14 @@ package com.kjsce.train.cia.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.opengl.Matrix;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
-import com.kjsce.train.cia.Activity.Inspection.InspectionTrainReportActivity;
 import com.kjsce.train.cia.Activity.Maintainence.BogeyActivity;
-import com.kjsce.train.cia.Activity.Maintainence.MaintainenceTrainDetailsActivity;
-import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.MaintainenceCardFiles;
-import com.kjsce.train.cia.Entity.StoreCard;
-import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;

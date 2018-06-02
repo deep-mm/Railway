@@ -4,19 +4,15 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
-import com.kjsce.train.cia.Activity.Maintainence.MaintainenceMenuActivity;
 import com.kjsce.train.cia.Activity.Maintainence.TrainSearchActivity;
 import com.kjsce.train.cia.Entity.UserEntity;
-import com.kjsce.train.cia.Listeners.GetUserListener;
 import com.kjsce.train.cia.R;
-import com.kjsce.train.cia.Utilities.Backend.UserUtility;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -7,12 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyActivity;
 import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
-import com.kjsce.train.cia.Activity.Inspection.InspectionTrainReportActivity;
-import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;

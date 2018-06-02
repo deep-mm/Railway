@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -18,12 +17,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
-import com.kjsce.train.cia.Activity.Maintainence.MaintainenceMenuActivity;
 import com.kjsce.train.cia.Activity.Maintainence.TrainSearchActivity;
 import com.kjsce.train.cia.Entity.UserEntity;
-import com.kjsce.train.cia.Listeners.GetUserListener;
 import com.kjsce.train.cia.R;
-import com.kjsce.train.cia.Utilities.Backend.UserUtility;
 
 public class LoginActivity extends AppCompatActivity {
 

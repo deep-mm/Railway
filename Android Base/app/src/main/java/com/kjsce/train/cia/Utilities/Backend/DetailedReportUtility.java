@@ -1,5 +1,6 @@
 package com.kjsce.train.cia.Utilities.Backend;
 
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,9 +15,9 @@ public class DetailedReportUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDetailedReportDatabaseReference;
 
-    public void getDetailedReport(DetailedReport detailedReport, final GetDetailedReportListener getDetailedReportListener)
+    public void getDetailedReport(String trainNumber,String dateTime, final GetDetailedReportListener getDetailedReportListener)
     {
-       mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child("D"+detailedReport.getTrainNumber()+detailedReport.getDateTime());
+        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber+dateTime);
 
         mDetailedReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -28,7 +29,7 @@ public class DetailedReportUtility {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                getDetailedReportListener.onCompleteTask(null);
             }
         });
     }

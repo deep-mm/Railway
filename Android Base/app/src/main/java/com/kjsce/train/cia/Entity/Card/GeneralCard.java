@@ -2,28 +2,38 @@ package com.kjsce.train.cia.Entity.Card;
 
 import java.util.List;
 
+//ye bhi final wala
 public class GeneralCard {
 
+    private String submittedBy;
     private String type;
     private List<String> image;
     private List<String> audio;
-    private List<String> comment;
+    private String comment;
     private boolean problemStatus;
 
+    public GeneralCard() {
+    }
+
+    public GeneralCard(String submittedBy, String type, List<String> image, List<String> audio, String comment, boolean problemStatus) {
+        this.submittedBy = submittedBy;
+        this.type = type;
+        this.image = image;
+        this.audio = audio;
+        this.comment = comment;
+        this.problemStatus = problemStatus;
+    }
+
+    public String getSubmittedBy() {
+        return submittedBy;
+    }
+
+    public void setSubmittedBy(String submittedBy) {
+        this.submittedBy = submittedBy;
+    }
 
     public String getType() {
         return type;
-    }
-
-    @Override
-    public String toString() {
-        return "GeneralCard{" +
-                "type='" + type + '\'' +
-                ", image=" + image +
-                ", audio=" + audio +
-                ", comment=" + comment +
-                ", problemStatus=" + problemStatus +
-                '}';
     }
 
     public void setType(String type) {
@@ -46,11 +56,11 @@ public class GeneralCard {
         this.audio = audio;
     }
 
-    public List<String> getComment() {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(List<String> comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
@@ -62,19 +72,15 @@ public class GeneralCard {
         this.problemStatus = problemStatus;
     }
 
-
-    public GeneralCard(String type, List<String> image, List<String> audio, List<String> comment, boolean problemStatus) {
-        this.type = type;
-        this.image = image;
-        this.audio = audio;
-        this.comment = comment;
-        this.problemStatus = problemStatus;
+    @Override
+    public String toString() {
+        return "GeneralCard{" +
+                "submittedBy='" + submittedBy + '\'' +
+                ", type='" + type + '\'' +
+                ", image=" + image +
+                ", audio=" + audio +
+                ", comment='" + comment + '\'' +
+                ", problemStatus=" + problemStatus +
+                '}';
     }
-
-
-    public GeneralCard()
-    {
-
-    }
-
 }

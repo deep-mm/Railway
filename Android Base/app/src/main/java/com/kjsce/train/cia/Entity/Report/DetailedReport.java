@@ -2,42 +2,56 @@ package com.kjsce.train.cia.Entity.Report;
 
 import com.kjsce.train.cia.Entity.Analysis.DetailedTrainAnalysis;
 import com.kjsce.train.cia.Entity.BogeyEntity;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 
+import java.util.ArrayList;
+import java.util.List;
+
+//final
 public class DetailedReport {
-    private String reportSubmittedBy;
+
     private String placeOfInspection;
     private String typeOfInspection;
     private String trainNumber;
     private String trainName;
     private String dateTime;
     private String manufacturer;
-    private BogeyEntity bogeyEntity;
+    private List<BogeyEntity> bogeyEntityList;
     private DetailedTrainAnalysis detailedTrainAnalysis;
 
+    public void addBogeyEntity(BogeyEntity bogeyEntity)
+    {
+        if(bogeyEntityList==null)
+        {
+            bogeyEntityList=new ArrayList<BogeyEntity>();
+        }
+        bogeyEntityList.add(bogeyEntity);
+    }
+    public DetailedReport() {
+    }
 
-    public DetailedReport(String reportSubmittedBy, String placeOfInspection, String typeOfInspection, String trainNumber, String trainName, String dateTime, String manufacturer, BogeyEntity bogeyEntity, DetailedTrainAnalysis detailedTrainAnalysis) {
-        this.reportSubmittedBy = reportSubmittedBy;
+    public DetailedReport(String placeOfInspection, String typeOfInspection, String trainNumber, String trainName, String dateTime, String manufacturer, List<BogeyEntity> bogeyEntityList, DetailedTrainAnalysis detailedTrainAnalysis) {
         this.placeOfInspection = placeOfInspection;
         this.typeOfInspection = typeOfInspection;
         this.trainNumber = trainNumber;
         this.trainName = trainName;
         this.dateTime = dateTime;
         this.manufacturer = manufacturer;
-        this.bogeyEntity = bogeyEntity;
+        this.bogeyEntityList = bogeyEntityList;
         this.detailedTrainAnalysis = detailedTrainAnalysis;
     }
 
-
-
-    public DetailedReport() {
-    }
-
-    public String getReportSubmittedBy() {
-        return reportSubmittedBy;
-    }
-
-    public void setReportSubmittedBy(String reportSubmittedBy) {
-        this.reportSubmittedBy = reportSubmittedBy;
+    public void addDetailedCard(DetailedCard card, String bogeyNumber){
+        for(int i=0;i<bogeyEntityList.size();i++)
+        {
+            if(bogeyEntityList.get(i).getBogeyNumber().equals(bogeyNumber)){
+                if(bogeyEntityList.get(i).getDetailedCard()==null)
+                {
+                    bogeyEntityList.get(i).setDetailedCard(new ArrayList<DetailedCard>());
+                }
+                    bogeyEntityList.get(i).getDetailedCard().add(card);
+            }
+        }
     }
 
     public String getPlaceOfInspection() {
@@ -88,12 +102,12 @@ public class DetailedReport {
         this.manufacturer = manufacturer;
     }
 
-    public BogeyEntity getBogeyEntity() {
-        return bogeyEntity;
+    public List<BogeyEntity> getBogeyEntityList() {
+        return bogeyEntityList;
     }
 
-    public void setBogeyEntity(BogeyEntity bogeyEntity) {
-        this.bogeyEntity = bogeyEntity;
+    public void setBogeyEntityList(List<BogeyEntity> bogeyEntityList) {
+        this.bogeyEntityList = bogeyEntityList;
     }
 
     public DetailedTrainAnalysis getDetailedTrainAnalysis() {
@@ -107,14 +121,13 @@ public class DetailedReport {
     @Override
     public String toString() {
         return "DetailedReport{" +
-                "reportSubmittedBy='" + reportSubmittedBy + '\'' +
-                ", placeOfInspection='" + placeOfInspection + '\'' +
+                "placeOfInspection='" + placeOfInspection + '\'' +
                 ", typeOfInspection='" + typeOfInspection + '\'' +
                 ", trainNumber='" + trainNumber + '\'' +
                 ", trainName='" + trainName + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", manufacturer='" + manufacturer + '\'' +
-                ", bogeyEntity=" + bogeyEntity +
+                ", bogeyEntityList=" + bogeyEntityList +
                 ", detailedTrainAnalysis=" + detailedTrainAnalysis +
                 '}';
     }

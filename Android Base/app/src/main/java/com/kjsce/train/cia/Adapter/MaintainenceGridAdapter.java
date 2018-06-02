@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
 import com.kjsce.train.cia.Activity.Maintainence.BogeyReportActivity;
-import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;

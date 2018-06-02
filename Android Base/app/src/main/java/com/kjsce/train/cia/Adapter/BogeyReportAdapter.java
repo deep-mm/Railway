@@ -7,10 +7,7 @@ package com.kjsce.train.cia.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -24,20 +21,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kjsce.train.cia.Activity.Inspection.InpectionTrainDetailsActivity;
-import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
-import com.kjsce.train.cia.Activity.Maintainence.BogeyReportActivity;
 import com.kjsce.train.cia.Activity.Maintainence.MaintainenceTrainDetailsActivity;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.StoreCard;
-import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Dhaval on 26-03-2018.

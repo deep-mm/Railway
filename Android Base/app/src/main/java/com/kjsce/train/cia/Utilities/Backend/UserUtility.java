@@ -1,5 +1,6 @@
 package com.kjsce.train.cia.Utilities.Backend;
 
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,9 +19,9 @@ public class UserUtility {
         mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                UserEntity userEntity1 = dataSnapshot.getValue(UserEntity.class);
-                System.out.println("User:"+userEntity1);
-                getUserListener.onCompleteTask(userEntity1);
+                UserEntity userEntity = dataSnapshot.getValue(UserEntity.class);
+                System.out.println("User:"+userEntity);
+                getUserListener.onCompleteTask(userEntity);
             }
 
             @Override
@@ -30,8 +31,9 @@ public class UserUtility {
         });
     }
     public void addUser(UserEntity userEntity, AddUserListener listener){
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserDatabaseReference = mFirebaseDatabase.getReference().child("User").child("U"+userEntity.getUserId());
+        mUserDatabaseReference = mFirebaseDatabase.getReference().child("User").child(userEntity.getUserId());
         mUserDatabaseReference.setValue(userEntity);
     }
 }
