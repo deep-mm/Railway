@@ -18,9 +18,9 @@ public class Helper {
     public Helper(Context c){
         this.c = c;
     }
+
     public boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
-
         return cm.getActiveNetworkInfo() != null;
     }
 

@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.R;
@@ -65,6 +67,8 @@ public class InspectionMenuActivity extends AppCompatActivity {
                            public void onClick(MaterialDialog dialog, DialogAction which) {
                                sd.isLoggedIn(false);
                                sd.clearAll();
+
+                               FirebaseAuth.getInstance().signOut();
                                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
                                startActivity(i);
                            }

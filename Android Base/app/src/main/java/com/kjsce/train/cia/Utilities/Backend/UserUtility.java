@@ -12,8 +12,8 @@ import com.kjsce.train.cia.Listeners.GetUserListener;
 public class UserUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserDatabaseReference;
-    public void getUser(UserEntity userEntity, final GetUserListener getUserListener){
-        mUserDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("User").child("U"+userEntity.getUserId());
+    public void getUser(String userId, final GetUserListener getUserListener){
+        mUserDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("User").child(userId);
 
         mUserDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
