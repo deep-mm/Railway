@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kjsce.train.cia">
+
+    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/train"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/train"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activity.Inspection.InspectionMenuActivity"></activity>
+        <activity android:name=".Activity.LoginActivity" />
+        <activity android:name=".Activity.Inspection.InspectionBogeyReportActivity" />
+        <activity android:name=".Activity.Inspection.InpectionTrainDetailsActivity" />
+        <activity android:name=".Activity.Inspection.InspectionBogeyActivity" />
+        <activity android:name=".Activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.Maintainence.TrainSearchActivity" />
+        <activity android:name=".Activity.Maintainence.MaintainenceMenuActivity" />
+        <activity android:name=".Activity.Maintainence.BogeyActivity" />
+        <activity android:name=".Activity.Maintainence.BogeyReportActivity" />
+        <activity android:name=".Activity.Maintainence.ImageShow" />
+        <activity android:name=".Activity.Inspection.InspectionTrainReportActivity" />
+        <activity android:name=".Activity.Inspection.TotalInspection"></activity>
+    </application>
+
+</manifest>

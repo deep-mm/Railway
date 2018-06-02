@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgr"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/app_bar_main_activity_start">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Create Report"
+                    android:textAlignment="center"
+                    android:textSize="25sp"
+                    android:textColor="#fff"
+                    android:layout_marginRight="35dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/createreport_title" />
+
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <!-- Write here by darshil -->
+    <SearchView
+        android:id="@+id/sv1"
+        android:layout_width="317dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="20dp"
+        android:fadingEdge="horizontal|vertical"
+        android:filterTouchesWhenObscured="false"
+        android:icon="@drawable/search"
+        android:iconifiedByDefault="false"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/curve"
+        android:queryHint="Search Trains">
+
+
+        <requestFocus />
+    </SearchView>
+
+    <ListView
+        android:id="@+id/lv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sv1">
+
+
+    </ListView>
+
+    <Spinner
+        android:id="@+id/sp1"
+        android:layout_width="317dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/lv1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:background="@drawable/curve"
+        android:spinnerMode="dropdown"
+        android:padding="8dp"
+        >
+
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/sp2"
+        android:layout_width="317dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/sp1"
+        android:layout_marginLeft="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="59dp"
+        android:background="@drawable/curve"
+        android:spinnerMode="dropdown"
+        android:padding="8dp"
+        ></Spinner>
+
+    <Button
+        android:id="@+id/stins"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="#25EEE2F2"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="#fff"
+        android:requiresFadingEdge="horizontal|vertical"
+        android:text="Start Inspection" />
+
+</RelativeLayout>
+
+
