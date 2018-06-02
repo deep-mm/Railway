@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kjsce.train.cia.Activity.Maintainence.ImageShow;
+import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.Entity.Item;
 import com.kjsce.train.cia.R;
 
@@ -58,8 +58,18 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemList.remove(listPosition);
-                notifyItemChanged(listPosition);
+               // itemList.remove(listPosition);
+
+                if(listPosition==0)
+                {
+                    notifyDataSetChanged();
+                    itemList.remove(listPosition);
+                }
+                else
+                {
+                    itemList.remove(listPosition);
+                    notifyItemRemoved(listPosition);}
+
             }
         });
     }

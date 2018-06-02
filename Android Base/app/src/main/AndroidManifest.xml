@@ -28,9 +28,10 @@
         </activity>
         <activity android:name=".Activity.Maintainence.TrainSearchActivity" />
         <activity android:name=".Activity.Maintainence.MaintainenceMenuActivity" />
+        <activity android:name=".Activity.Maintainence.MaintainenceTrainDetailsActivity" />
         <activity android:name=".Activity.Maintainence.BogeyActivity" />
         <activity android:name=".Activity.Maintainence.BogeyReportActivity" />
-        <activity android:name=".Activity.Maintainence.ImageShow" />
+        <activity android:name=".Activity.ImageShow" />
         <activity android:name=".Activity.Inspection.InspectionTrainReportActivity" />
         <activity android:name=".Activity.Inspection.TotalInspection"></activity>
     </application>

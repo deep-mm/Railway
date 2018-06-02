@@ -99,6 +99,8 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         uid.setText("MH12345");
 
         lv1=(ListView)findViewById(R.id.lv1);
+
+        lv1.setVisibility(View.GONE);
         sv1=(SearchView)findViewById(R.id.sv1);
         sp1=(Spinner)findViewById(R.id.sp1);
         sp2=(Spinner)findViewById(R.id.sp2);
@@ -349,6 +351,7 @@ public class InspectionTrainReportActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextChange(String newText) {
 
+        lv1.setVisibility(View.VISIBLE);
         newText = newText.toLowerCase(Locale.getDefault());
         data1.clear();
         int i=0;
@@ -364,6 +367,7 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         if(newText.length()==0)
         {
             data1.clear();
+            lv1.setVisibility(View.GONE);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data1);
             lv1.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -377,6 +381,9 @@ public class InspectionTrainReportActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String x=data1.get(position);
+        Toast.makeText(this,"Item "+x,Toast.LENGTH_SHORT).show();
+        sv1.setQuery(x,true);
+        lv1.setVisibility(View.GONE);
         sd.setTrain(x);
     }
 }

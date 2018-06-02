@@ -8,19 +8,21 @@ public class DetailedCard {
     Problem problem;
     private String type;
     private List<String> image;
-    private List<String> comment;
+    private String comment;
     private boolean problemStatus;
     private List<String> audio;
     public DetailedCard()
     {
 
     }
-    public DetailedCard(String type, List<String> image, List<String> audio, List<String> comment, boolean problemStatus) {
+
+    public DetailedCard(Problem problem, String type, List<String> image, String comment, boolean problemStatus, List<String> audio) {
+        this.problem = problem;
         this.type = type;
         this.image = image;
-        this.audio = audio;
         this.comment = comment;
         this.problemStatus = problemStatus;
+        this.audio = audio;
     }
 
     public String getType() {
@@ -47,11 +49,11 @@ public class DetailedCard {
         this.audio = audio;
     }
 
-    public List<String> getComment() {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(List<String> comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
