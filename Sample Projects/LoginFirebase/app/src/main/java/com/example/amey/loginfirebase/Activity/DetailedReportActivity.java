@@ -34,7 +34,6 @@ public class DetailedReportActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
 
-
                 detailedReportUtility.getDetailedReport("1511092","231097", new GetDetailedReportListener() {
                     @Override
                     public void onCompleteTask(DetailedReport detailedReport) {
@@ -69,11 +68,6 @@ public class DetailedReportActivity extends AppCompatActivity {
                 BogeyEntity bogeyEntity = new BogeyEntity();
 
                 bogeyEntity.setType("Sleeper");
-
-
-
-
-
 
                 DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
                 DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
