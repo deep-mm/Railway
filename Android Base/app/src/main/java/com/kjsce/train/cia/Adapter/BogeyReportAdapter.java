@@ -181,6 +181,8 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
             itemView.setOnClickListener(this);
         }
 
+
+
         public void setClickListener(ItemClickListener itemClickListener) {
             this.clickListener = itemClickListener;
         }
