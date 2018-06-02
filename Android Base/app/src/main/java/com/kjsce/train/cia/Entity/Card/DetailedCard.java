@@ -20,8 +20,16 @@ public class DetailedCard {
     public DetailedCard() {
     }
 
-    public DetailedCard(String submittedBy, String type, List<String> image, List<String> audio, String comment, boolean problemStatus, Problem problem) {
-        this.submittedBy = submittedBy;
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
+    }
+
+    public DetailedCard(Problem problem, String type, List<String> image, String comment, boolean problemStatus, List<String> audio) {
+        this.problem = problem;
         this.type = type;
         this.image = image;
         this.audio = audio;
@@ -80,13 +88,8 @@ public class DetailedCard {
         this.problemStatus = problemStatus;
     }
 
-    public Problem getProblem() {
-        return problem;
-    }
 
-    public void setProblem(Problem problem) {
-        this.problem = problem;
-    }
+
 
     @Override
     public String toString() {
@@ -100,5 +103,6 @@ public class DetailedCard {
                 ", problem=" + problem +
                 '}';
     }
+
 }
 

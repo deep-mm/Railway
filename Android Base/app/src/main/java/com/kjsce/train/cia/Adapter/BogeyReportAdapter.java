@@ -24,18 +24,20 @@ import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.Inspection.InpectionTrainDetailsActivity;
 import com.kjsce.train.cia.Activity.Maintainence.MaintainenceTrainDetailsActivity;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.StoreCard;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dhaval on 26-03-2018.
  */
 
 public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.ViewHolder>{
-    private final ArrayList<CardFiles> Mvalues;
+    private final List<DetailedCard> Mvalues;
     private final ArrayList<StoreCard>ReportValues = new ArrayList<StoreCard>();
     private ArrayList<String> Spinner_list = null;
     public int SELECT_PICTURE = 100;
@@ -51,7 +53,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
     }
 
-    public BogeyReportAdapter(ArrayList mvalues, ArrayList<String> spinner_list, Context c,boolean type,String comment) {
+    public BogeyReportAdapter(List<DetailedCard> mvalues, ArrayList<String> spinner_list, Context c,boolean type,String comment) {
                 Mvalues = mvalues;
                 Spinner_list =spinner_list;
                 context = c;
@@ -155,6 +157,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
                     Intent intent = new Intent(context, InpectionTrainDetailsActivity.class);
                     intent.putExtra("type", type);
                     intent.putExtra("comment", comment_text);
+                    intent.putExtra("position",position);
                     context.startActivity(intent);
                 } else {
                     Intent intent = new Intent(context, MaintainenceTrainDetailsActivity.class);

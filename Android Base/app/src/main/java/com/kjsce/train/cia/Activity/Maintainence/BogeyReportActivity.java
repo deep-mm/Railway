@@ -11,15 +11,17 @@ import android.widget.RelativeLayout;
 import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
 import com.kjsce.train.cia.Adapter.BogeyReportAdapter;
 import com.kjsce.train.cia.Adapter.MaintainenceBogeyReportAdapter;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.MaintainenceCardFiles;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class BogeyReportActivity extends AppCompatActivity {
-    ArrayList<CardFiles> cards = new ArrayList<CardFiles>();
+    List<DetailedCard> cards = new ArrayList<DetailedCard>();
     ArrayList<CardFiles> reportvalues = new ArrayList<CardFiles>();//fetch and store report values here
     BogeyReportAdapter adapter;
     CardFiles cardfiles;
@@ -31,8 +33,8 @@ public class BogeyReportActivity extends AppCompatActivity {
 
         Date date = new java.util.Date();
 
-        cardfiles = new CardFiles("Seat no:","Comment:","Type:");
-        cards.add(cardfiles);
+        DetailedCard detailedCard = new DetailedCard();
+        cards.add(detailedCard);
         //reportvalues.add();
 
         EndCompliance = (RelativeLayout)findViewById(R.id.endcompliance_button);
@@ -53,8 +55,7 @@ public class BogeyReportActivity extends AppCompatActivity {
 
         for (int i=0;i<reportvalues.size();i++) //Instead of 1 put the size of reportvalues arraylist
         {
-            cardfiles = new CardFiles("Seat no:","Comment:","Type:");
-            cards.add(cardfiles);
+            cards.add(detailedCard);
             adapter.notifyDataSetChanged();
         }
     }

@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Entity.UserEntity;
 
 import java.lang.reflect.Type;
@@ -100,16 +102,38 @@ public class SharedData {
         return card_list;
     }
 
+    public void setBogieEntity(List<BogeyEntity> cards){
+        String card = gson.toJson(cards);
+        editor.putString("bogey_entity",card).commit();
+    }
+
+    public List<BogeyEntity> getBogieEntity(){
+        String json = pref.getString("bogey_entity", "");
+        Type listType = new TypeToken<List<BogeyEntity>>() {}.getType();
+        List<BogeyEntity> card_list = gson.fromJson(json, listType);
+        return card_list;
+    }
+
     public void setUserEntity(UserEntity userEntity){
-        String card = gson.toJson(userEntity);
-        editor.putString("userEntity",card).commit();
+        String json = gson.toJson(userEntity);
+        editor.putString("userEntity",json).commit();
     }
 
     public UserEntity getUserEntity(){
         String json = pref.getString("userEntity", "");
-        Type listType = new TypeToken<UserEntity>() {}.getType();
-        UserEntity userEntity = gson.fromJson(json, listType);
+        UserEntity userEntity = gson.fromJson(json, UserEntity.class);
         return userEntity;
+    }
+
+    public void setTrainEntity(TrainEntity trainEntity){
+        String json = gson.toJson(trainEntity);
+        editor.putString("trainEntity",json).commit();
+    }
+
+    public TrainEntity getTrainEntity(){
+        String json = pref.getString("trainEntity", "");
+        TrainEntity trainEntity = gson.fromJson(json, TrainEntity.class);
+        return trainEntity;
     }
 
     public void clearAll(){

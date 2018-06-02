@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     i = new Intent(getApplicationContext(), TrainSearchActivity.class);
                 }
+                System.out.println("USerEntity"+userEntity);
                 sd.setUserEntity(userEntity);
                 startActivity(i);
             }
