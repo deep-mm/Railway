@@ -1,4 +1,4 @@
-package com.kjsce.train.cia.Activity.Maintainence;
+package com.kjsce.train.cia.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kjsce.train.cia.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -21,19 +22,13 @@ public class ImageShow extends AppCompatActivity {
 
 
         String url = "";
-        if(getIntent().hasExtra("path")){
-            url = getIntent().getExtras().getString("path");
+        if(getIntent().hasExtra("url")){
+            url = getIntent().getExtras().getString("url");
         }
+
 
         ImageView iv=findViewById(R.id.imgv);
-
-        File imgFile = new  File(url);
-
-        if(imgFile.exists()){
-
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            iv.setImageBitmap(myBitmap);
-        }
+        Picasso.with(getApplicationContext()).load(url).into(iv);
 
     }
 

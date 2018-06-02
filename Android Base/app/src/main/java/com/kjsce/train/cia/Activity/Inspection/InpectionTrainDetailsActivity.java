@@ -27,22 +27,31 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Adapter.BogeyReportAdapter;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.ImageAdapter;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.Problem.CoachExteriorProblem;
 import com.kjsce.train.cia.Entity.Problem.CoachInteriorAmenitiesProblem;
 import com.kjsce.train.cia.Entity.Problem.CoachInteriorCleanProblem;
+import com.kjsce.train.cia.Entity.Problem.ElectricalProblem;
+import com.kjsce.train.cia.Entity.Problem.Problem;
 import com.kjsce.train.cia.Entity.Problem.ToiletProblem;
+import com.kjsce.train.cia.Entity.Problem.UndergearProblem;
+import com.kjsce.train.cia.Entity.Problem.WindowProblem;
 import com.kjsce.train.cia.R;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
@@ -52,6 +61,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
@@ -73,11 +83,18 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 10;
     public int SELECT_PICTURE = 100;
     ArrayList<String> paths = new ArrayList<String>();
+    ArrayList<String> images = new ArrayList<String>();
+    ArrayList<String> audio = new ArrayList<String>();
     ArrayList<String> checkBoxList = new ArrayList<String>();
+    ArrayList<Boolean> box = new ArrayList<Boolean>();
     ImageAdapter adapter = null;
     CheckBoxAdapter checkBoxAdapter = null;
     Boolean flag = false;
     TextView typeval,descriptionval;;
+    RelativeLayout done,notdone;
+    SharedData sd;
+    List<Boolean> typeList;
+    List<DetailedCard> detailedCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,8 +111,15 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
             camera = (ImageButton)findViewById(R.id.camera);
             mic = (ImageButton)findViewById(R.id.mic);
+            sd = new SharedData(getApplicationContext());
+            typeList = new ArrayList<Boolean>();
+            sd.setTypeList(typeList);
 
             checkBoxList = getTypes();
+            detailedCards = sd.getDetailedCard();
+
+            done = (RelativeLayout) findViewById(R.id.done);
+            notdone = (RelativeLayout) findViewById(R.id.notdone);
 
         final RecyclerView card = (RecyclerView)findViewById(R.id.imgurl);
         adapter = new ImageAdapter(paths,InpectionTrainDetailsActivity.this);
@@ -143,6 +167,39 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             }
         });
 
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                for(int i=0;i<paths.size();i++){
+                    if(paths.get(i).contains("3gp"))
+                        audio.add(paths.get(i));
+
+                    else
+                        images.add(paths.get(i));
+
+                }
+                typeList = sd.getTypeList();
+                for (int i=0;i<checkBoxList.size();i++){
+                    box.add(typeList.get(i));
+                }
+                Problem problem = getProblem(box);
+                DetailedCard detailedCard = new DetailedCard(problem,typeval.getText().toString(),images,descriptionval.getText().toString(),
+                        false,audio);
+                detailedCards.add(detailedCard);
+                sd.setDetailedCards(detailedCards);
+                Intent intent = new Intent(getApplicationContext(),InspectionBogeyReportActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        notdone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
 
         }
 
@@ -165,6 +222,39 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
                 default:
                     return type;
+
+            }
+        }
+
+
+        public Problem getProblem(List<Boolean> types_checked){
+
+            ArrayList<String> type = new ArrayList<String>();
+            switch(typeval.getText().toString()){
+
+                case "Toilets":
+                    return (new ToiletProblem(types_checked.get(0),types_checked.get(1),types_checked.get(2),types_checked.get(3),types_checked.get(4)));
+
+                case "Coach Interior Amenities":
+                    return (new CoachInteriorAmenitiesProblem(types_checked.get(0),types_checked.get(1),types_checked.get(2),types_checked.get(3),types_checked.get(4)));
+
+                case "Coach Interior Cleanliness":
+                    return (new CoachInteriorCleanProblem(types_checked.get(0),types_checked.get(1),types_checked.get(2),types_checked.get(3),types_checked.get(4),types_checked.get(5)));
+
+                case "Coach Exterior":
+                    return (new CoachExteriorProblem(types_checked.get(0),types_checked.get(1),types_checked.get(2),types_checked.get(3)));
+
+                case "Undergear":
+                    return (new UndergearProblem());
+
+                case "Electricals":
+                    return (new ElectricalProblem());
+
+                case "Windows":
+                    return (new WindowProblem());
+
+                default:
+                    return null;
 
             }
         }
@@ -197,75 +287,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         //uploadAudio();
     }
 
-    private void uploadAudio() {
-
-        mProgress.setMessage("Uploading Audio...");
-        mProgress.show();
-        String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-        StorageReference filePath = mStorage.child("Audio").child(timeStamp + ".3gp");
-        Uri uri = Uri.fromFile(new File(mFileName));
-        filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mProgress.dismiss();
-                mRecordLabel.setText("Uploading Finished...");
-            }
-        });
-    }
-    public void insertImage()
-    {
-        mStorage = FirebaseStorage.getInstance().getReference();
-
-
-        //Initialize Views
-//        btnChoose = (Button) findViewById(R.id.btnChoose);
-        //      btnUpload = (Button) findViewById(R.id.btnUpload);
-        //    imageView = (ImageView) findViewById(R.id.imgView);
-
-      /*  btnChoose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPictureDialog();
-            }
-        });
-
-        btnUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImage();
-            }
-        });
-      */  if (ContextCompat.checkSelfPermission(this,
-            Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED) {
-
-        // Permission is not granted
-        // Should we show an explanation?
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA)) {
-
-            // Show an explanation to the user *asynchronously* -- don't block
-            // this thread waiting for the user's response! After the user
-            // sees the explanation, try again to request the permission.
-
-        } else
-
-            // No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    100);
-
-        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-        // app-defined int constant. The callback method gets the
-        // result of the request.
-    }
-    else {
-        // Permission has already been granted
-
-
-    }
-
-    }
     private void showPictureDialog()
     {
 
@@ -414,40 +435,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         return "";
     }
 
-    private void uploadImage() {
-
-        if(filePath != null)
-        {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-
-            StorageReference ref = mStorage.child("images/"+ UUID.randomUUID().toString());
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(InpectionTrainDetailsActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(InpectionTrainDetailsActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                        }
-                    });
-        }
-    }
 
     private void requestAudioPermissions() {
         if (ContextCompat.checkSelfPermission(this,
@@ -481,6 +468,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         }
     }
 
+
     //Handling callback
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -498,6 +486,29 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        new MaterialDialog.Builder(InpectionTrainDetailsActivity.this)
+                .title("Confirm")
+                .content("All data will be lost, Confirm?")
+                .positiveText("Yes")
+                .negativeText("No")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        Intent i = new Intent(getApplicationContext(),InspectionMenuActivity.class);
+                        startActivity(i);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                    }
+                })
+                .show();
+
     }
 
     }
