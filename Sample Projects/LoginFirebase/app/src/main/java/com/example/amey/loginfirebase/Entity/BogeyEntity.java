@@ -4,16 +4,20 @@ import com.example.amey.loginfirebase.Entity.Analysis.DetailedBogeyAnalysis;
 import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
 import com.example.amey.loginfirebase.Entity.Report.DetailedReport;
 
+import java.util.List;
+
 public class BogeyEntity {
+    private String bogeyNumber;
     private String type;
-    private DetailedCard detailedCard;
+    private List<DetailedCard> detailedCard;
     private DetailedBogeyAnalysis detailedBogeyAnalysis;
 
     public BogeyEntity() {
 
     }
 
-    public BogeyEntity(String type, DetailedCard detailedCard, DetailedBogeyAnalysis detailedBogeyAnalysis) {
+    public BogeyEntity(String bogeyNumber, String type, List<DetailedCard> detailedCard, DetailedBogeyAnalysis detailedBogeyAnalysis) {
+        this.bogeyNumber = bogeyNumber;
         this.type = type;
         this.detailedCard = detailedCard;
         this.detailedBogeyAnalysis = detailedBogeyAnalysis;
@@ -27,11 +31,11 @@ public class BogeyEntity {
         this.type = type;
     }
 
-    public DetailedCard getDetailedCard() {
+    public List<DetailedCard> getDetailedCard() {
         return detailedCard;
     }
 
-    public void setDetailedCard(DetailedCard detailedCard) {
+    public void setDetailedCard(List<DetailedCard> detailedCard) {
         this.detailedCard = detailedCard;
     }
 
@@ -43,10 +47,19 @@ public class BogeyEntity {
         this.detailedBogeyAnalysis = detailedBogeyAnalysis;
     }
 
+    public String getBogeyNumber() {
+        return bogeyNumber;
+    }
+
+    public void setBogeyNumber(String bogeyNumber) {
+        this.bogeyNumber = bogeyNumber;
+    }
+
     @Override
     public String toString() {
         return "BogeyEntity{" +
-                "type='" + type + '\'' +
+                "bogeyNumber='" + bogeyNumber + '\'' +
+                ", type='" + type + '\'' +
                 ", detailedCard=" + detailedCard +
                 ", detailedBogeyAnalysis=" + detailedBogeyAnalysis +
                 '}';

@@ -32,6 +32,15 @@ public class DetailedReport {
         this.detailedTrainAnalysis = detailedTrainAnalysis;
     }
 
+    public void addDetailedCard(DetailedCard card,String bogeyNumber){
+        for(int i=0;i<bogeyEntityList.size();i++)
+        {
+            if(bogeyEntityList.get(i).getBogeyNumber().equals(bogeyNumber)){
+                bogeyEntityList.get(i).getDetailedCard().add(card);
+            }
+        }
+    }
+
     public String getPlaceOfInspection() {
         return placeOfInspection;
     }
