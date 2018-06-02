@@ -481,6 +481,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         }
     }
 
+
     //Handling callback
     @Override
     public void onRequestPermissionsResult(int requestCode,

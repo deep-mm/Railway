@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.R;
@@ -50,6 +51,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         holder.image_name.setText(Mvalues.get(position));
+
+
+
+
         if(Mvalues.get(position).contains("3gp"))
             holder.type = "audio";
 
@@ -71,8 +76,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
                         }
                     }
                     else{
-                    Intent i = new Intent(context, ImageShow.class);
+                   /* Intent i = new Intent(context, ImageShow.class);
                     i.putExtra("path",Mvalues.get(position));
+                    context.startActivity(i);*/
+
+                   // mToast(getLayoutPosition(),image_name.getText());
+                    Intent i=new Intent(context,ImageShow.class);
+                    i.putExtra("url",holder.image_name.getText());
                     context.startActivity(i);
                 }
             }
@@ -103,5 +113,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
             remove =(ImageButton)itemView.findViewById(R.id.remove);
             type = "";
         }
+
     }
 }
