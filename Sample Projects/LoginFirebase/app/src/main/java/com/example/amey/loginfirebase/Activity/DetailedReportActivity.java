@@ -33,10 +33,9 @@ public class DetailedReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
-                DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
-                        "Error Resolving", "1511112", "Rajdhani", "23", "parakh", null, null);
 
-                detailedReportUtility.getDetailedReport(detailedRep, new GetDetailedReportListener() {
+
+                detailedReportUtility.getDetailedReport("1511092","231097", new GetDetailedReportListener() {
                     @Override
                     public void onCompleteTask(DetailedReport detailedReport) {
 
@@ -51,12 +50,7 @@ public class DetailedReportActivity extends AppCompatActivity {
                 final DetailedReport detailedReport = new DetailedReport();
 
                 UserUtility userUtility = new UserUtility();
-                userUtility.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GetUserListener() {
-                    @Override
-                    public void onCompleteTask(UserEntity userEntity) {
-                        detailedReport.setReportSubmittedBy(userEntity.getName());
-                    }
-                });
+
 
                 detailedReport.setPlaceOfInspection("LTT");
                 detailedReport.setTypeOfInspection("General");
@@ -83,7 +77,7 @@ public class DetailedReportActivity extends AppCompatActivity {
 
                 DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
                 DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
-                        "Error Resolving", "1511112", "Rajdhani", "23", "parakh", null, null);
+                        "1511092", "Rajdhani", "231097", "Amey",  null, null);
                 detailedReportUtility.addDetailedReport(detailedRep, new AddDetailedReportListener() {
                     @Override
                     public void onCompleteTask(String result) {
@@ -99,7 +93,7 @@ public class DetailedReportActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
                 DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
-                        "Error Resolving", "1511112", "Rajdhani", "23", "parakh", null, null);
+                        "1511092", "Rajdhani", "231097", "Amey",  null, null);
                 detailedReportUtility.removeDetailedReport(detailedRep, new RemoveDetailedReportListener() {
                     @Override
                     public void onCompleteTask(String result) {
