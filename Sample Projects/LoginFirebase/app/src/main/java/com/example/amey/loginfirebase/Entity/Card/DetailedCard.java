@@ -27,6 +27,8 @@ public class DetailedCard {
         return type;
     }
 
+
+
     public void setType(String type) {
         this.type = type;
     }

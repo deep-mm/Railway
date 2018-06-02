@@ -82,4 +82,15 @@ public class StructureActivity extends AppCompatActivity {
             intent = new Intent(this , TrainActivity.class);
             startActivity(intent);
         }
+
+        public void toAudio (View view)
+        {
+            intent = new Intent(this , AudioActivity.class);
+            startActivity(intent);
+        }
+        public void toAImage (View view)
+        {
+            intent = new Intent(this , ImageActivity.class);
+            startActivity(intent);
+        }
     }
