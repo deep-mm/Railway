@@ -37,6 +37,19 @@
         android:layout_marginBottom="10dp"
         android:layout_toRightOf="@id/type" />
 
+
+    <TextView
+        android:id="@+id/in_type_text"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/remove"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/type" />
+
+
+
     <TextView
         android:id="@+id/comment"
         android:layout_width="wrap_content"

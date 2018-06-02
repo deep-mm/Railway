@@ -25,9 +25,11 @@ public class TotalInspection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_inspection);
 
-        Date date = new java.util.Date();
+        String date ="adsas";
+        String train = "123 trainn";
         sd = new SharedData(getApplicationContext());
-        MaintainenceCardFiles m = new MaintainenceCardFiles(sd.getTrain(),date);//example card
+        //System.out.println("train"+sd.getTrain());
+        MaintainenceCardFiles m = new MaintainenceCardFiles(train,date);//example card
         reportvalues.add(m);
 
         final RecyclerView card = (RecyclerView)findViewById(R.id.card_list);

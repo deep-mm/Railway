@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.Maintainence.BogeyActivity;
+import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.TrainSearchListItem;
 import com.kjsce.train.cia.R;
 
@@ -35,14 +36,18 @@ public class TrainSearchListAdapter extends RecyclerView.Adapter<TrainSearchList
         holder.trainNo.setText(trainSearchListItem.gettNo());
         holder.trainName.setText(trainSearchListItem.gettName());
         final String trainNo=trainSearchListItem.gettNo();
+        final String trainName=trainSearchListItem.gettName();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // Intent to open next activity on Item click
-
+                SharedData sd = new SharedData(context);
+                sd.setTrain(trainName);
+                sd.setTrainNo(trainNo);
                 Intent i =new Intent(context, BogeyActivity.class);
                 i.putExtra("TrainNo",trainNo);
+                i.putExtra("TrainName",trainName);
                 context.startActivity(i);
             }
         });
