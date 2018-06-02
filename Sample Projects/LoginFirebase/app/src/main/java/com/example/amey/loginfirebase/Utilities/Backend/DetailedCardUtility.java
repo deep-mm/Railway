@@ -27,17 +27,17 @@ public class DetailedCardUtility
                 }
                 else
                 {
-                    dR.addDetailedCard(card,bogeyNumber);
-                    final DetailedReport newReport = dR;
                     detailedReportUtility.removeDetailedReport(dR, new RemoveDetailedReportListener() {
                         @Override
                         public void onCompleteTask(String result) {
-                            detailedReportUtility.addDetailedReport(newReport, new AddDetailedReportListener() {
-                                @Override
-                                public void onCompleteTask(String result) {
-                                    listener.onCompleteTask(true);
-                                }
-                            });
+
+                        }
+                    });
+                    dR.addDetailedCard(card,bogeyNumber);
+                    detailedReportUtility.addDetailedReport(dR, new AddDetailedReportListener() {
+                        @Override
+                        public void onCompleteTask(String result) {
+                            listener.onCompleteTask(true);
                         }
                     });
                 }

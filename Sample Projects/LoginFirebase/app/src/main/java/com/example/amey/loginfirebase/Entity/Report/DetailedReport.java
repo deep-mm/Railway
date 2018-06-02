@@ -4,6 +4,7 @@ import com.example.amey.loginfirebase.Entity.Analysis.DetailedTrainAnalysis;
 import com.example.amey.loginfirebase.Entity.BogeyEntity;
 import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //final
@@ -17,7 +18,14 @@ public class DetailedReport {
     private String manufacturer;
     private List<BogeyEntity> bogeyEntityList;
     private DetailedTrainAnalysis detailedTrainAnalysis;
-
+    public void addBogeyEntity(BogeyEntity bogeyEntity)
+    {
+        if(bogeyEntityList==null)
+        {
+            bogeyEntityList=new ArrayList<BogeyEntity>();
+        }
+        bogeyEntityList.add(bogeyEntity);
+    }
     public DetailedReport() {
     }
 
@@ -36,7 +44,11 @@ public class DetailedReport {
         for(int i=0;i<bogeyEntityList.size();i++)
         {
             if(bogeyEntityList.get(i).getBogeyNumber().equals(bogeyNumber)){
-                bogeyEntityList.get(i).getDetailedCard().add(card);
+                if(bogeyEntityList.get(i).getDetailedCard()==null)
+                {
+                    bogeyEntityList.get(i).setDetailedCard(new ArrayList<DetailedCard>());
+                }
+                    bogeyEntityList.get(i).getDetailedCard().add(card);
             }
         }
     }

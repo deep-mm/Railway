@@ -1,8 +1,15 @@
 package com.example.amey.loginfirebase.Utilities.Backend;
 
+import android.view.View;
+
+import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
 import com.example.amey.loginfirebase.Entity.Report.DetailedReport;
+import com.example.amey.loginfirebase.Entity.Report.GeneralReport;
+import com.example.amey.loginfirebase.Listener.AddDetailedCardListener;
 import com.example.amey.loginfirebase.Listener.AddDetailedReportListener;
+import com.example.amey.loginfirebase.Listener.AddGeneralCardListener;
 import com.example.amey.loginfirebase.Listener.GetDetailedReportListener;
+import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.RemoveDetailedReportListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
