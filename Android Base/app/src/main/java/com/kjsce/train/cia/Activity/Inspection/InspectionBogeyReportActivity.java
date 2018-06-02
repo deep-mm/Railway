@@ -16,10 +16,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Adapter.BogeyReportAdapter;
 import com.kjsce.train.cia.Entity.CardFiles;
@@ -41,6 +44,7 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
     SharedData sd;
     List<String> coach_list = new ArrayList<String>();
     int position;
+    LinearLayout detailed,general;
 
     CardFiles cardfiles;
 
@@ -56,9 +60,25 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         train_number = (TextView)findViewById(R.id.train_number);
         sd = new SharedData(getApplicationContext());
         back_button = (ImageButton) findViewById(R.id.back_button);
+        detailed = (LinearLayout) findViewById(R.id.bottom_bar);
+        general = (LinearLayout) findViewById(R.id.bottom_bar_1);
 
         coach_list = sd.getCoachList();
 
+        if(getIntent().hasExtra("type")){
+            String type = getIntent().getExtras().getString("type");
+            if(type.equalsIgnoreCase("detailed")){
+                detailed.setVisibility(View.VISIBLE);
+                general.setVisibility(View.GONE);
+            }
+            else{
+                detailed.setVisibility(View.GONE);
+                general.setVisibility(View.VISIBLE);
+                String train[] = sd.getTrain().split("\\s+");
+                bogey_number.setText(train[1]);
+                train_number.setText(train[0]);
+            }
+        }
         if(getIntent().hasExtra("coach")){
             bogey_number.setText(getIntent().getExtras().getString("coach"));
             train_number.setText(sd.getTrain());
@@ -73,6 +93,31 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
                 next_coach = coach_list.get(position+1);
             }
         }
+
+        general.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
+                        .title("Confirm")
+                        .content("Are you sure you want to end inspection?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                Intent intent = new Intent(getApplicationContext(),InspectionMenuActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                //
+                            }
+                        })
+                        .show();
+            }
+        });
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
