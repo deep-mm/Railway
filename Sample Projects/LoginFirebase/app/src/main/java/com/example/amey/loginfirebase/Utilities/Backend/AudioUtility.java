@@ -73,7 +73,6 @@ public class AudioUtility {
             httpsReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    // Local temp file has been created
                     counterR++;
                     String mFileName=mainFile+"/"+fileName;
                     System.out.println(mFileName);

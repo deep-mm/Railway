@@ -4,30 +4,41 @@ import com.example.amey.loginfirebase.Entity.Problem.Problem;
 
 import java.util.List;
 
+//ye bhi bas final
 public class DetailedCard {
-    Problem problem;
+
+    private String submittedBy;
     private String type;
     private List<String> image;
-    private List<String> comment;
-    private boolean problemStatus;
     private List<String> audio;
-    public DetailedCard()
-    {
+    private String comment;
+    private boolean problemStatus;
+    private Problem problem;
 
+    public DetailedCard() {
     }
-    public DetailedCard(String type, List<String> image, List<String> audio, List<String> comment, boolean problemStatus) {
+
+    public DetailedCard(String submittedBy, String type, List<String> image, List<String> audio, String comment, boolean problemStatus, Problem problem) {
+        this.submittedBy = submittedBy;
         this.type = type;
         this.image = image;
         this.audio = audio;
         this.comment = comment;
         this.problemStatus = problemStatus;
+        this.problem = problem;
+    }
+
+    public String getSubmittedBy() {
+        return submittedBy;
+    }
+
+    public void setSubmittedBy(String submittedBy) {
+        this.submittedBy = submittedBy;
     }
 
     public String getType() {
         return type;
     }
-
-
 
     public void setType(String type) {
         this.type = type;
@@ -49,11 +60,11 @@ public class DetailedCard {
         this.audio = audio;
     }
 
-    public List<String> getComment() {
+    public String getComment() {
         return comment;
     }
 
-    public void setComment(List<String> comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 
@@ -65,19 +76,25 @@ public class DetailedCard {
         this.problemStatus = problemStatus;
     }
 
+    public Problem getProblem() {
+        return problem;
+    }
 
-
+    public void setProblem(Problem problem) {
+        this.problem = problem;
+    }
 
     @Override
     public String toString() {
-        return "GeneralCard{" +
-                "type='" + type + '\'' +
+        return "DetailedCard{" +
+                "submittedBy='" + submittedBy + '\'' +
+                ", type='" + type + '\'' +
                 ", image=" + image +
                 ", audio=" + audio +
-                ", comment=" + comment +
+                ", comment='" + comment + '\'' +
                 ", problemStatus=" + problemStatus +
+                ", problem=" + problem +
                 '}';
     }
-
 }
 
