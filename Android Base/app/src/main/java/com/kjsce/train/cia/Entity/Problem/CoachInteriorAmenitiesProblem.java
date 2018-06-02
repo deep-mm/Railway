@@ -1,5 +1,7 @@
 package com.kjsce.train.cia.Entity.Problem;
 
+import java.util.ArrayList;
+
 public class CoachInteriorAmenitiesProblem extends Problem
 {
     boolean fittings,windowGlass,windowShutter,berth,wallLaminates;
@@ -13,6 +15,17 @@ public class CoachInteriorAmenitiesProblem extends Problem
     }
 
     public CoachInteriorAmenitiesProblem() {
+    }
+
+    public ArrayList<String> getTypes(){
+        ArrayList<String> types = new ArrayList<String>();
+
+        types.add("Fittings");
+        types.add("Window Glass");
+        types.add("Window Shutter");
+        types.add("Berth");
+        types.add("Wall Laminates");
+        return types;
     }
 
     public boolean isFittings() {

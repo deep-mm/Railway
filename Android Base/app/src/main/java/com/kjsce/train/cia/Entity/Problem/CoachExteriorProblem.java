@@ -1,5 +1,7 @@
 package com.kjsce.train.cia.Entity.Problem;
 
+import java.util.ArrayList;
+
 public class CoachExteriorProblem extends Problem
 {
     boolean paintQuality,bogeyCleanliness,roofCleanliness,windowGlass;
@@ -12,6 +14,16 @@ public class CoachExteriorProblem extends Problem
     }
 
     public CoachExteriorProblem() {
+    }
+
+    public ArrayList<String> getTypes(){
+        ArrayList<String> types = new ArrayList<String>();
+
+        types.add("Paint Quality");
+        types.add("Body Cleanliness");
+        types.add("Roof Cleanliness");
+        types.add("Window Glass");
+        return types;
     }
 
     public boolean isPaintQuality() {

@@ -39,6 +39,10 @@ import com.google.firebase.storage.UploadTask;
 import com.kjsce.train.cia.Adapter.BogeyReportAdapter;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.ImageAdapter;
+import com.kjsce.train.cia.Entity.Problem.CoachExteriorProblem;
+import com.kjsce.train.cia.Entity.Problem.CoachInteriorAmenitiesProblem;
+import com.kjsce.train.cia.Entity.Problem.CoachInteriorCleanProblem;
+import com.kjsce.train.cia.Entity.Problem.ToiletProblem;
 import com.kjsce.train.cia.R;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
@@ -68,35 +72,30 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 10;
     public int SELECT_PICTURE = 100;
-    final ArrayList<String> paths = new ArrayList<String>();
-    final ArrayList<String> checkBoxList = new ArrayList<String>();
+    ArrayList<String> paths = new ArrayList<String>();
+    ArrayList<String> checkBoxList = new ArrayList<String>();
     ImageAdapter adapter = null;
     CheckBoxAdapter checkBoxAdapter = null;
     Boolean flag = false;
+    TextView typeval,descriptionval;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inpection_train_details);
 
-        TextView typeval,descriptionval;
-
             typeval=findViewById(R.id.typeval);
             descriptionval=findViewById(R.id.descriptionval);
 
             if(getIntent().hasExtra("type")) {
                 typeval.setText(getIntent().getExtras().getString("type"));
-                descriptionval.setText(getIntent().getExtras().getString("description"));
+                descriptionval.setText(getIntent().getExtras().getString("comment"));
             }
 
             camera = (ImageButton)findViewById(R.id.camera);
             mic = (ImageButton)findViewById(R.id.mic);
 
-            checkBoxList.add("Fittings Not Ok");
-            checkBoxList.add("Flood Drainage Not Ok");
-        checkBoxList.add("Cleanliness Not Ok");
-        checkBoxList.add("Smell Not Ok");
-        checkBoxList.add("Bio Toilet Not Ok");
+            checkBoxList = getTypes();
 
         final RecyclerView card = (RecyclerView)findViewById(R.id.imgurl);
         adapter = new ImageAdapter(paths,InpectionTrainDetailsActivity.this);
@@ -147,6 +146,28 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
         }
 
+        public ArrayList<String> getTypes(){
+
+        ArrayList<String> type = new ArrayList<String>();
+            switch(typeval.getText().toString()){
+
+                case "Toilets":
+                    return (new ToiletProblem().getTypes());
+
+                case "Coach Interior Amenities":
+                    return (new CoachInteriorAmenitiesProblem().getTypes());
+
+                case "Coach Interior Cleanliness":
+                    return (new CoachInteriorCleanProblem().getTypes());
+
+                case "Coach Exterior":
+                    return (new CoachExteriorProblem().getTypes());
+
+                default:
+                    return type;
+
+            }
+        }
 
     private void startRecording() {
         requestAudioPermissions();

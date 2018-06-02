@@ -1,5 +1,7 @@
 package com.kjsce.train.cia.Entity.Problem;
 
+import java.util.ArrayList;
+
 public class CoachInteriorCleanProblem extends Problem
 {
     boolean gangwayCleanliness,stickers,seatingCleanliness,pests,rodent,bedrollQuality;
@@ -14,6 +16,18 @@ public class CoachInteriorCleanProblem extends Problem
     }
 
     public CoachInteriorCleanProblem() {
+    }
+
+    public ArrayList<String> getTypes(){
+        ArrayList<String> types = new ArrayList<String>();
+
+        types.add("Gangway Cleanliness");
+        types.add("Stickers");
+        types.add("Seating Cleanliness");
+        types.add("Pests");
+        types.add("Rodent");
+        types.add("Bedroll Quality");
+        return types;
     }
 
     public boolean isGangwayCleanliness() {
