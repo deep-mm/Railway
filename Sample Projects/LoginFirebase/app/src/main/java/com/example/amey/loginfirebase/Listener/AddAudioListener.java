@@ -3,5 +3,5 @@ package com.example.amey.loginfirebase.Listener;
 import java.util.List;
 
 public interface AddAudioListener {
-    void onCompleteTask(List<String> getAudio);
+    void onCompleteTask(List<String> audioS);
 }
