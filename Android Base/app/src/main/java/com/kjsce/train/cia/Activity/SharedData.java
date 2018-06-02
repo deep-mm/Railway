@@ -51,6 +51,18 @@ public class SharedData {
         return train;
     }
 
+    public void setTrainNo(String train){
+        editor.putString("train_no", train).commit();
+    }
+
+    public String getTrainNo(){
+        String train = pref.getString("train_no", "");
+        return train;
+    }
+
+
+
+
     public void setCoachList(List<String> coach_list){
         String coach = gson.toJson(coach_list);
         editor.putString("coach_list",coach).commit();

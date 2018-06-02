@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class BogeyReportActivity extends AppCompatActivity {
-    ArrayList<MaintainenceCardFiles> cards = new ArrayList<MaintainenceCardFiles>();
-    ArrayList<MaintainenceCardFiles> reportvalues = new ArrayList<MaintainenceCardFiles>();//fetch and store report values here
-    MaintainenceBogeyReportAdapter adapter;
-    MaintainenceCardFiles cardfiles;
+    ArrayList<CardFiles> cards = new ArrayList<CardFiles>();
+    ArrayList<CardFiles> reportvalues = new ArrayList<CardFiles>();//fetch and store report values here
+    BogeyReportAdapter adapter;
+    CardFiles cardfiles;
     RelativeLayout EndCompliance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,9 @@ public class BogeyReportActivity extends AppCompatActivity {
 
         Date date = new java.util.Date();
 
-        MaintainenceCardFiles m = new MaintainenceCardFiles("",date);//example card
-        reportvalues.add(m);
+        cardfiles = new CardFiles("Seat no:","Comment:","Type:");
+        cards.add(cardfiles);
+        //reportvalues.add();
 
         EndCompliance = (RelativeLayout)findViewById(R.id.endcompliance_button);
         EndCompliance.setOnClickListener(new View.OnClickListener() {
@@ -41,16 +42,18 @@ public class BogeyReportActivity extends AppCompatActivity {
 
             }
         });
-
+        ArrayList<String> spinner_list = new ArrayList<String>();
+        spinner_list.add("toilets");
+        String comment = "aa";
         final RecyclerView card = (RecyclerView)findViewById(R.id.card_list);
-        adapter = new MaintainenceBogeyReportAdapter(cards,reportvalues,BogeyReportActivity.this);
+        adapter = new BogeyReportAdapter(cards,spinner_list,BogeyReportActivity.this,true,comment);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         card.setLayoutManager(mlayoutmanager);
         card.setAdapter(adapter);
 
-        for (int i=0;i<1;i++) //Instead of 1 put the size of reportvalues arraylist
+        for (int i=0;i<reportvalues.size();i++) //Instead of 1 put the size of reportvalues arraylist
         {
-            cardfiles = new MaintainenceCardFiles("",date);;
+            cardfiles = new CardFiles("Seat no:","Comment:","Type:");
             cards.add(cardfiles);
             adapter.notifyDataSetChanged();
         }

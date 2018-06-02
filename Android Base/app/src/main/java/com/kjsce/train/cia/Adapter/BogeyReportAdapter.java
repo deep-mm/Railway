@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.kjsce.train.cia.Activity.Inspection.InpectionTrainDetailsActivity;
 import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
 import com.kjsce.train.cia.Activity.Maintainence.BogeyReportActivity;
+import com.kjsce.train.cia.Activity.Maintainence.MaintainenceTrainDetailsActivity;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.StoreCard;
 import com.kjsce.train.cia.Listeners.ItemClickListener;
@@ -50,20 +51,21 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
     public StoreCard storeCard = new StoreCard();
     ArrayAdapter<String> spinner_adapter;
     Context context;
-    int flag =1;
-    String type;
+    String type,comment;
     String comment_text;
+    boolean flag;
 
     public BogeyReportAdapter() {
         Mvalues = null;
 
     }
 
-    public BogeyReportAdapter(ArrayList mvalues, ArrayList<String> spinner_list, Context c) {
-        Mvalues = mvalues;
-        Spinner_list =spinner_list;
-        context = c;
-
+    public BogeyReportAdapter(ArrayList mvalues, ArrayList<String> spinner_list, Context c,boolean type,String comment) {
+                Mvalues = mvalues;
+                Spinner_list =spinner_list;
+                context = c;
+                flag = type;
+                this.comment = comment;
     }
 
     @Override
@@ -76,6 +78,9 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
     @Override
     public void onBindViewHolder(BogeyReportAdapter.ViewHolder holder, final int position) {
 
+
+            holder.in_comment.setFocusable(flag);
+
         holder.setClickListener(new ItemClickListener() {
 
             @Override
@@ -86,7 +91,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
 
         //textwatchers i.e storeCard contains all the information of all the cards store them in database
-
+        holder.in_comment.setText(comment);
         holder.comment.setText(Mvalues.get(position).getComment());
         holder.in_comment.addTextChangedListener(new TextWatcher() {
             @Override
@@ -106,6 +111,17 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
             }
         });
         holder.type.setText(Mvalues.get(position).getType());
+
+        if(flag)
+        {
+            holder.in_type_text.setVisibility(View.GONE);
+        }
+        else
+        {
+            holder.in_type.setVisibility(View.GONE);
+            type = Spinner_list.get(0);
+            comment_text = comment;
+        }
         holder.in_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -123,6 +139,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
             }
         });
+
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,10 +160,17 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         holder.more_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,InpectionTrainDetailsActivity.class);
-                intent.putExtra("type",type);
-                intent.putExtra("comment",comment_text);
-                context.startActivity(intent);
+                if (flag) {
+                    Intent intent = new Intent(context, InpectionTrainDetailsActivity.class);
+                    intent.putExtra("type", type);
+                    intent.putExtra("comment", comment_text);
+                    context.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(context, MaintainenceTrainDetailsActivity.class);
+                    intent.putExtra("type", type);
+                    intent.putExtra("comment", comment_text);
+                    context.startActivity(intent);
+                }
             }
         });
 
@@ -160,7 +184,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-        final TextView comment,type,more_detail;
+        final TextView comment,type,more_detail,in_type_text;
         final EditText in_comment;
         final Spinner in_type;
         final ImageButton remove;
@@ -178,6 +202,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
             spinner_adapter = new ArrayAdapter<String>(context,android.R.layout.simple_spinner_item,Spinner_list);
             spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             in_type.setAdapter(spinner_adapter);
+            in_type_text = (TextView)itemView.findViewById(R.id.in_type_text);
             itemView.setOnClickListener(this);
         }
 

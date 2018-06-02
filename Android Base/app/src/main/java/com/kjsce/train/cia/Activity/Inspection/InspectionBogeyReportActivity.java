@@ -121,7 +121,7 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         spinner_list.add("Electricals");
         spinner_list.add("Windows");
         final RecyclerView card = (RecyclerView)findViewById(R.id.card_list);
-        adapter = new BogeyReportAdapter(cards,spinner_list,InspectionBogeyReportActivity.this);
+        adapter = new BogeyReportAdapter(cards,spinner_list,InspectionBogeyReportActivity.this,true,"");
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         card.setLayoutManager(mlayoutmanager);
         card.setAdapter(adapter);

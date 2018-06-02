@@ -19,14 +19,16 @@
         <activity android:name=".Activity.Inspection.InspectionBogeyReportActivity" />
         <activity android:name=".Activity.Inspection.InpectionTrainDetailsActivity" />
         <activity android:name=".Activity.Inspection.InspectionBogeyActivity" />
-        <activity android:name=".Activity.SplashActivity">
+        <activity android:name=".Activity.Maintainence.TrainSearchActivity">
+
+        </activity>
+        <activity android:name=".Activity.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Maintainence.TrainSearchActivity" />
         <activity android:name=".Activity.Maintainence.MaintainenceMenuActivity" />
         <activity android:name=".Activity.Maintainence.MaintainenceTrainDetailsActivity" />
         <activity android:name=".Activity.Maintainence.BogeyActivity" />
