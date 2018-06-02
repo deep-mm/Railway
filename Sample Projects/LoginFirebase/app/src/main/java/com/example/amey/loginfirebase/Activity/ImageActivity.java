@@ -83,12 +83,6 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
 
-        mTextViewShowUploads.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openImagesActivity();
-            }
-        });
     }
 
     private void openFileChooser() {
@@ -158,8 +152,4 @@ public class ImageActivity extends AppCompatActivity {
         }
     }
 
-    private void openImagesActivity() {
-        Intent intent = new Intent(this, ImagesActivtiy.class);
-        startActivity(intent);
-    }
 }

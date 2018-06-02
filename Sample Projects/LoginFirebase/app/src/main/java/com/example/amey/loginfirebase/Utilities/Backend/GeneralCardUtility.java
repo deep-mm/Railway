@@ -8,9 +8,7 @@ import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.RemoveGeneralReportListener;
 
 public class GeneralCardUtility {
-    /*
-    addgeneral card fn -> listener
-     */
+
     public void addGeneralCard(final GeneralReport generalReport, final GeneralCard generalCard,final AddGeneralCardListener listener){
         final GeneralReportUtility generalReportUtility=new GeneralReportUtility();
         generalReportUtility.getGeneralReport(generalReport.getTrainNumber(),generalReport.getDateTime(), new GetGeneralReportListener() {
@@ -28,20 +26,21 @@ public class GeneralCardUtility {
                 }
                 else
                 {
-
-                    gr.addCard(generalCard);
-                    final GeneralReport newReport=gr;
                     generalReportUtility.removeGeneralReport(gr, new RemoveGeneralReportListener() {
                         @Override
                         public void onCompleteTask(String result) {
-                            generalReportUtility.addGeneralReport(newReport, new AddGeneralReportListener() {
-                                @Override
-                                public void onCompleteTask(String result) {
-                                    listener.onCompleteTask(true);
-                                }
-                            });
+
                         }
                     });
+                    gr.addCard(generalCard);
+                    generalReportUtility.addGeneralReport(gr, new AddGeneralReportListener() {
+                        @Override
+                        public void onCompleteTask(String result) {
+                            listener.onCompleteTask(true);
+                        }
+                    });
+                    final GeneralReport newReport=gr;
+
                 }
             }
         });

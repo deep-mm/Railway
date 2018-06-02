@@ -28,7 +28,7 @@ public class TrainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 TrainUtility trainUtility = new TrainUtility();
                 TrainEntity trainEntity = new TrainEntity("123456", "Rajdhani", "Delhi", "Mumbai", "nagpur", "12", "6", "LeyLand", "obhs", "2000", "MainTain", 10);
-                trainUtility.getTrain(trainEntity, new GetTrainListener() {
+                trainUtility.getTrain("1511092", new GetTrainListener() {
                     @Override
                     public void onCompleteTask(TrainEntity trainEntity) {
 

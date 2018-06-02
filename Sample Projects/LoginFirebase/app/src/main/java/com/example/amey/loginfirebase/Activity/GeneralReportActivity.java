@@ -11,6 +11,7 @@ import com.example.amey.loginfirebase.Entity.Report.GeneralReport;
 import com.example.amey.loginfirebase.Entity.TrainEntity;
 import com.example.amey.loginfirebase.Entity.UserEntity;
 import com.example.amey.loginfirebase.Listener.AddAudioListener;
+import com.example.amey.loginfirebase.Listener.AddGeneralCardListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.GetTrainListener;
@@ -18,6 +19,7 @@ import com.example.amey.loginfirebase.Listener.GetUserListener;
 import com.example.amey.loginfirebase.Listener.RemoveGeneralReportListener;
 import com.example.amey.loginfirebase.R;
 import com.example.amey.loginfirebase.Utilities.Backend.AudioUtility;
+import com.example.amey.loginfirebase.Utilities.Backend.GeneralCardUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.GeneralReportUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.TrainUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.UserUtility;
@@ -29,6 +31,25 @@ import java.util.List;
 
 public class GeneralReportActivity extends AppCompatActivity {
     private Button getReport,addReport,removeReport;
+    public void addCard(View view)
+    {
+        final GeneralCard generalCard=new GeneralCard("Parakh","Toilet",null,null,"Not OK",false);
+
+        GeneralReportUtility generalReportUtility=new GeneralReportUtility();
+        generalReportUtility.getGeneralReport("1511092", "231097", new GetGeneralReportListener() {
+            @Override
+            public void onCompleteTask(GeneralReport generalReport) {
+
+                GeneralCardUtility generalCardUtility=new GeneralCardUtility();
+                generalCardUtility.addGeneralCard(generalReport, generalCard, new AddGeneralCardListener() {
+                    @Override
+                    public void onCompleteTask(boolean result) {
+
+                    }
+                });
+            }
+        });
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +91,6 @@ public class GeneralReportActivity extends AppCompatActivity {
                     }
                 });
 */
-
-
                 GeneralReport generalRep = new GeneralReport("Dadar","General","1511092","SAMY","231097","tp",null,null);
 
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();

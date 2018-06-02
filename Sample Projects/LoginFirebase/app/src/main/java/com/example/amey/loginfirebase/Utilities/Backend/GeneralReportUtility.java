@@ -35,11 +35,21 @@ public class GeneralReportUtility {
         });
     }
 
-    public void addGeneralReport(GeneralReport generalReport,AddGeneralReportListener listener)
+    public void addGeneralReport(final GeneralReport generalReport,AddGeneralReportListener listener)
     {
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child("G"+generalReport.getTrainNumber()+generalReport.getDateTime());
-        mGeneralReportDatabaseReference.setValue(generalReport);
+        getGeneralReport(generalReport.getTrainNumber(), generalReport.getDateTime(), new GetGeneralReportListener() {
+            @Override
+            public void onCompleteTask(GeneralReport databaseReport) {
+                if(databaseReport==null)
+                {
+                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                    mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child(generalReport.getTrainNumber()+generalReport.getDateTime());
+                    mGeneralReportDatabaseReference.setValue(generalReport);
+                }
+
+            }
+        });
+
 
     }
     public void removeGeneralReport(GeneralReport generalReport,RemoveGeneralReportListener listener)
