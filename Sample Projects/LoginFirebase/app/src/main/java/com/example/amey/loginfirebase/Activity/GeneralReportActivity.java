@@ -41,11 +41,8 @@ public class GeneralReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();
-                GeneralReport generalRep = new GeneralReport("Ramani" , "Dombivli" ,
-                        "Error Resolving", "1511102","Rajdhani","23","bcd",
-                        new GeneralCard("xyzz", null,null,null,false),null);
 
-                generalReportUtility.getGeneralReport(generalRep, new GetGeneralReportListener() {
+                generalReportUtility.getGeneralReport("1511092" ,"231097", new GetGeneralReportListener() {
                     @Override
                     public void onCompleteTask(GeneralReport generalReport) {
 
@@ -59,41 +56,23 @@ public class GeneralReportActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final GeneralReport generalReport = new GeneralReport();
 
-                UserUtility userUtility = new UserUtility();
-                userUtility.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GetUserListener() {
-                    @Override
-                    public void onCompleteTask(UserEntity userEntity) {
-                        generalReport.setReportSubmittedBy(userEntity.getName());
-                    }
-                });
-
-                generalReport.setPlaceOfInspection("LTT");
+                /*generalReport.setPlaceOfInspection("LTT");
                 generalReport.setTypeOfInspection("General");
-                generalReport.setTrainNumber("1511100");
+                generalReport.setTrainNumber("1511092");
                 generalReport.setTrainName("Rajdhani");
-                generalReport.setDateTime("datetime daalde");
+                generalReport.setDateTime("231097");
 
                 TrainUtility trainUtility = new TrainUtility();
                 trainUtility.getTrain("1511100", new GetTrainListener() {
                     @Override
                     public void onCompleteTask(TrainEntity trainEntity) {
-                        generalReport.setPlaceOfInspection(trainEntity.getManufacturer());
+                        generalReport.setManufacturer(trainEntity.getManufacturer());
                     }
                 });
+*/
 
-                final GeneralCard generalCard = new GeneralCard();
-                List<String> audioL = new ArrayList<String>();
-                AudioUtility audioUtility = new AudioUtility();
-                audioUtility.uploadAudio(audioL, new AddAudioListener() {
-                    @Override
-                    public void onCompleteTask(List<String> audioS) {
-                        generalCard.setAudio(audioS);
-                    }
-                });
 
-                GeneralReport generalRep = new GeneralReport("Ramani" , "Dombivli" ,
-                        "Error Resolving", "1511102","Rajdhani","23","bcd",
-                        new GeneralCard("xyzz", null,null,null,false),null);
+                GeneralReport generalRep = new GeneralReport("Dadar","General","1511092","SAMY","231097","tp",null,null);
 
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();
                 generalReportUtility.addGeneralReport(generalRep, new AddGeneralReportListener() {
@@ -110,9 +89,8 @@ public class GeneralReportActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();
-                GeneralReport generalRep = new GeneralReport("Ramani" , "Dombivli" ,
-                        "Error Resolving", "1511102","Rajdhani","23","bcd",
-                        new GeneralCard("xyzz", null,null,null,false),null);
+                GeneralReport generalRep = new GeneralReport("Dadar","General","1511092","SAMY","231097","tp",null,null);
+
                 generalReportUtility.removeGeneralReport(generalRep, new RemoveGeneralReportListener() {
                     @Override
                     public void onCompleteTask(String result) {

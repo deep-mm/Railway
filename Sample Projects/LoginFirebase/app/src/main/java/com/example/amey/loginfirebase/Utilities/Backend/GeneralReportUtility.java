@@ -17,9 +17,9 @@ public class GeneralReportUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGeneralReportDatabaseReference;
 
-    public void getGeneralReport(GeneralReport generalReport, final GetGeneralReportListener getGeneralReportListener)
+    public void getGeneralReport(String trainNumber,String dateTime, final GetGeneralReportListener getGeneralReportListener)
     {
-        mGeneralReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("GeneralReport").child(generalReport.getTrainNumber()+generalReport.getDateTime());
+        mGeneralReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("GeneralReport").child(trainNumber + dateTime);
         mGeneralReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

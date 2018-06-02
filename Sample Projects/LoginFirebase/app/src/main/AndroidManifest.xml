@@ -27,7 +27,6 @@
         <activity android:name=".Activity.AudioActivity"></activity>
         <activity android:name=".Activity.DetailedReportActivity"></activity>
         <activity android:name=".Activity.GeneralReportActivity"></activity>
-        <activity android:name=".Activity.ImageActivity"></activity>
         <activity android:name=".Activity.TrainActivity"></activity>
 
 
