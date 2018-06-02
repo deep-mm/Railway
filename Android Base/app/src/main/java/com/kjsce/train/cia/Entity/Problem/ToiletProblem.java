@@ -1,5 +1,7 @@
 package com.kjsce.train.cia.Entity.Problem;
 
+import java.util.ArrayList;
+
 public class ToiletProblem extends Problem
 {
     boolean fittings,floorDrainage,cleanliness,smell,biotoilet;
@@ -10,6 +12,17 @@ public class ToiletProblem extends Problem
         this.cleanliness = cleanliness;
         this.smell = smell;
         this.biotoilet = biotoilet;
+    }
+
+    public ArrayList<String> getTypes(){
+        ArrayList<String> types = new ArrayList<String>();
+
+        types.add("Fittings");
+        types.add("FloodDrainage");
+        types.add("Cleanliness");
+        types.add("Smell");
+        types.add("BioToilet");
+        return types;
     }
 
     public ToiletProblem() {

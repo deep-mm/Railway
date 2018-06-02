@@ -28,8 +28,8 @@ public class SplashActivity extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
 
         sd.setType("Inspection"); //set default right now, change when connected to database
-        if(!helper.isNetworkConnected()) {
-
+        if(true) {
+//!helper.isNetworkConnected()
             new Handler().postDelayed(new Runnable() {
 
                 @Override

@@ -51,6 +51,9 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
     ArrayAdapter<String> spinner_adapter;
     Context context;
     int flag =1;
+    String type;
+    String comment;
+
     public BogeyReportAdapter() {
         Mvalues = null;
 
@@ -93,6 +96,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                comment = s.toString();
                 storeCard.setIn_comment(s.toString());
             }
 
@@ -108,6 +112,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
                 String typevalue = parent.getItemAtPosition(position).toString();
                 if (!typevalue.equals(null)) {
+                    type = typevalue;
                     storeCard.setIn_type(typevalue);
                 }
 
@@ -138,6 +143,9 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         holder.more_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(context,InpectionTrainDetailsActivity.class);
+                intent.putExtra("type",type);
+                intent.putExtra("comment",comment);
                 context.startActivity(new Intent(context,InpectionTrainDetailsActivity.class));
             }
         });
