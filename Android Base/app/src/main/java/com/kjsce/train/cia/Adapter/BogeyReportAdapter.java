@@ -52,7 +52,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
     Context context;
     int flag =1;
     String type;
-    String comment;
+    String comment_text;
 
     public BogeyReportAdapter() {
         Mvalues = null;
@@ -88,7 +88,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         //textwatchers i.e storeCard contains all the information of all the cards store them in database
 
         holder.comment.setText(Mvalues.get(position).getComment());
-        holder.comment.addTextChangedListener(new TextWatcher() {
+        holder.in_comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -96,7 +96,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                comment = s.toString();
+                comment_text = s.toString();
                 storeCard.setIn_comment(s.toString());
             }
 
@@ -145,8 +145,8 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(context,InpectionTrainDetailsActivity.class);
                 intent.putExtra("type",type);
-                intent.putExtra("comment",comment);
-                context.startActivity(new Intent(context,InpectionTrainDetailsActivity.class));
+                intent.putExtra("comment",comment_text);
+                context.startActivity(intent);
             }
         });
 

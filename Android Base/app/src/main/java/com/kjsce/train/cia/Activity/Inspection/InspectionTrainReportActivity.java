@@ -384,7 +384,6 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         Toast.makeText(this,"Item "+x,Toast.LENGTH_SHORT).show();
         sv1.setQuery(x,true);
         lv1.setVisibility(View.GONE);
-
-        //sd.setTrain(x);
+        sd.setTrain(x);
     }
 }
