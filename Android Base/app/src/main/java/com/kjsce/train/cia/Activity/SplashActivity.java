@@ -21,7 +21,7 @@ import com.kjsce.train.cia.Utilities.Backend.UserUtility;
 public class SplashActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private static int SPLASH_TIME_OUT = 10000;
+    private static int SPLASH_TIME_OUT = 2000;
     public SharedData sd;
     public Helper helper;
     Intent i;
@@ -36,32 +36,17 @@ public class SplashActivity extends AppCompatActivity {
         sd = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
 
-        sd.setType("Inspection"); //set default right now, change when connected to database
         if(true) {
 //!helper.isNetworkConnected()
-            checkLoggedIn();
-            /*new Handler().postDelayed(new Runnable() {
+
+            new Handler().postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
                     checkLoggedIn();
-                    *//*Intent i;
-                    if (!sd.isLoggedIn()) {
-                        i = new Intent(getApplicationContext(), LoginActivity.class);
-                    } else {
-                        if (sd.getType().equalsIgnoreCase("Inspection")) {
-                            i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
-                        } else {
-                            i = new Intent(getApplicationContext(), TrainSearchActivity.class);
-                        }
-                    }
-                    startActivity(i);*//*
-                    if(i!= null)
-                        startActivity(i);
-                    finish();
                 }
 
-            }, SPLASH_TIME_OUT);*/
+            }, SPLASH_TIME_OUT);
         }
         else{
             new MaterialDialog.Builder(this)
@@ -93,32 +78,21 @@ public class SplashActivity extends AppCompatActivity {
     public void checkLoggedIn(){
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            System.out.println("USer is there");
-            checkType(currentUser);
+            UserEntity userEntity = sd.getUserEntity();
+            if(userEntity.getType().equals("inspection")){
+                i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
+                startActivity(i);
+                finish();
+            }
+                else{
+                i = new Intent(getApplicationContext(), TrainSearchActivity.class);
+                startActivity(i);
+                finish();
+            }
         }
         else{
             i = new Intent(this,LoginActivity.class);
             startActivity(i);
         }
-    }
-
-    public void checkType(FirebaseUser user){
-
-        UserUtility userUtility = new UserUtility();
-        userUtility.getUser(user.getUid(), new GetUserListener() {
-            @Override
-            public void onCompleteTask(UserEntity userEntity) {
-
-                if(userEntity.getDesignation().equals("Inspection")){
-                    i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
-                    startActivity(i);
-                }
-                else{
-                    System.out.println("type is there");
-                    i = new Intent(getApplicationContext(), TrainSearchActivity.class);
-                    startActivity(i);
-                }
-            }
-        });
     }
 }

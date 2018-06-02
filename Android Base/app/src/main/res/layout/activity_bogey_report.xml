@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                tools:listitem="@layout/bogey_report_cards" />
+                tools:listitem="@layout/fragment_bogey_cards" />
 
 
         </RelativeLayout>

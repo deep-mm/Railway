@@ -74,12 +74,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onCompleteTask(UserEntity userEntity) {
                 Intent i;
-                if(userEntity.getDesignation().equals("Inspection")){
+                if(userEntity.getType().equals("inspection")){
                     i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
                 }
                 else{
                     i = new Intent(getApplicationContext(), TrainSearchActivity.class);
                 }
+                sd.setUserEntity(userEntity);
                 startActivity(i);
             }
         });

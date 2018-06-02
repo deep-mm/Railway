@@ -48,6 +48,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class InspectionTrainReportActivity extends AppCompatActivity
     SharedData sd;
     String typeOfInspection="";
     String selectedStation = "";
+    UserEntity userEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +86,20 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        userEntity = sd.getUserEntity();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         name=(TextView) headerView.findViewById(R.id.name);
         name.setPaintFlags(name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        name.setText("Aman Agarwal");
+        name.setText(userEntity.getName());
 
         udesignation=(TextView) headerView.findViewById(R.id.udesignation);
         udesignation.setPaintFlags(udesignation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        udesignation.setText("Inspector");
+        udesignation.setText(userEntity.getDesignation());
 
         uid=(TextView) headerView.findViewById(R.id.uid);
-        uid.setText("MH12345");
+        uid.setText(userEntity.getUserId());
 
         lv1=(ListView)findViewById(R.id.lv1);
 
@@ -143,8 +146,16 @@ public class InspectionTrainReportActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(),"Fields cannot be left empty",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
-                    startActivity(i);
+                    if(typeOfInspection.equalsIgnoreCase("detailed")) {
+                        Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
+                        i.putExtra("type", typeOfInspection);
+                        startActivity(i);
+                    }
+                    else{
+                        Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
+                        i.putExtra("type", typeOfInspection);
+                        startActivity(i);
+                    }
                 }
             }
         });
