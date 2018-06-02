@@ -14,59 +14,60 @@ import com.example.amey.loginfirebase.R;
 import com.example.amey.loginfirebase.Utilities.Backend.DetailedReportUtility;
 
 public class DetailedReportActivity extends AppCompatActivity {
-    private Button get_det , add_det, rem_det;
+    private Button get_det, add_det, rem_det;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailreport);
 
-      get_det.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              DetailedReportUtility detailedReportUtility= new DetailedReportUtility();
-              DetailedReport detailedRep = new DetailedReport("Ramani" , "Dombivli" ,
-                      "Error Resolving", "1511112","Rajdhani","23","parakh",null,null);
+        get_det.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
+                DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
+                        "Error Resolving", "1511112", "Rajdhani", "23", "parakh", null, null);
 
-              detailedReportUtility.getDetailedReport(detailedRep, new GetDetailedReportListener() {
-                  @Override
-                  public void onCompleteTask(DetailedReport detailedReport) {
+                detailedReportUtility.getDetailedReport(detailedRep, new GetDetailedReportListener() {
+                    @Override
+                    public void onCompleteTask(DetailedReport detailedReport) {
 
-                  }
-              });
-          }
-      });
+                    }
+                });
+            }
+        });
 
-      add_det.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              DetailedReportUtility detailedReportUtility= new DetailedReportUtility();
-              DetailedReport detailedRep = new DetailedReport("Ramani" , "Dombivli" ,
-                      "Error Resolving", "1511112","Rajdhani","23","parakh",null,null);
-              detailedReportUtility.addDetailedReport(detailedRep, new AddDetailedReportListener() {
-                  @Override
-                  public void onCompleteTask(String result) {
+        add_det.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
+                DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
+                        "Error Resolving", "1511112", "Rajdhani", "23", "parakh", null, null);
+                detailedReportUtility.addDetailedReport(detailedRep, new AddDetailedReportListener() {
+                    @Override
+                    public void onCompleteTask(String result) {
 
-                  }
-              });
+                    }
+                });
 
-          }
-      });
+            }
+        });
 
-      rem_det.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view) {
-              DetailedReportUtility detailedReportUtility= new DetailedReportUtility();
-              DetailedReport detailedRep = new DetailedReport("Ramani" , "Dombivli" ,
-                      "Error Resolving", "1511112","Rajdhani","23","parakh",null,null);
-              detailedReportUtility.removeDetailedReport(detailedRep, new RemoveDetailedReportListener() {
-                  @Override
-                  public void onCompleteTask(String result) {
-                      System.out.println("Result: "+result);
-                  }
-              });
+        rem_det.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
+                DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
+                        "Error Resolving", "1511112", "Rajdhani", "23", "parakh", null, null);
+                detailedReportUtility.removeDetailedReport(detailedRep, new RemoveDetailedReportListener() {
+                    @Override
+                    public void onCompleteTask(String result) {
+                        System.out.println("Result: " + result);
+                    }
+                });
 
-          }
-      });
+            }
+        });
 
     }
 }
