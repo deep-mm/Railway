@@ -30,7 +30,7 @@ public class GeneralReportUtility {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                getGeneralReportListener.onCompleteTask(null);
             }
         });
     }
