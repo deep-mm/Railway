@@ -2,59 +2,95 @@ package com.example.amey.loginfirebase.Utilities.Backend;
 
 import android.app.ProgressDialog;
 import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 
 import com.example.amey.loginfirebase.Listener.GetAudioListener;
 import com.example.amey.loginfirebase.Listener.AddAudioListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AudioUtility {
 
     private StorageReference mStorage;
-    List<String> getAudio=new ArrayList<String>();
+    List<String> audioS=new ArrayList<String>();
+    List<String> audioL=new ArrayList<String>();
     int i;
-    int counter=0;
+    int counterU=0;
+    int counterR=0;
 
-    public void uploadAudio(final List<String> audio, final AddAudioListener listener)
+
+    public void uploadAudio(final List<String> audioL, final AddAudioListener listener)
     {
         String timeStamp;
         int n;
 
         mStorage = FirebaseStorage.getInstance().getReference();
-        for(i=0;i<audio.size();i++) {
+        for(i=0;i<audioL.size();i++) {
 
-            n=audio.get(i).length();
-            timeStamp=audio.get(i).substring((n-19),(n-4));
+            n=audioL.get(i).length();
+            timeStamp=audioL.get(i).substring((n-19),(n-4));
             StorageReference audioStorageReference = mStorage.child("Audio").child(timeStamp + ".3gp");
-            Uri uri = Uri.fromFile(new File(audio.get(i)));
+            Uri uri = Uri.fromFile(new File(audioL.get(i)));
             audioStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    counter++;
+                    counterU++;
                     Uri downloadUri=taskSnapshot.getDownloadUrl();
-                    getAudio.add(downloadUri.toString());
+                    audioS.add(downloadUri.toString());
                     System.out.println("added");
-                    if(counter==(audio.size())){
+                    if(counterU==(audioL.size())){
                         System.out.println("true");
-                        listener.onCompleteTask(getAudio);
+                        listener.onCompleteTask(audioS);
                     }
+                }
+            });
+        }
+    }
 
+    public void retrieveAudio(final List<String> audioS,final GetAudioListener listener) throws IOException {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        for (int i = 0; i < audioS.size(); i++)
+        {
+            final String fileName;
 
+            StorageReference httpsReference= storage.getReferenceFromUrl(audioS.get(i));
+            fileName=httpsReference.getName();
+            File mainDir=Environment.getExternalStorageDirectory();
+            final File mainFile=new File(mainDir,"/CIA/Inspection/Audios");
+
+            File localFile = File.createTempFile(fileName, ".3gp", mainFile);
+
+            httpsReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    counterR++;
+                    String mFileName=mainFile+"/"+fileName;
+                    System.out.println(mFileName);
+                    audioL.add(mFileName);
+                    System.out.println("added");
+                    if(counterR==(audioS.size())){
+                        System.out.println("true");
+                        listener.onCompleteTask(audioL);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
                 }
             });
 
-
         }
-
-    }
-    public void retrieveAudio(GetAudioListener listener)
-    {
-
     }
 }
