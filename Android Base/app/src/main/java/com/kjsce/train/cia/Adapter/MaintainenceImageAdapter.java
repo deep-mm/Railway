@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.R;
@@ -16,38 +17,34 @@ import com.kjsce.train.cia.R;
 import java.util.ArrayList;
 
 /**
- * Created by Dhaval on 09-04-2018.
+ * Created by Dhaval on 02-06-2018.
  */
 
-/**
- * Created by Dhaval on 26-03-2018.
- */
-
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
+public class MaintainenceImageAdapter extends RecyclerView.Adapter<MaintainenceImageAdapter.ViewHolder>{
     private final ArrayList<String> Mvalues;
 
 
     Context context;
     int flag =1;
-    public ImageAdapter() {
+    public MaintainenceImageAdapter() {
         Mvalues = null;
     }
 
-    public ImageAdapter(ArrayList mvalues,Context c) {
+    public MaintainenceImageAdapter(ArrayList mvalues,Context c) {
         Mvalues = mvalues;
         context = c;
 
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MaintainenceImageAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_image, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.fragment_image_maintainence, parent, false);
+        return new MaintainenceImageAdapter.ViewHolder(view);
 
     }
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(MaintainenceImageAdapter.ViewHolder holder, final int position) {
 
         holder.image_name.setText(Mvalues.get(position));
         if(Mvalues.get(position).contains("3gp"))
@@ -60,17 +57,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 if(holder.type.equalsIgnoreCase("audio")){
-                        MediaPlayer mp = new MediaPlayer();
+                    MediaPlayer mp = new MediaPlayer();
 
-                        try {
-                            mp.setDataSource(Mvalues.get(position));
-                            mp.prepare();
-                            mp.start();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    try {
+                        mp.setDataSource(Mvalues.get(position));
+                        mp.prepare();
+                        mp.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    else{
+                }
+                else{
                     Intent i = new Intent(context, ImageShow.class);
                     i.putExtra("path",Mvalues.get(position));
                     context.startActivity(i);
@@ -78,13 +75,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
             }
         });
 
-        holder.remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Mvalues.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
-            }
-        });
+
     }
 
     @Override
@@ -92,16 +83,32 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
         return Mvalues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         final TextView image_name;
-        final ImageButton remove;
+
         String type;
         public ViewHolder(View itemView) {
             super(itemView);
             image_name = (TextView)itemView.findViewById(R.id.imageurl);
-            remove =(ImageButton)itemView.findViewById(R.id.remove);
+
             type = "";
+        }
+
+        @Override
+        public void onClick(View view) {
+
+           mToast(getLayoutPosition(),image_name.getText());
+            Intent i=new Intent(context,ImageShow.class);
+            i.putExtra("url",image_name.getText());
+            context.startActivity(i);
+
+
+            //Log.d("onclick", "onClick " + getLayoutPosition() + " " + item.getText());
+            //Toast.makeText(this,"Clicked",Toast.LENGTH_SHORT).show();
+        }
+        private void mToast(int layoutPosition, CharSequence text) {
+            Toast.makeText(context,"Clicked"+ layoutPosition+text, Toast.LENGTH_SHORT).show();
         }
     }
 }

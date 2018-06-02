@@ -122,7 +122,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
             @Override
             public void onClick(View v) {
 
-                Mvalues.remove(position);
+
                 if(position==0)
                 {
                     notifyDataSetChanged();
@@ -130,7 +130,8 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
                 }
                 else
                 {
-                notifyItemRemoved(position);}
+                    Mvalues.remove(position);
+                    notifyItemRemoved(position);}
             }
         });
 

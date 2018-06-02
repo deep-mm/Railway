@@ -1,4 +1,4 @@
-package com.kjsce.train.cia.Activity.Maintainence;
+package com.kjsce.train.cia.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
