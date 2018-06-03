@@ -68,7 +68,7 @@ public class AudioUtility {
                         BogeyEntity newBogeyEntity = new BogeyEntity();
                         newBogeyEntity = bogeyEntities.get(counterI);
                         newBogeyEntity.getDetailedCard().get(counterJ).setAudio(audioS);
-
+                        newBogeyEntityList.add(newBogeyEntity);
                         if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
                             listener.onCompleteTask(newBogeyEntityList);
                         }

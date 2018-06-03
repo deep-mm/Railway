@@ -5,7 +5,9 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 
 import com.example.amey.loginfirebase.Entity.BogeyEntity;
+import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
 import com.example.amey.loginfirebase.Entity.Card.GeneralCard;
+import com.example.amey.loginfirebase.Listener.AddAudioListener;
 import com.example.amey.loginfirebase.Listener.AddBogeyImageListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralImageListener;
 import com.example.amey.loginfirebase.Listener.GetImageListener;
@@ -32,11 +34,45 @@ public class ImageUtility {
     int counterR=0;
 
     public void uploadGeneralImage(final List<GeneralCard> generalCardList, final AddGeneralImageListener listener){
+        for(int i=0;i<generalCardList.size();i++){
+            final int counterI = i;
+            uploadImage(generalCardList.get(i).getImage(), new AddImageListener() {
+                @Override
+                public void onCompleteTask(List<String> imageS) {
+                    List<GeneralCard> newGeneralCards = new ArrayList<GeneralCard>();
+                    GeneralCard generalCard = generalCardList.get(counterI);
+                    generalCard.setAudio(imageS);
+                    newGeneralCards.add(generalCard);
 
+                    if(counterI == generalCardList.size()-1){
+                        listener.onCompleteTask(newGeneralCards);
+                    }
+                }
+            });
+        }
     }
 
     public void uploadBogeyImage(final List<BogeyEntity> bogeyEntities, final AddBogeyImageListener listener){
-
+        final List<BogeyEntity> newBogeyEntityList = new ArrayList<BogeyEntity>();
+        for(int i=0;i<bogeyEntities.size();i++){
+            final List<DetailedCard> detailedCards = bogeyEntities.get(i).getDetailedCard();
+            for(int j=0;j<detailedCards.size();j++){
+                final int counterI = i;
+                final int counterJ = j;
+                uploadImage(detailedCards.get(j).getImage(), new AddImageListener() {
+                    @Override
+                    public void onCompleteTask(List<String> imageS) {
+                        BogeyEntity newBogeyEntity = new BogeyEntity();
+                        newBogeyEntity = bogeyEntities.get(counterI);
+                        newBogeyEntity.getDetailedCard().get(counterJ).setImage(imageS);
+                        newBogeyEntityList.add(newBogeyEntity);
+                        if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
+                            listener.onCompleteTask(newBogeyEntityList);
+                        }
+                    }
+                });
+            }
+        }
     }
 
 
