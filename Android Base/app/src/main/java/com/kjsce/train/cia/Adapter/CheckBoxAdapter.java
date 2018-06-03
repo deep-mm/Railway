@@ -60,9 +60,12 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
         holder.check_box.setText(Mvalues.get(position));
 
         SharedData sd = new SharedData(context);
+
         type_list = sd.getTypeList();
-        type_list.set(position,isChecked);
-        sd.setTypeList(type_list);
+        System.out.println("zzzzz"+type_list);
+        if(type_list!=null) {
+            holder.check_box.setChecked(type_list.get(position));
+        }
 
         holder.check_box.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +79,16 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
                 isChecked = holder.check_box.isChecked();
 
                 type_list = sd.getTypeList();
-                type_list.set(position,isChecked);
+                if(type_list==null) {
+                    type_list = new ArrayList<Boolean>();
+                    for (int i = 0; i < 8; i++)
+                        type_list.add(false);
+                }
+
+
+                    System.out.println("zzzzz" + type_list);
+                    type_list.set(position, isChecked);
+
                 sd.setTypeList(type_list);
             }
         });

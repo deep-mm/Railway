@@ -16,6 +16,7 @@ import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Adapter.GridAdapter;
 import com.kjsce.train.cia.Adapter.MaintainenceGridAdapter;
+import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -40,7 +41,12 @@ public class InspectionBogeyActivity extends AppCompatActivity {
         sd = new SharedData(getApplicationContext());
         train_name = (TextView) findViewById(R.id.train_name);
 
-        coach = new ArrayList<>(Arrays.asList("S1", "S2 ", "S3", "S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3"));
+        coach = new ArrayList<String>();
+        TrainEntity trainEntity= sd.getTrainEntity();
+        for(int i=0;i<Integer.parseInt(trainEntity.getCompartments());i++){
+            coach.add("S"+(i+1));
+        }
+        //coach = new ArrayList<>(Arrays.asList("S1", "S2 ", "S3", "S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3"));
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         sd.setCoachList(coach);
@@ -55,6 +61,7 @@ public class InspectionBogeyActivity extends AppCompatActivity {
         generateReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent i = new Intent(getApplicationContext(), InspectionTrainReportActivity.class);
                 startActivity(i);
             }

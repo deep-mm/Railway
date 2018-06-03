@@ -15,6 +15,7 @@ import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dhaval on 09-04-2018.
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  */
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
-    private final ArrayList<String> Mvalues;
+    private final List<String> Mvalues;
 
 
     Context context;
@@ -34,7 +35,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
         Mvalues = null;
     }
 
-    public ImageAdapter(ArrayList mvalues,Context c) {
+    public ImageAdapter(List mvalues, Context c) {
         Mvalues = mvalues;
         context = c;
 
