@@ -9,9 +9,14 @@ import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InspectionMenuActivity extends AppCompatActivity {
     Button createreport,totalinspection,help;
@@ -28,6 +33,14 @@ public class InspectionMenuActivity extends AppCompatActivity {
         help= (Button) findViewById(R.id.help);
         logout_button = (RelativeLayout) findViewById(R.id.logout_button);
         sd = new SharedData(getApplicationContext());
+
+        List<Boolean> type_list = new ArrayList<Boolean>();
+        for(int i=0;i<8;i++){
+            type_list.add(false);
+        }
+        sd.setTypeList(type_list);
+
+        System.out.println("zzzzz"+sd.getTypeList());
 
       createreport.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +78,8 @@ public class InspectionMenuActivity extends AppCompatActivity {
                            public void onClick(MaterialDialog dialog, DialogAction which) {
                                sd.isLoggedIn(false);
                                sd.clearAll();
+
+                               FirebaseAuth.getInstance().signOut();
                                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
                                startActivity(i);
                            }

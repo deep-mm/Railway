@@ -1,5 +1,6 @@
 package com.kjsce.train.cia.Activity.Maintainence;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Adapter.TrainSearchListAdapter;
 import com.kjsce.train.cia.Entity.TrainSearchListItem;
 import com.kjsce.train.cia.R;
@@ -146,11 +149,6 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
     public boolean onNavigationItemSelected( MenuItem item) {
         int id =item.getItemId();
 
-        if(id==R.id.total_inspection)
-        {
-            Toast.makeText(this,"Total inspection",Toast.LENGTH_SHORT).show();
-
-        }
         if(id==R.id.help)
         {
             Toast.makeText(this,"help selected",Toast.LENGTH_SHORT).show();
@@ -159,6 +157,9 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
         if(id==R.id.logout)
         {
           Toast.makeText(this,"logout selected",Toast.LENGTH_SHORT).show();
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(i);
           }
 
         return true;

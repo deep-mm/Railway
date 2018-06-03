@@ -16,12 +16,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Adapter.BogeyReportAdapter;
+import com.kjsce.train.cia.Entity.BogeyEntity;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.R;
 
@@ -40,7 +45,10 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
     String previous_coach="",next_coach="";
     SharedData sd;
     List<String> coach_list = new ArrayList<String>();
-    int position;
+    int position,position_bogey;
+    LinearLayout detailed,general;
+    List<BogeyEntity> bogeyEntities;
+    List<DetailedCard> detailedCards;
 
     CardFiles cardfiles;
 
@@ -56,12 +64,36 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         train_number = (TextView)findViewById(R.id.train_number);
         sd = new SharedData(getApplicationContext());
         back_button = (ImageButton) findViewById(R.id.back_button);
+        detailed = (LinearLayout) findViewById(R.id.bottom_bar);
+        general = (LinearLayout) findViewById(R.id.bottom_bar_1);
 
+        detailedCards = new ArrayList<DetailedCard>();
+        if(check()){
+            BogeyEntity bogeyEntity = bogeyEntities.get(position_bogey);
+            detailedCards = bogeyEntity.getDetailedCard();
+            System.out.println("xxxxx"+detailedCards);
+            sd.setDetailedCards(detailedCards);
+        }
         coach_list = sd.getCoachList();
 
+        if(getIntent().hasExtra("type")){
+            String type = getIntent().getExtras().getString("type");
+            if(type.equalsIgnoreCase("detailed")){
+                detailed.setVisibility(View.VISIBLE);
+                general.setVisibility(View.GONE);
+            }
+            else{
+                detailed.setVisibility(View.GONE);
+                general.setVisibility(View.VISIBLE);
+                String train[] = sd.getTrain().split("\\s+");
+                bogey_number.setText(train[1]);
+                train_number.setText(train[0]);
+            }
+        }
         if(getIntent().hasExtra("coach")){
             bogey_number.setText(getIntent().getExtras().getString("coach"));
-            train_number.setText(sd.getTrain());
+            String train[] = sd.getTrain().split("\\s+");
+            train_number.setText(train[0]);
         }
 
         if(getIntent().hasExtra("coach_index")){
@@ -74,10 +106,36 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
             }
         }
 
+        general.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
+                        .title("Confirm")
+                        .content("Are you sure you want to end inspection?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                Intent intent = new Intent(getApplicationContext(),InspectionMenuActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                //
+                            }
+                        })
+                        .show();
+            }
+        });
+
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!previous_coach.equalsIgnoreCase("")) {
+                    onNext();
                     Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
                     i.putExtra("coach", previous_coach);
                     i.putExtra("coach_index",position-1);
@@ -95,6 +153,7 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!next_coach.equalsIgnoreCase("")) {
+                    onNext();
                     Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
                     i.putExtra("coach", next_coach);
                     i.putExtra("coach_index",position+1);
@@ -121,7 +180,7 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         spinner_list.add("Electricals");
         spinner_list.add("Windows");
         final RecyclerView card = (RecyclerView)findViewById(R.id.card_list);
-        adapter = new BogeyReportAdapter(cards,spinner_list,InspectionBogeyReportActivity.this);
+        adapter = new BogeyReportAdapter(detailedCards,spinner_list,InspectionBogeyReportActivity.this,true,"");
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         card.setLayoutManager(mlayoutmanager);
         card.setAdapter(adapter);
@@ -132,8 +191,10 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cardfiles = new CardFiles("Seat no:","Comment:","Type:");
-                cards.add(cardfiles);
+                DetailedCard detailedCard = new DetailedCard();
+                /*cardfiles = new CardFiles("Seat no:","Comment:","Type:");
+                cards.add(cardfiles);*/
+                detailedCards.add(detailedCard);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -142,8 +203,35 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        onNext();
         Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
         startActivity(i);
+    }
+
+    public void onNext(){
+        BogeyEntity bogeyEntity = new BogeyEntity(bogey_number.getText().toString(),"",sd.getDetailedCard(),null);
+        List<BogeyEntity> bogeyEntities = sd.getBogieEntity();
+        bogeyEntities.add(bogeyEntity);
+        sd.setBogieEntity(bogeyEntities);
+    }
+
+    public boolean check() {
+        try {
+            String bogey = bogey_number.getText().toString();
+            bogeyEntities = sd.getBogieEntity();
+            for (int i = 0; i < bogeyEntities.size(); i++) {
+                System.out.println("xxxxx"+bogey);
+                System.out.println("xxxxx"+bogeyEntities.get(i).getBogeyNumber());
+                if (bogeyEntities.get(i).getBogeyNumber().equalsIgnoreCase(bogey)) {
+                    position_bogey = i;
+                    return true;
+                }
+            }
+            return false;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
 

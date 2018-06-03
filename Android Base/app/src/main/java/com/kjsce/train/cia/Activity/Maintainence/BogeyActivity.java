@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.kjsce.train.cia.Adapter.MaintainenceGridAdapter;
 import com.kjsce.train.cia.R;
@@ -17,6 +18,8 @@ public class BogeyActivity extends AppCompatActivity {
     RecyclerView.LayoutManager mLayoutManager;
     RecyclerView.Adapter mAdapter;
     ArrayList<String> coach;
+    TextView number,name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +27,12 @@ public class BogeyActivity extends AppCompatActivity {
 
         coach = new ArrayList<>(Arrays.asList("S1", "S2 ", "S3", "S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3"));
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        String trainName =  getIntent().getExtras().getString("TrainName");
+
+        name = (TextView)findViewById(R.id.train_name);
+
+        name.setText(trainName);
 
         mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);

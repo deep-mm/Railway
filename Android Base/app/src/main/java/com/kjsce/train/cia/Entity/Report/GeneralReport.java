@@ -4,40 +4,42 @@ package com.kjsce.train.cia.Entity.Report;
 import com.kjsce.train.cia.Entity.Analysis.GeneralTrainAnalysis;
 import com.kjsce.train.cia.Entity.Card.GeneralCard;
 
+import java.util.ArrayList;
+import java.util.List;
+
+//final wala bc
+
 public class GeneralReport {
 
-    private String reportSubmittedBy;
     private String placeOfInspection;
     private String typeOfInspection;
     private String trainNumber;
     private String trainName;
     private String dateTime;
     private String manufacturer;
-    private GeneralCard generalCard;
+    private List<GeneralCard> generalCardList;
     private GeneralTrainAnalysis generalTrainAnalysis;
 
+    public void addCard(GeneralCard generalCard)
+    {
+        if(generalCardList==null)
+        {
+            generalCardList=new ArrayList<GeneralCard>();
+        }
+        generalCardList.add(generalCard);
+    }
     public GeneralReport() {
-
     }
 
-    public GeneralReport(String reportSubmittedBy, String placeOfInspection, String typeOfInspection, String trainNumber, String trainName, String dateTime, String manufacturer, GeneralCard generalCard, GeneralTrainAnalysis generalTrainAnalysis) {
-        this.reportSubmittedBy = reportSubmittedBy;
+    public GeneralReport(String placeOfInspection, String typeOfInspection, String trainNumber, String trainName, String dateTime, String manufacturer, List<GeneralCard> generalCardList, GeneralTrainAnalysis generalTrainAnalysis) {
         this.placeOfInspection = placeOfInspection;
         this.typeOfInspection = typeOfInspection;
         this.trainNumber = trainNumber;
         this.trainName = trainName;
         this.dateTime = dateTime;
         this.manufacturer = manufacturer;
-        this.generalCard = generalCard;
+        this.generalCardList = generalCardList;
         this.generalTrainAnalysis = generalTrainAnalysis;
-    }
-
-    public String getReportSubmittedBy() {
-        return reportSubmittedBy;
-    }
-
-    public void setReportSubmittedBy(String reportSubmittedBy) {
-        this.reportSubmittedBy = reportSubmittedBy;
     }
 
     public String getPlaceOfInspection() {
@@ -88,12 +90,12 @@ public class GeneralReport {
         this.manufacturer = manufacturer;
     }
 
-    public GeneralCard getGeneralCard() {
-        return generalCard;
+    public List<GeneralCard> getGeneralCardList() {
+        return generalCardList;
     }
 
-    public void setGeneralCard(GeneralCard generalCard) {
-        this.generalCard = generalCard;
+    public void setGeneralCardList(List<GeneralCard> generalCardList) {
+        this.generalCardList = generalCardList;
     }
 
     public GeneralTrainAnalysis getGeneralTrainAnalysis() {
@@ -107,14 +109,13 @@ public class GeneralReport {
     @Override
     public String toString() {
         return "GeneralReport{" +
-                "reportSubmittedBy='" + reportSubmittedBy + '\'' +
-                ", placeOfInspection='" + placeOfInspection + '\'' +
+                "placeOfInspection='" + placeOfInspection + '\'' +
                 ", typeOfInspection='" + typeOfInspection + '\'' +
                 ", trainNumber='" + trainNumber + '\'' +
                 ", trainName='" + trainName + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", manufacturer='" + manufacturer + '\'' +
-                ", generalCard=" + generalCard +
+                ", generalCardList=" + generalCardList +
                 ", generalTrainAnalysis=" + generalTrainAnalysis +
                 '}';
     }

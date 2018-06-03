@@ -20,7 +20,6 @@
         android:id="@+id/type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/remove"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:text="Type :"
@@ -31,11 +30,23 @@
         android:id="@+id/in_type"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/remove"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="22dp"
         android:layout_marginBottom="10dp"
         android:layout_toRightOf="@id/type" />
+
+
+    <TextView
+        android:id="@+id/in_type_text"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="22dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorBlack"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@id/type" />
+
 
     <TextView
         android:id="@+id/comment"
@@ -54,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/in_type"
         android:layout_toRightOf="@id/comment"
+        android:textColor="@color/colorBlack"
         android:textSize="20sp" />
 
 
@@ -66,7 +78,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="16dp"/>
-
-
 
 </RelativeLayout>

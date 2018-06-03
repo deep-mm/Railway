@@ -76,7 +76,8 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/train_details">
+        android:layout_below="@id/train_details"
+        android:layout_above="@id/endcompliance_button">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -88,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                tools:listitem="@layout/bogey_report_cards" />
+                tools:listitem="@layout/fragment_bogey_cards" />
 
 
         </RelativeLayout>
@@ -99,8 +100,10 @@
         android:id="@+id/endcompliance_button"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent">
+        android:background="#75EEE2F2"
+        android:requiresFadingEdge="horizontal|vertical"
+        android:alpha="1"
+        android:layout_alignParentBottom="true">
 
         <TextView
             android:id="@+id/endcompliance"

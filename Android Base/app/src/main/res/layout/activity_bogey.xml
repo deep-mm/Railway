@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -11,6 +11,7 @@
     >
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="15dp"
@@ -39,30 +40,26 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtNum"
-                    android:text="Number"
+                    android:id="@+id/train_title"
+                    android:text="Train:"
                     android:paddingRight="33dp"
                     android:textSize="20sp"
                     android:textColor="@color/background"/>
 
                 <TextView
+                    android:id="@+id/train_name"
+                    android:layout_below="@id/train_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/txtNum"
                     android:text="Name"
-                    android:textColor="@color/background"
-                    android:textSize="20sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No. Of Coaches:"
-                    android:paddingTop="5dp"
-                    android:layout_below="@+id/txtNum"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/background"
                     android:textSize="20sp"/>
 
             </RelativeLayout>
+
+
         </android.support.v7.widget.CardView>
 
 
@@ -74,5 +71,26 @@
         </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/endcompliance"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:background="#25EEE2F2"
+        android:requiresFadingEdge="horizontal|vertical"
+        android:alpha="1"
+        android:layout_alignParentBottom="true">
 
-</FrameLayout>
+
+        <TextView
+            android:id="@+id/endcompliance_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Compliance"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

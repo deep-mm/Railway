@@ -48,9 +48,14 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Entity.TrainEntity;
+import com.kjsce.train.cia.Entity.UserEntity;
+import com.kjsce.train.cia.Listeners.GetTrainListListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.Backend.TrainUtility;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import java.util.ArrayList;
@@ -70,6 +75,11 @@ public class InspectionTrainReportActivity extends AppCompatActivity
     SharedData sd;
     String typeOfInspection="";
     String selectedStation = "";
+    UserEntity userEntity;
+    TrainEntity selectedTrain;
+    List<TrainEntity> trainEntities;
+    Boolean flag = false;
+    String[] station = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +94,25 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        sd = new SharedData(getApplicationContext());
+        station = new String[4];
+        station[0] = "Select Station";
+
+        userEntity = sd.getUserEntity();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         name=(TextView) headerView.findViewById(R.id.name);
         name.setPaintFlags(name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        name.setText("Aman Agarwal");
+        name.setText(userEntity.getName());
 
         udesignation=(TextView) headerView.findViewById(R.id.udesignation);
         udesignation.setPaintFlags(udesignation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        udesignation.setText("Inspector");
+        udesignation.setText(userEntity.getDesignation());
 
         uid=(TextView) headerView.findViewById(R.id.uid);
-        uid.setText("MH12345");
+        String str[] = userEntity.getEmailId().split("@");
+        uid.setText(str[0]);
 
         lv1=(ListView)findViewById(R.id.lv1);
 
@@ -105,31 +121,22 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         sp1=(Spinner)findViewById(R.id.sp1);
         sp2=(Spinner)findViewById(R.id.sp2);
         stins=findViewById(R.id.stins);
-        sd = new SharedData(getApplicationContext());
 
-        final String[] station={"Enter station","Source","Destination","Mid-way"};
         String[] inspection={"Type of Inspection","General","Detailed"};
 
-
         data=new ArrayList<>();
-        data.add("123    Abc");
-        data.add("101    Sbc");
-        data.add("323    Xyz");
-        data.add("501    Abcxyz");
-        data.add("301    tst");
-        data.add("787    ttt");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-        data.add("101    Sbc");
-
+        TrainUtility trainUtility = new TrainUtility();
+        trainUtility.getTrainList(new GetTrainListListener() {
+            @Override
+            public void onCompleteTask(List<TrainEntity> trainEntityList) {
+                trainEntities = trainEntityList;
+                System.out.println("zzzzz"+trainEntityList);
+                for(int i=0;i<trainEntityList.size();i++){
+                    TrainEntity trainEntity = trainEntityList.get(i);
+                    data.add(trainEntity.getTrainNumber()+"  "+trainEntity.getTrainName());
+                }
+            }
+        });
 
         // adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,data);
 
@@ -143,8 +150,16 @@ public class InspectionTrainReportActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(),"Fields cannot be left empty",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
-                    startActivity(i);
+                    if(typeOfInspection.equalsIgnoreCase("detailed")) {
+                        Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
+                        i.putExtra("type", typeOfInspection);
+                        startActivity(i);
+                    }
+                    else{
+                        Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
+                        i.putExtra("type", typeOfInspection);
+                        startActivity(i);
+                    }
                 }
             }
         });
@@ -381,9 +396,14 @@ public class InspectionTrainReportActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String x=data1.get(position);
-        Toast.makeText(this,"Item "+x,Toast.LENGTH_SHORT).show();
         sv1.setQuery(x,true);
         lv1.setVisibility(View.GONE);
         sd.setTrain(x);
+        sd.setTrainEntity(trainEntities.get(position));
+        selectedTrain = trainEntities.get(position);
+        flag = true;
+        station[1] = selectedTrain.getFrom();
+        station[2] = "Mid-way";
+        station[3] = selectedTrain.getTo();
     }
 }

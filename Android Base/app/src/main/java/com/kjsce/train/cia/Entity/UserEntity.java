@@ -7,17 +7,19 @@ public class UserEntity
     String emailId;
     String password;
     String lastLoginTime;
+    String type;
     String designation;
 
     public UserEntity() {
     }
 
-    public UserEntity(String userId, String name, String emailId, String password, String lastLoginTime, String designation) {
+    public UserEntity(String userId, String name, String emailId, String password, String lastLoginTime, String type, String designation) {
         this.userId = userId;
         this.name = name;
         this.emailId = emailId;
         this.password = password;
         this.lastLoginTime = lastLoginTime;
+        this.type = type;
         this.designation = designation;
     }
 
@@ -69,6 +71,14 @@ public class UserEntity
         this.designation = designation;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
@@ -77,6 +87,7 @@ public class UserEntity
                 ", emailId='" + emailId + '\'' +
                 ", password='" + password + '\'' +
                 ", lastLoginTime='" + lastLoginTime + '\'' +
+                ", type='" + type + '\'' +
                 ", designation='" + designation + '\'' +
                 '}';
     }

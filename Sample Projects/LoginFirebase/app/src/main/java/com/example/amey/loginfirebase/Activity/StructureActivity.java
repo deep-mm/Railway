@@ -91,7 +91,7 @@ public class StructureActivity extends AppCompatActivity {
             intent = new Intent(this , AudioActivity.class);
             startActivity(intent);
         }
-        public void toAImage (View view)
+        public void toImage (View view)
         {
             intent = new Intent(this , ImageActivity.class);
             startActivity(intent);
@@ -99,7 +99,7 @@ public class StructureActivity extends AppCompatActivity {
         public void toUser(View view){
             System.out.println("uuu");
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            UserEntity userEntity = new UserEntity(uid,"test","test@email.com","password","null","designation");
+            UserEntity userEntity = new UserEntity(uid,"test1","test11@email.com","password","null","Inspection","designation");
             UserUtility userUtility = new UserUtility();
             AddUserListener addUserListener = new AddUserListener() {
                 @Override

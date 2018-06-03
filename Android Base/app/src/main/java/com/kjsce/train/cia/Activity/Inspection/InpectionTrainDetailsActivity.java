@@ -6,14 +6,12 @@ import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -23,7 +21,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -33,14 +30,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Adapter.BogeyReportAdapter;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.ImageAdapter;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
@@ -62,10 +54,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.UUID;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
-import static android.os.Environment.getExternalStorageDirectory;
 
 public class InpectionTrainDetailsActivity extends AppCompatActivity {
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
@@ -82,7 +72,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 10;
     public int SELECT_PICTURE = 100;
-    ArrayList<String> paths = new ArrayList<String>();
+    List<String> paths = new ArrayList<String>();
     ArrayList<String> images = new ArrayList<String>();
     ArrayList<String> audio = new ArrayList<String>();
     ArrayList<String> checkBoxList = new ArrayList<String>();
@@ -95,6 +85,8 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     SharedData sd;
     List<Boolean> typeList;
     List<DetailedCard> detailedCards;
+    DetailedCard detailedCard;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,16 +99,27 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             if(getIntent().hasExtra("type")) {
                 typeval.setText(getIntent().getExtras().getString("type"));
                 descriptionval.setText(getIntent().getExtras().getString("comment"));
+                position = getIntent().getExtras().getInt("position");
             }
 
             camera = (ImageButton)findViewById(R.id.camera);
             mic = (ImageButton)findViewById(R.id.mic);
             sd = new SharedData(getApplicationContext());
-            typeList = new ArrayList<Boolean>();
-            sd.setTypeList(typeList);
 
             checkBoxList = getTypes();
-            detailedCards = sd.getDetailedCard();
+            detailedCards = new ArrayList<DetailedCard>();
+
+            if(check()) {
+                detailedCard = detailedCards.get(position);
+                paths = detailedCard.getImage();
+                paths.addAll(detailedCard.getAudio());
+                Problem p = detailedCard.getProblem();
+                System.out.println("yyyyy"+p.getList());
+                sd.setTypeList(p.getList());
+            }
+            else{
+                detailedCards = new ArrayList<DetailedCard>();
+            }
 
             done = (RelativeLayout) findViewById(R.id.done);
             notdone = (RelativeLayout) findViewById(R.id.notdone);
@@ -180,15 +183,22 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
                 }
                 typeList = sd.getTypeList();
+                System.out.println("zzzzzy"+typeList);
                 for (int i=0;i<checkBoxList.size();i++){
-                    box.add(typeList.get(i));
+                    if(typeList.get(i)==null)
+                        box.add(false);
+                    else
+                        box.add(typeList.get(i));
                 }
+                System.out.println("zzzzzy"+box);
                 Problem problem = getProblem(box);
+                problem.setList(box);
                 DetailedCard detailedCard = new DetailedCard(problem,typeval.getText().toString(),images,descriptionval.getText().toString(),
                         false,audio);
                 detailedCards.add(detailedCard);
                 sd.setDetailedCards(detailedCards);
                 Intent intent = new Intent(getApplicationContext(),InspectionBogeyReportActivity.class);
+                //Set train and bogie number
                 startActivity(intent);
             }
         });
@@ -256,6 +266,79 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
                 default:
                     return null;
 
+            }
+        }
+
+    public List<Boolean> getProblemClass(Problem p){
+
+        ArrayList<String> type = new ArrayList<String>();
+        List<Boolean> problems = new ArrayList<Boolean>();
+        switch(typeval.getText().toString()){
+
+            case "Toilets":
+                ToiletProblem toiletProblem = (ToiletProblem)p;
+                problems.add(toiletProblem.isFittings());
+                problems.add(toiletProblem.isFloorDrainage());
+                problems.add(toiletProblem.isCleanliness());
+                problems.add(toiletProblem.isSmell());
+                problems.add(toiletProblem.isBiotoilet());
+                return problems;
+
+            case "Coach Interior Amenities":
+                CoachInteriorAmenitiesProblem coachInteriorAmenitiesProblem = (CoachInteriorAmenitiesProblem)p;
+                problems.add(coachInteriorAmenitiesProblem.isFittings());
+                problems.add(coachInteriorAmenitiesProblem.isWindowGlass());
+                problems.add(coachInteriorAmenitiesProblem.isWindowShutter());
+                problems.add(coachInteriorAmenitiesProblem.isBerth());
+                problems.add(coachInteriorAmenitiesProblem.isWallLaminates());
+                return problems;
+
+            case "Coach Interior Cleanliness":
+                CoachInteriorCleanProblem coachInteriorCleanProblem = (CoachInteriorCleanProblem)p;
+                problems.add(coachInteriorCleanProblem.isGangwayCleanliness());
+                problems.add(coachInteriorCleanProblem.isStickers());
+                problems.add(coachInteriorCleanProblem.isSeatingCleanliness());
+                problems.add(coachInteriorCleanProblem.isPests());
+                problems.add(coachInteriorCleanProblem.isRodent());
+                problems.add(coachInteriorCleanProblem.isBedrollQuality());
+                return problems;
+
+            case "Coach Exterior":
+                CoachExteriorProblem coachExteriorProblem = (CoachExteriorProblem)p;
+                problems.add(coachExteriorProblem.isPaintQuality());
+                problems.add(coachExteriorProblem.isBogeyCleanliness());
+                problems.add(coachExteriorProblem.isRoofCleanliness());
+                problems.add(coachExteriorProblem.isWindowGlass());
+                return problems;
+
+            case "Undergear":
+                break;
+
+            case "Electricals":
+                break;
+
+            case "Windows":
+                break;
+
+            default:
+                return null;
+
+        }
+        return null;
+    }
+
+        public boolean check(){
+
+            try{
+                detailedCards = sd.getDetailedCard();
+                if(position<detailedCards.size())
+                    return true;
+
+                else
+                    return false;
+            }
+            catch (Exception e){
+                return false;
             }
         }
 

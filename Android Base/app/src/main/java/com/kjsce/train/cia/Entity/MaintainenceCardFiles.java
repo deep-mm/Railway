@@ -9,9 +9,9 @@ import java.util.Date;
 public class MaintainenceCardFiles {
 
     String train_name;
-    Date date;
+    String date;
 
-    public MaintainenceCardFiles(String train_name, Date date) {
+    public MaintainenceCardFiles(String train_name, String date) {
         this.date = date;
         this.train_name = train_name;
     }
@@ -27,11 +27,11 @@ public class MaintainenceCardFiles {
         this.train_name = train_name;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

@@ -11,6 +11,7 @@ import com.example.amey.loginfirebase.Entity.Report.GeneralReport;
 import com.example.amey.loginfirebase.Entity.TrainEntity;
 import com.example.amey.loginfirebase.Entity.UserEntity;
 import com.example.amey.loginfirebase.Listener.AddAudioListener;
+import com.example.amey.loginfirebase.Listener.AddGeneralCardListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.GetTrainListener;
@@ -18,6 +19,7 @@ import com.example.amey.loginfirebase.Listener.GetUserListener;
 import com.example.amey.loginfirebase.Listener.RemoveGeneralReportListener;
 import com.example.amey.loginfirebase.R;
 import com.example.amey.loginfirebase.Utilities.Backend.AudioUtility;
+import com.example.amey.loginfirebase.Utilities.Backend.GeneralCardUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.GeneralReportUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.TrainUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.UserUtility;
@@ -29,6 +31,25 @@ import java.util.List;
 
 public class GeneralReportActivity extends AppCompatActivity {
     private Button getReport,addReport,removeReport;
+    public void addCard(View view)
+    {
+        final GeneralCard generalCard=new GeneralCard("Parakh","Toilet",null,null,"Not OK",false);
+
+        GeneralReportUtility generalReportUtility=new GeneralReportUtility();
+        generalReportUtility.getGeneralReport("1511092", "231097", new GetGeneralReportListener() {
+            @Override
+            public void onCompleteTask(GeneralReport generalReport) {
+
+                GeneralCardUtility generalCardUtility=new GeneralCardUtility();
+                generalCardUtility.addGeneralCard(generalReport, generalCard, new AddGeneralCardListener() {
+                    @Override
+                    public void onCompleteTask(boolean result) {
+
+                    }
+                });
+            }
+        });
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +62,8 @@ public class GeneralReportActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();
-                GeneralReport generalRep = new GeneralReport("Ramani" , "Dombivli" ,
-                        "Error Resolving", "1511102","Rajdhani","23","bcd",
-                        new GeneralCard("xyzz", null,null,null,false),null);
 
-                generalReportUtility.getGeneralReport(generalRep, new GetGeneralReportListener() {
+                generalReportUtility.getGeneralReport("1511092" ,"231097", new GetGeneralReportListener() {
                     @Override
                     public void onCompleteTask(GeneralReport generalReport) {
 
@@ -59,41 +77,21 @@ public class GeneralReportActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final GeneralReport generalReport = new GeneralReport();
 
-                UserUtility userUtility = new UserUtility();
-                userUtility.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GetUserListener() {
-                    @Override
-                    public void onCompleteTask(UserEntity userEntity) {
-                        generalReport.setReportSubmittedBy(userEntity.getName());
-                    }
-                });
-
-                generalReport.setPlaceOfInspection("LTT");
+                /*generalReport.setPlaceOfInspection("LTT");
                 generalReport.setTypeOfInspection("General");
-                generalReport.setTrainNumber("1511100");
+                generalReport.setTrainNumber("1511092");
                 generalReport.setTrainName("Rajdhani");
-                generalReport.setDateTime("datetime daalde");
+                generalReport.setDateTime("231097");
 
                 TrainUtility trainUtility = new TrainUtility();
                 trainUtility.getTrain("1511100", new GetTrainListener() {
                     @Override
                     public void onCompleteTask(TrainEntity trainEntity) {
-                        generalReport.setPlaceOfInspection(trainEntity.getManufacturer());
+                        generalReport.setManufacturer(trainEntity.getManufacturer());
                     }
                 });
-
-                final GeneralCard generalCard = new GeneralCard();
-                List<String> audioL = new ArrayList<String>();
-                AudioUtility audioUtility = new AudioUtility();
-                audioUtility.uploadAudio(audioL, new AddAudioListener() {
-                    @Override
-                    public void onCompleteTask(List<String> audioS) {
-                        generalCard.setAudio(audioS);
-                    }
-                });
-
-                GeneralReport generalRep = new GeneralReport("Ramani" , "Dombivli" ,
-                        "Error Resolving", "1511102","Rajdhani","23","bcd",
-                        new GeneralCard("xyzz", null,null,null,false),null);
+*/
+                GeneralReport generalRep = new GeneralReport("Dadar","General","1511092","SAMY","231097","tp",null,null);
 
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();
                 generalReportUtility.addGeneralReport(generalRep, new AddGeneralReportListener() {
@@ -110,9 +108,8 @@ public class GeneralReportActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 GeneralReportUtility generalReportUtility= new GeneralReportUtility();
-                GeneralReport generalRep = new GeneralReport("Ramani" , "Dombivli" ,
-                        "Error Resolving", "1511102","Rajdhani","23","bcd",
-                        new GeneralCard("xyzz", null,null,null,false),null);
+                GeneralReport generalRep = new GeneralReport("Dadar","General","1511092","SAMY","231097","tp",null,null);
+
                 generalReportUtility.removeGeneralReport(generalRep, new RemoveGeneralReportListener() {
                     @Override
                     public void onCompleteTask(String result) {

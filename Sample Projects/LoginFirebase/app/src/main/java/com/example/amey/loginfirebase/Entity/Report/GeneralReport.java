@@ -2,6 +2,7 @@ package com.example.amey.loginfirebase.Entity.Report;
 import com.example.amey.loginfirebase.Entity.Analysis.GeneralTrainAnalysis;
 import com.example.amey.loginfirebase.Entity.Card.GeneralCard;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,13 +16,21 @@ public class GeneralReport {
     private String trainName;
     private String dateTime;
     private String manufacturer;
-    private List<GeneralReport> generalCardList;
+    private List<GeneralCard> generalCardList;
     private GeneralTrainAnalysis generalTrainAnalysis;
 
+    public void addCard(GeneralCard generalCard)
+    {
+        if(generalCardList==null)
+        {
+            generalCardList=new ArrayList<GeneralCard>();
+        }
+        generalCardList.add(generalCard);
+    }
     public GeneralReport() {
     }
 
-    public GeneralReport(String placeOfInspection, String typeOfInspection, String trainNumber, String trainName, String dateTime, String manufacturer, List<GeneralReport> generalCardList, GeneralTrainAnalysis generalTrainAnalysis) {
+    public GeneralReport(String placeOfInspection, String typeOfInspection, String trainNumber, String trainName, String dateTime, String manufacturer, List<GeneralCard> generalCardList, GeneralTrainAnalysis generalTrainAnalysis) {
         this.placeOfInspection = placeOfInspection;
         this.typeOfInspection = typeOfInspection;
         this.trainNumber = trainNumber;
@@ -80,11 +89,11 @@ public class GeneralReport {
         this.manufacturer = manufacturer;
     }
 
-    public List<GeneralReport> getGeneralCardList() {
+    public List<GeneralCard> getGeneralCardList() {
         return generalCardList;
     }
 
-    public void setGeneralCardList(List<GeneralReport> generalCardList) {
+    public void setGeneralCardList(List<GeneralCard> generalCardList) {
         this.generalCardList = generalCardList;
     }
 
