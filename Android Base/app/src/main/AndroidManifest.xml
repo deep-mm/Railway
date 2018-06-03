@@ -20,7 +20,6 @@
         <activity android:name=".Activity.Inspection.InpectionTrainDetailsActivity" />
         <activity android:name=".Activity.Inspection.InspectionBogeyActivity" />
         <activity android:name=".Activity.Maintainence.TrainSearchActivity">
-
         </activity>
         <activity android:name=".Activity.SplashActivity" >
             <intent-filter>

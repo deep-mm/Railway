@@ -149,11 +149,6 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
     public boolean onNavigationItemSelected( MenuItem item) {
         int id =item.getItemId();
 
-        if(id==R.id.total_inspection)
-        {
-            Toast.makeText(this,"Total inspection",Toast.LENGTH_SHORT).show();
-
-        }
         if(id==R.id.help)
         {
             Toast.makeText(this,"help selected",Toast.LENGTH_SHORT).show();

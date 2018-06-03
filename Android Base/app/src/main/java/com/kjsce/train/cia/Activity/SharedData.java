@@ -45,6 +45,15 @@ public class SharedData {
         return type;
     }
 
+    public void setStation(String type){
+        editor.putString("station", type).commit();
+    }
+
+    public String getStation(){
+        String type = pref.getString("station", "");
+        return type;
+    }
+
     public void setTrain(String train){
         editor.putString("train", train).commit();
     }

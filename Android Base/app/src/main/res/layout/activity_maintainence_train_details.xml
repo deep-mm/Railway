@@ -77,15 +77,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sno"
                 android:layout_toRightOf="@id/type"
+                android:text="Toilet"
+                android:layout_marginLeft="15dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="#734D98"
-                android:textStyle="bold" />
+                android:textColor="@color/colorBlack" />
 
             <TextView
                 android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/type"
+                android:layout_marginTop="8dp"
                 android:layout_marginLeft="20dp"
                 android:text="Description : "
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -97,10 +99,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/type"
+                android:layout_marginTop="8dp"
+                android:text="Not Good"
+                android:layout_marginLeft="4dp"
                 android:layout_toRightOf="@+id/description"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:textColor="#734D98"
-                android:textStyle="bold" />
+                android:textColor="@color/colorBlack" />
 
             <RelativeLayout
                 android:id="@+id/check_boxes"
@@ -121,7 +125,6 @@
                         android:id="@+id/imgurl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
                         app:layoutManager="LinearLayoutManager"
                         tools:listitem="@layout/fragment_check_boxes" />
 
@@ -149,7 +152,6 @@
                         android:id="@+id/checkBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
                         app:layoutManager="LinearLayoutManager"
                         tools:listitem="@layout/fragment_image_maintainence" />
 

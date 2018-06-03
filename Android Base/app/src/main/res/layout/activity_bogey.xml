@@ -40,27 +40,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtNum"
-                    android:text="Number"
+                    android:id="@+id/train_title"
+                    android:text="Train:"
                     android:paddingRight="33dp"
                     android:textSize="20sp"
                     android:textColor="@color/background"/>
 
                 <TextView
-                    android:id="@+id/trainname"
+                    android:id="@+id/train_name"
+                    android:layout_below="@id/train_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/txtNum"
                     android:text="Name"
-                    android:textColor="@color/background"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No. Of Coaches:"
-                    android:paddingTop="5dp"
-                    android:layout_below="@+id/txtNum"
+                    android:layout_marginTop="8dp"
                     android:textColor="@color/background"
                     android:textSize="20sp"/>
 

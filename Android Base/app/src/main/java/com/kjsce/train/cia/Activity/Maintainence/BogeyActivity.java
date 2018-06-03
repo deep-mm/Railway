@@ -25,18 +25,13 @@ public class BogeyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bogey);
 
-
-
         coach = new ArrayList<>(Arrays.asList("S1", "S2 ", "S3", "S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3","S1", "S2 ", "S3"));
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        String trainNo =  getIntent().getExtras().getString("TrainNo");
         String trainName =  getIntent().getExtras().getString("TrainName");
 
-        number = (TextView)findViewById(R.id.txtNum);
-        name = (TextView)findViewById(R.id.trainname);
+        name = (TextView)findViewById(R.id.train_name);
 
-        number.setText(trainNo);
         name.setText(trainName);
 
         mLayoutManager = new GridLayoutManager(this, 2);
