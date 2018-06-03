@@ -16,5 +16,4 @@
         android:checked="true"
         android:text="Toilet"/>
 
-
 </RelativeLayout>

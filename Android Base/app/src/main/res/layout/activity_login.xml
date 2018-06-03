@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:hint="Username"
         android:textAlignment="center"
+        android:inputType="textEmailAddress"
         android:textColorHint="@color/colorWhite"
         android:textSize="20sp"
         android:fontFamily="sans-serif"

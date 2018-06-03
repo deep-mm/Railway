@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="175dp"
     android:background="@drawable/side_nav_bar"
-    android:padding="8dp"
+    android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:gravity="bottom"
     android:orientation="horizontal">

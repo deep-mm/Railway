@@ -32,8 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         sd = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
 
-        if(true) {
-//!helper.isNetworkConnected()
+        if(!helper.isNetworkConnected()) {
 
             new Handler().postDelayed(new Runnable() {
 
@@ -48,11 +47,13 @@ public class SplashActivity extends AppCompatActivity {
             new MaterialDialog.Builder(this)
                     .title("No Internet Connection")
                     .content("You need active internet connection to login")
-                    .positiveText("Exit")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            finishAffinity();
+                            Intent intent = new Intent(getApplicationContext(),SplashActivity.class);
+                            startActivity(intent);
                         }
                     })
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
