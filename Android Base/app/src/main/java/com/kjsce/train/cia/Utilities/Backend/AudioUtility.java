@@ -1,8 +1,11 @@
 package com.kjsce.train.cia.Utilities.Backend;
 
+
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -10,7 +13,10 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.kjsce.train.cia.Entity.BogeyEntity;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Listeners.AddAudioListener;
+import com.kjsce.train.cia.Listeners.AddBogeyAudioListener;
 import com.kjsce.train.cia.Listeners.GetAudioListener;
 
 import java.io.File;
@@ -26,6 +32,29 @@ public class AudioUtility {
     int i;
     int counterU=0;
     int counterR=0;
+
+    public void uploadBogeyAudio(final List<BogeyEntity> bogeyEntities, final AddBogeyAudioListener listener){
+        final List<BogeyEntity> newBogeyEntityList = new ArrayList<BogeyEntity>();
+        for(int i=0;i<bogeyEntities.size();i++){
+            final List<DetailedCard> detailedCards = bogeyEntities.get(i).getDetailedCard();
+            for(int j=0;j<detailedCards.size();j++){
+                final int counterI = i;
+                final int counterJ = j;
+                uploadAudio(detailedCards.get(j).getAudio(), new AddAudioListener() {
+                    @Override
+                    public void onCompleteTask(List<String> audioS) {
+                        BogeyEntity newBogeyEntity = new BogeyEntity();
+                        newBogeyEntity = bogeyEntities.get(counterI);
+                        newBogeyEntity.getDetailedCard().get(counterJ).setAudio(audioS);
+
+                        if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
+                            listener.onCompleteTask(newBogeyEntityList);
+                        }
+                    }
+                });
+            }
+        }
+    }
 
 
     public void uploadAudio(final List<String> audioL, final AddAudioListener listener)
