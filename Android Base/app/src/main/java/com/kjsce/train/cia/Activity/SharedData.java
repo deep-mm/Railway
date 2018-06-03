@@ -72,9 +72,6 @@ public class SharedData {
         return train;
     }
 
-
-
-
     public void setCoachList(List<String> coach_list){
         String coach = gson.toJson(coach_list);
         editor.putString("coach_list",coach).commit();
@@ -85,6 +82,18 @@ public class SharedData {
         Type listType = new TypeToken<List<String>>() {}.getType();
         List<String> coach_list = gson.fromJson(json, listType);
         return coach_list;
+    }
+
+    public void setTrainList(List<String> train_list){
+        String train = gson.toJson(train_list);
+        editor.putString("train_list",train).commit();
+    }
+
+    public List<String> getTrainList(){
+        String json = pref.getString("train_list", "");
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        List<String> train_list = gson.fromJson(json, listType);
+        return train_list;
     }
 
     public void setTypeList(List<Boolean> type_list){
@@ -120,6 +129,18 @@ public class SharedData {
         String json = pref.getString("bogey_entity", "");
         Type listType = new TypeToken<List<BogeyEntity>>() {}.getType();
         List<BogeyEntity> card_list = gson.fromJson(json, listType);
+        return card_list;
+    }
+
+    public void setTrainEntityList(List<TrainEntity> cards){
+        String card = gson.toJson(cards);
+        editor.putString("train_entity_list",card).commit();
+    }
+
+    public List<TrainEntity> getTrainEntityList(){
+        String json = pref.getString("train_entity_list", "");
+        Type listType = new TypeToken<List<TrainEntity>>() {}.getType();
+        List<TrainEntity> card_list = gson.fromJson(json, listType);
         return card_list;
     }
 

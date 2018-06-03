@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedData sd;
     Boolean success;
     private FirebaseAuth mAuth;
+    MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (get_username.equalsIgnoreCase("") || get_password.equalsIgnoreCase("")) {
                     Toast.makeText(getApplicationContext(), "Fields cannot be left empty", Toast.LENGTH_SHORT).show();
                 } else {
+                    materialDialog = new MaterialDialog.Builder(LoginActivity.this)
+                            .title("Logging In")
+                            .content("Please Wait")
+                            .progress(true, 0)
+                            .show();
                     signIn(get_username,get_password);
                 }
             }
@@ -78,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     i = new Intent(getApplicationContext(), TrainSearchActivity.class);
                 }
-                System.out.println("USerEntity"+userEntity);
                 sd.setUserEntity(userEntity);
                 startActivity(i);
             }
@@ -121,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                                     })
                                     .show();
                         }
+                        materialDialog.hide();
                     }
                 });
     }

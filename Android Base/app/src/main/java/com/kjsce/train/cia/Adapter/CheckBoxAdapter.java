@@ -62,7 +62,6 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
         SharedData sd = new SharedData(context);
 
         type_list = sd.getTypeList();
-        System.out.println("zzzzz"+type_list);
         if(type_list!=null) {
             holder.check_box.setChecked(type_list.get(position));
         }
