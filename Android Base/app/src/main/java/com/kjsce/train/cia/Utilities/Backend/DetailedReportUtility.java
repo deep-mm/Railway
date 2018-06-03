@@ -93,4 +93,6 @@ public class DetailedReportUtility {
         mFirebaseDatabase.getReference().child("DetailedReport").child(detailedReport.getTrainNumber() + detailedReport.getDateTime()).removeValue();
 
     }
+
+
 }

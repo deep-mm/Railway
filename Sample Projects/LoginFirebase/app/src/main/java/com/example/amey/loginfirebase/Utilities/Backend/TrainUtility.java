@@ -12,6 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainUtility {
@@ -48,14 +49,31 @@ public class TrainUtility {
         mFirebaseDatabase.getReference().child("Train").child(trainEntity.getTrainNumber()).removeValue();
     }
 
-    public  void getTrainList(final List<TrainEntity> trainEntityList, GetTrainListListener getTrainListListener){
+    public void getTrainList(final GetTrainListListener getTrainListListener){
+
+        final List<TrainEntity> trainEntityList = new ArrayList<TrainEntity>();
+
+        ValueEventListener tripListner = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                getTrainListListener.onComplete(trainEntityList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+
         mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Train");
+        mTrainDatabaseReference.addValueEventListener(tripListner);
         ChildEventListener mChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 TrainEntity trainEntity = dataSnapshot.getValue(TrainEntity.class);
                 trainEntityList.add(trainEntity);
-
+                System.out.println("zzzzz"+trainEntity);
             }
 
             @Override

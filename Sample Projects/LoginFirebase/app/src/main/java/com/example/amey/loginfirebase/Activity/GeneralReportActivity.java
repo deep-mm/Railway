@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.amey.loginfirebase.Entity.Card.GeneralCard;
 import com.example.amey.loginfirebase.Entity.Report.GeneralReport;
@@ -13,6 +14,7 @@ import com.example.amey.loginfirebase.Entity.UserEntity;
 import com.example.amey.loginfirebase.Listener.AddAudioListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralCardListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralReportListener;
+import com.example.amey.loginfirebase.Listener.GetGeneralReportListListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.GetTrainListener;
 import com.example.amey.loginfirebase.Listener.GetUserListener;
@@ -50,6 +52,18 @@ public class GeneralReportActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void getGeneralL(View view){
+        GeneralReportUtility generalReportUtility=new GeneralReportUtility();
+        generalReportUtility.getGeneralReportList(new GetGeneralReportListListener() {
+            @Override
+            public void onCompleteTask(List<GeneralReport> generalReportList) {
+                System.out.println(generalReportList);
+            }
+        });
+
+
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +80,8 @@ public class GeneralReportActivity extends AppCompatActivity {
                 generalReportUtility.getGeneralReport("1511092" ,"231097", new GetGeneralReportListener() {
                     @Override
                     public void onCompleteTask(GeneralReport generalReport) {
-
+                        Toast.makeText(getApplicationContext(),generalReport.toString(),Toast.LENGTH_SHORT).show();
+                        System.out.println(generalReport);
                     }
                 });
             }
@@ -119,5 +134,7 @@ public class GeneralReportActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 }

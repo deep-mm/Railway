@@ -5,14 +5,18 @@ import com.example.amey.loginfirebase.Entity.Report.DetailedReport;
 import com.example.amey.loginfirebase.Entity.Report.GeneralReport;
 import com.example.amey.loginfirebase.Listener.AddGeneralAudioListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralReportListener;
+import com.example.amey.loginfirebase.Listener.GetDetailedReportListListener;
+import com.example.amey.loginfirebase.Listener.GetGeneralReportListListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.RemoveGeneralReportListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -78,5 +82,57 @@ public class GeneralReportUtility {
     {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseDatabase.getReference().child("GeneralReport").child(generalReport.getTrainNumber() + generalReport.getDateTime()).removeValue();
+    }
+
+    public void getGeneralReportList(final GetGeneralReportListListener getGeneralReportListListener){
+
+        final List<GeneralReport> generalReportList = new ArrayList<>();
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                getGeneralReportListListener.onCompleteTask(generalReportList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mGeneralReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("GeneralReport");
+        mGeneralReportDatabaseReference.addValueEventListener(valueEventListener);
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                GeneralReport generalReport = dataSnapshot.getValue(GeneralReport.class);
+                generalReportList.add(generalReport);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mGeneralReportDatabaseReference.addChildEventListener(childEventListener);
+
+
     }
 }

@@ -10,9 +10,11 @@ import com.example.amey.loginfirebase.Listener.AddBogeyAudioListener;
 import com.example.amey.loginfirebase.Listener.AddDetailedCardListener;
 import com.example.amey.loginfirebase.Listener.AddDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralCardListener;
+import com.example.amey.loginfirebase.Listener.GetDetailedReportListListener;
 import com.example.amey.loginfirebase.Listener.GetDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
 import com.example.amey.loginfirebase.Listener.RemoveDetailedReportListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -95,6 +97,58 @@ public class DetailedReportUtility {
     {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseDatabase.getReference().child("DetailedReport").child(detailedReport.getTrainNumber() + detailedReport.getDateTime()).removeValue();
+
+    }
+
+    public void getDetailedReportList(final GetDetailedReportListListener getDetailedReportListListener){
+
+        final List<DetailedReport> detailedReportList = new ArrayList<>();
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                getDetailedReportListListener.onCompleteTask(detailedReportList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport");
+        mDetailedReportDatabaseReference.addValueEventListener(valueEventListener);
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                DetailedReport detailedReport = dataSnapshot.getValue(DetailedReport.class);
+                detailedReportList.add(detailedReport);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mDetailedReportDatabaseReference.addChildEventListener(childEventListener);
+
 
     }
 }
