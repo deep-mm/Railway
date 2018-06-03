@@ -1,9 +1,5 @@
 package com.kjsce.train.cia.Adapter;
 
-/**
- * Created by Dhaval on 09-04-2018.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,7 +35,6 @@ import java.util.List;
 
 public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.ViewHolder>{
     private final List<DetailedCard> Mvalues;
-    private final ArrayList<StoreCard>ReportValues = new ArrayList<StoreCard>();
     private ArrayList<String> Spinner_list = null;
     public int SELECT_PICTURE = 100;
     public StoreCard storeCard = new StoreCard();
@@ -86,7 +81,6 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
         //textwatchers i.e storeCard contains all the information of all the cards store them in database
         holder.in_comment.setText(comment);
-        holder.comment.setText(Mvalues.get(position).getComment());
         holder.in_comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -104,7 +98,6 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
             }
         });
-        holder.type.setText(Mvalues.get(position).getType());
 
         if(flag)
         {
@@ -123,7 +116,6 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
                 String typevalue = parent.getItemAtPosition(position).toString();
                 if (!typevalue.equals(null)) {
                     type = typevalue;
-                    storeCard.setIn_type(typevalue);
                 }
 
             }
@@ -137,8 +129,6 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if(position==0)
                 {
                     notifyDataSetChanged();
@@ -164,6 +154,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
                     Intent intent = new Intent(context, MaintainenceTrainDetailsActivity.class);
                     intent.putExtra("type", type);
                     intent.putExtra("comment", comment_text);
+                    intent.putExtra("position",position);
                     context.startActivity(intent);
                 }
             }
@@ -211,15 +202,6 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         public void onClick(View view) {
             clickListener.onClick(view,getPosition());
         }
-    }
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    void openImageChooser() {
-
-        Activity gallery = (Activity)context;
-        Intent intent = new Intent();
-        gallery.getIntent().setType("images/*");
-        gallery.getIntent().setAction(Intent.ACTION_PICK_ACTIVITY);
-        gallery.startActivityForResult(Intent.createChooser(intent, "Select Picture"),SELECT_PICTURE);
     }
 
 

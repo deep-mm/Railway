@@ -13,15 +13,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Entity.TrainEntity;
+import com.kjsce.train.cia.Listeners.GetTrainListListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.Backend.TrainUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 public class InspectionMenuActivity extends AppCompatActivity {
     Button createreport,totalinspection,help;
     RelativeLayout logout_button;
     SharedData sd;
+    MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +40,11 @@ public class InspectionMenuActivity extends AppCompatActivity {
         logout_button = (RelativeLayout) findViewById(R.id.logout_button);
         sd = new SharedData(getApplicationContext());
 
-        List<Boolean> type_list = new ArrayList<Boolean>();
-        for(int i=0;i<8;i++){
-            type_list.add(false);
-        }
-        sd.setTypeList(type_list);
-
-        System.out.println("zzzzz"+sd.getTypeList());
+        syncData();
 
       createreport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i = new Intent(getApplicationContext(), InspectionTrainReportActivity.class);
                 startActivity(i);
             }
@@ -53,7 +52,6 @@ public class InspectionMenuActivity extends AppCompatActivity {
        totalinspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i = new Intent(getApplicationContext(), TotalInspection.class);
                 startActivity(i);
             }
@@ -92,6 +90,29 @@ public class InspectionMenuActivity extends AppCompatActivity {
                        .show();
            }
        });
+    }
+
+    public void syncData() {
+
+        materialDialog = new MaterialDialog.Builder(InspectionMenuActivity.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .show();
+        List<String> data = new ArrayList<String>();
+        TrainUtility trainUtility = new TrainUtility();
+        trainUtility.getTrainList(new GetTrainListListener() {
+            @Override
+            public void onCompleteTask(List<TrainEntity> trainEntityList) {
+                for (int i = 0; i < trainEntityList.size(); i++) {
+                    TrainEntity trainEntity = trainEntityList.get(i);
+                    data.add(trainEntity.getTrainNumber() + "  " + trainEntity.getTrainName());
+                }
+                sd.setTrainList(data);
+                sd.setTrainEntityList(trainEntityList);
+                materialDialog.hide();
+            }
+        });
     }
 
     @Override

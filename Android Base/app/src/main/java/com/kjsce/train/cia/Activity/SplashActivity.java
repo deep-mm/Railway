@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         sd = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
 
-        if(!helper.isNetworkConnected()) {
+        if(helper.isNetworkConnected()) {
 
             new Handler().postDelayed(new Runnable() {
 

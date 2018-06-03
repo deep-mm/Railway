@@ -46,6 +46,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Activity.LoginActivity;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.TrainEntity;
@@ -68,7 +69,7 @@ public class InspectionTrainReportActivity extends AppCompatActivity
     ListView lv1;
     SearchView sv1;
     ArrayAdapter<String> adapter;
-    ArrayList<String> data;
+    List<String> data;
     ArrayList<String> data1=new ArrayList<>();
     Spinner sp1,sp2;
     Button stins;
@@ -122,26 +123,17 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         sp2=(Spinner)findViewById(R.id.sp2);
         stins=findViewById(R.id.stins);
 
+        sp1.setVisibility(View.INVISIBLE);
+        sp2.setVisibility(View.INVISIBLE);
+
         String[] inspection={"Type of Inspection","General","Detailed"};
 
-        data=new ArrayList<>();
-        TrainUtility trainUtility = new TrainUtility();
-        trainUtility.getTrainList(new GetTrainListListener() {
-            @Override
-            public void onCompleteTask(List<TrainEntity> trainEntityList) {
-                trainEntities = trainEntityList;
-                System.out.println("zzzzz"+trainEntityList);
-                for(int i=0;i<trainEntityList.size();i++){
-                    TrainEntity trainEntity = trainEntityList.get(i);
-                    data.add(trainEntity.getTrainNumber()+"  "+trainEntity.getTrainName());
-                }
-            }
-        });
-
-        // adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,data);
+        data=sd.getTrainList();
 
         sv1.setOnQueryTextListener(this);
         lv1.setOnItemClickListener(this);
+
+        trainEntities = sd.getTrainEntityList();
 
         stins.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,14 +142,15 @@ public class InspectionTrainReportActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(),"Fields cannot be left empty",Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    sd.setType(typeOfInspection);
+                    sd.setStation(selectedStation);
+                    sd.setTrainEntity(selectedTrain);
                     if(typeOfInspection.equalsIgnoreCase("detailed")) {
                         Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
-                        i.putExtra("type", typeOfInspection);
                         startActivity(i);
                     }
                     else{
                         Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
-                        i.putExtra("type", typeOfInspection);
                         startActivity(i);
                     }
                 }
@@ -321,9 +314,11 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         if (id == R.id.creport) {
             Intent i = new Intent(getApplicationContext(), InspectionTrainReportActivity.class);
             startActivity(i);
-        } else if (id == R.id.totinspection) {
+        }
+        else if (id == R.id.totinspection) {
 
-            //Total Inspection screen
+            Intent i = new Intent(getApplicationContext(), TotalInspection.class);
+            startActivity(i);
 
         } else if (id == R.id.help) {
 
@@ -340,6 +335,8 @@ public class InspectionTrainReportActivity extends AppCompatActivity
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                             sd.isLoggedIn(false);
                             sd.clearAll();
+
+                            FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(getApplicationContext(),LoginActivity.class);
                             startActivity(i);
                         }
@@ -399,11 +396,12 @@ public class InspectionTrainReportActivity extends AppCompatActivity
         sv1.setQuery(x,true);
         lv1.setVisibility(View.GONE);
         sd.setTrain(x);
-        sd.setTrainEntity(trainEntities.get(position));
         selectedTrain = trainEntities.get(position);
         flag = true;
         station[1] = selectedTrain.getFrom();
         station[2] = "Mid-way";
         station[3] = selectedTrain.getTo();
+        sp1.setVisibility(View.VISIBLE);
+        sp2.setVisibility(View.VISIBLE);
     }
 }

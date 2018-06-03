@@ -53,6 +53,7 @@
             android:id="@+id/uid"
             android:fontFamily="serif"
             android:textSize="20sp"
+            android:background="@drawable/maintenance_nav_header_underline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
