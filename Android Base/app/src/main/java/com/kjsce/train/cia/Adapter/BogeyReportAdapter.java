@@ -27,6 +27,7 @@ import com.kjsce.train.cia.Activity.Maintainence.MaintainenceTrainDetailsActivit
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.CardFiles;
 import com.kjsce.train.cia.Entity.StoreCard;
+import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
