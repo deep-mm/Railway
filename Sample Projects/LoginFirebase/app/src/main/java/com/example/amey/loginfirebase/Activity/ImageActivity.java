@@ -1,155 +1,107 @@
 package com.example.amey.loginfirebase.Activity;
 
-
-import android.support.v7.app.AppCompatActivity;
-
-
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.webkit.MimeTypeMap;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.amey.loginfirebase.Listener.AddImageListener;
+import com.example.amey.loginfirebase.Listener.GetImageListener;
 import com.example.amey.loginfirebase.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+import com.example.amey.loginfirebase.Utilities.Backend.ImageUtility;
+import com.frosquivel.magicaltakephoto.MagicalTakePhoto;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ImageActivity extends AppCompatActivity {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-
-    private Button mButtonChooseImage;
-    private Button mButtonUpload;
-    private TextView mTextViewShowUploads;
-    private EditText mEditTextFileName;
-    private ImageView mImageView;
-    private ProgressBar mProgressBar;
-
-    private Uri mImageUri;
-
-    private StorageReference mStorageRef;
-    private DatabaseReference mDatabaseRef;
-
-    private StorageTask mUploadTask;
+    MagicalTakePhoto magicalTakePhoto;
+    private String timeStamp;
+    private String mFileName = null;
+    private List<String> imageL = new ArrayList<String>();
+    private List<String> imageS = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image);
-
-        mButtonChooseImage = findViewById(R.id.button_choose_image);
-        mButtonUpload = findViewById(R.id.button_upload);
-        mTextViewShowUploads = findViewById(R.id.text_view_show_uploads);
-        mEditTextFileName = findViewById(R.id.edit_text_file_name);
-        mImageView = findViewById(R.id.image_view);
-        mProgressBar = findViewById(R.id.progress_bar);
-
-        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
-
-        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFileChooser();
-            }
-        });
-
-        mButtonUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mUploadTask != null && mUploadTask.isInProgress()) {
-                    Toast.makeText(ImageActivity.this, "Upload in progress", Toast.LENGTH_SHORT).show();
-                } else {
-                    uploadFile();
-                }
-            }
-        });
+        setContentView(R.layout.activity_image_new);
 
     }
 
-    private void openFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    public void getImage(View view){
+
+        ImageUtility imageUtility = new ImageUtility();
+        try {
+            imageUtility.retrieveImage(imageS, new GetImageListener() {
+                @Override
+                public void onCompleteTask(List<String> image) {
+                    imageL = image;
+                    for(int i=0;i<image.size();i++){
+                        System.out.println(image.get(i));
+                    }
+                }
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void uploadImage(View view){
+        File mainDir= Environment.getExternalStorageDirectory();
+        File mainFile=new File(mainDir,"/CIA/Inspection/Images/Sent");
+
+        ImageUtility imageUtility = new ImageUtility();
+        imageUtility.uploadImage(imageL, new AddImageListener() {
+            @Override
+            public void onCompleteTask(List<String> image) {
+                if(image != null){
+                    for(int i=0;i<image.size();i++){
+                        System.out.println(image.get(i));
+                    }
+                }
+                imageS = image;
+            }
+        });
+    }
+
+    public void clickImage(View view){
+        magicalTakePhoto =  new MagicalTakePhoto(this,2000);
+        magicalTakePhoto.takePhoto("abc");
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        magicalTakePhoto.resultPhoto(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            mImageUri = data.getData();
 
-            Picasso.with(this).load(mImageUri).into(mImageView);
+        // example to get photo
+        // imageView.setImageBitmap(magicalTakePhoto.getMyPhoto());
+        Bitmap bitmap = magicalTakePhoto.getMyPhoto();
+
+        File mainDir= Environment.getExternalStorageDirectory();
+        File mainFile=new File(mainDir,"/CIA/Inspection/Images/Sent");
+        mainFile.mkdirs();
+
+        timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        mFileName = mainFile + "/" + new Random().nextInt(9) + timeStamp + ".jpg";
+        imageL.add(mFileName);
+
+        try {
+            FileOutputStream fOut = new FileOutputStream(mFileName);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+            fOut.flush();
+            fOut.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
-
-    private String getFileExtension(Uri uri) {
-        ContentResolver cR = getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-
-    private void uploadFile() {
-        if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(mImageUri));
-
-            mUploadTask = fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mProgressBar.setProgress(0);
-                                }
-                            }, 500);
-
-                            Toast.makeText(ImageActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
-                            Upload upload = new Upload(mEditTextFileName.getText().toString().trim(),
-                                    taskSnapshot.getDownloadUrl().toString());
-                            String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ImageActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                            mProgressBar.setProgress((int) progress);
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
-        }
-    }
-
 }

@@ -1,6 +1,6 @@
 package com.example.amey.loginfirebase.Utilities.Backend;
 
-import android.app.ProgressDialog;
+
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -45,7 +45,7 @@ public class AudioUtility {
                         newBogeyEntity = bogeyEntities.get(counterI);
                         newBogeyEntity.getDetailedCard().get(counterJ).setAudio(audioS);
 
-                        if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
+                        if(counterI == bogeyEntities.size() && counterJ == detailedCards.size()){
                             listener.onCompleteTask(newBogeyEntityList);
                         }
                     }
