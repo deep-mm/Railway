@@ -2,13 +2,17 @@ package com.example.amey.loginfirebase.Utilities.Backend;
 
 import com.example.amey.loginfirebase.Entity.TrainEntity;
 import com.example.amey.loginfirebase.Listener.AddTrainListener;
+import com.example.amey.loginfirebase.Listener.GetTrainListListener;
 import com.example.amey.loginfirebase.Listener.GetTrainListener;
 import com.example.amey.loginfirebase.Listener.RemoveTrainListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
 
 public class TrainUtility {
     private FirebaseDatabase mFirebaseDatabase;
@@ -16,6 +20,7 @@ public class TrainUtility {
 
     public void getTrain(String trainNumber, final GetTrainListener getTrainListener){
         mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Train").child(trainNumber);
+
 
         mTrainDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -41,5 +46,40 @@ public class TrainUtility {
     public void removeTrain(TrainEntity trainEntity, RemoveTrainListener removeTrainListener){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseDatabase.getReference().child("Train").child(trainEntity.getTrainNumber()).removeValue();
+    }
+
+    public  void getTrainList(final List<TrainEntity> trainEntityList, GetTrainListListener getTrainListListener){
+        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Train");
+        ChildEventListener mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                TrainEntity trainEntity = dataSnapshot.getValue(TrainEntity.class);
+                trainEntityList.add(trainEntity);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        mTrainDatabaseReference.addChildEventListener(mChildEventListener);
+
+
     }
 }
