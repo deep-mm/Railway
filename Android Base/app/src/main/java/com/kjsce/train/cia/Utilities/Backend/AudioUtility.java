@@ -15,8 +15,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entity.Card.GeneralCard;
 import com.kjsce.train.cia.Listeners.AddAudioListener;
 import com.kjsce.train.cia.Listeners.AddBogeyAudioListener;
+import com.kjsce.train.cia.Listeners.AddGeneralAudioListener;
 import com.kjsce.train.cia.Listeners.GetAudioListener;
 
 import java.io.File;
@@ -32,6 +34,25 @@ public class AudioUtility {
     int i;
     int counterU=0;
     int counterR=0;
+
+    public void uploadGeneralAudio(final List<GeneralCard> generalCardList,final AddGeneralAudioListener listener){
+        List<GeneralCard> newGeneralCards = new ArrayList<GeneralCard>();
+        for(int i=0;i<generalCardList.size();i++){
+            final int counterI = i;
+            uploadAudio(generalCardList.get(i).getAudio(), new AddAudioListener() {
+                @Override
+                public void onCompleteTask(List<String> audioS) {
+                    GeneralCard generalCard = generalCardList.get(counterI);
+                    generalCard.setAudio(audioS);
+                    newGeneralCards.add(generalCard);
+
+                    if(counterI == generalCardList.size()-1){
+                        listener.onCompleteTask(newGeneralCards);
+                    }
+                }
+            });
+        }
+    }
 
     public void uploadBogeyAudio(final List<BogeyEntity> bogeyEntities, final AddBogeyAudioListener listener){
         final List<BogeyEntity> newBogeyEntityList = new ArrayList<BogeyEntity>();

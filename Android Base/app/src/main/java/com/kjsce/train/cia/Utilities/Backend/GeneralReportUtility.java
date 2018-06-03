@@ -5,10 +5,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kjsce.train.cia.Entity.Card.GeneralCard;
 import com.kjsce.train.cia.Entity.Report.GeneralReport;
+import com.kjsce.train.cia.Listeners.AddGeneralAudioListener;
 import com.kjsce.train.cia.Listeners.AddGeneralReportListener;
 import com.kjsce.train.cia.Listeners.GetGeneralReportListener;
 import com.kjsce.train.cia.Listeners.RemoveGeneralReportListener;
+
+import java.util.List;
 
 
 public class GeneralReportUtility {
@@ -36,21 +40,39 @@ public class GeneralReportUtility {
 
     public void addGeneralReport(final GeneralReport generalReport,AddGeneralReportListener listener)
     {
-        getGeneralReport(generalReport.getTrainNumber(), generalReport.getDateTime(), new GetGeneralReportListener() {
+        AudioUtility audioUtility = new AudioUtility();
+        audioUtility.uploadGeneralAudio(generalReport.getGeneralCardList(), new AddGeneralAudioListener() {
             @Override
-            public void onCompleteTask(GeneralReport databaseReport) {
-                if(databaseReport==null)
-                {
-                    mFirebaseDatabase = FirebaseDatabase.getInstance();
-                    mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child(generalReport.getTrainNumber()+generalReport.getDateTime());
-                    mGeneralReportDatabaseReference.setValue(generalReport);
-                }
-
+            public void onCompleteTask(List<GeneralCard> generalCardList) {
+                generalReport.setGeneralCardList(generalCardList);
+                getGeneralReport(generalReport.getTrainNumber(), generalReport.getDateTime(), new GetGeneralReportListener() {
+                    @Override
+                    public void onCompleteTask(GeneralReport databaseReport) {
+                        if(databaseReport==null)
+                        {
+                            mFirebaseDatabase = FirebaseDatabase.getInstance();
+                            mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child(generalReport.getTrainNumber()+generalReport.getDateTime());
+                            mGeneralReportDatabaseReference.setValue(generalReport);
+                        }
+                        else{
+                            databaseReport = combineReports(databaseReport,generalReport);
+                            mFirebaseDatabase = FirebaseDatabase.getInstance();
+                            mGeneralReportDatabaseReference = mFirebaseDatabase.getReference().child("GeneralReport").child(databaseReport.getTrainNumber()+databaseReport.getDateTime());
+                            mGeneralReportDatabaseReference.setValue(databaseReport);
+                        }
+                    }
+                });
             }
         });
-
-
     }
+
+    public GeneralReport combineReports(GeneralReport originalReport,GeneralReport newReport){
+        for(int i=0;i<newReport.getGeneralCardList().size();i++){
+            originalReport.addCard(newReport.getGeneralCardList().get(i));
+        }
+        return originalReport;
+    }
+
     public void removeGeneralReport(GeneralReport generalReport, RemoveGeneralReportListener listener)
     {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
