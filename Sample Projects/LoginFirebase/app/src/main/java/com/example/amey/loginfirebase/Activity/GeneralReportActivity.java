@@ -58,6 +58,8 @@ public class GeneralReportActivity extends AppCompatActivity {
         generalReportUtility.getGeneralReportList(new GetGeneralReportListListener() {
             @Override
             public void onCompleteTask(List<GeneralReport> generalReportList) {
+                Toast.makeText(getApplicationContext(),generalReportList.toString(),Toast.LENGTH_SHORT).show();
+
                 System.out.println(generalReportList);
             }
         });
