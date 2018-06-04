@@ -91,6 +91,7 @@ public class InspectionBogeyActivity extends AppCompatActivity {
 
                                 DetailedReport detailedReport = new DetailedReport(sd.getStation(),sd.getType(),trainEntity.getTrainNumber(),trainEntity.getTrainNumber(),
                                         "2018",trainEntity.getManufacturer(),bogeyEntities,null);
+                                System.out.println(detailedReport);
                                 DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
                                 detailedReportUtility.addDetailedReport(detailedReport, new AddDetailedReportListener() {
                                     @Override
