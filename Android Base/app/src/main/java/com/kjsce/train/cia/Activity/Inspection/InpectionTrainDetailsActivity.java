@@ -482,11 +482,12 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
+                && data != null && data.getData() != null)
         {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                saveImage(bitmap);
                 paths.add(filePath.toString());
                 adapter.notifyDataSetChanged();
                 //imageView.setImageBitmap(bitmap);
@@ -507,17 +508,18 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     }
 
     public String saveImage(Bitmap thumbnail) {
+        String timeStamp1 = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         ContextWrapper c = new ContextWrapper(getApplicationContext());
-        File myDir=c.getFilesDir();
+        File myDir=new File(Environment.getExternalStorageDirectory(),"/CIA/Inspection/Audio/Sent");
         // have the object build the directory structure, if needed.
         if (!myDir.exists()) {
             myDir.mkdirs();
         }
 
         try {
-            String name= String.valueOf(Calendar.getInstance().getTimeInMillis());
+            String name= timeStamp1;
             paths.add(name);
             adapter.notifyDataSetChanged();
             File f = new File(myDir, name + ".jpg");
