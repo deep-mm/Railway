@@ -77,17 +77,7 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
 
                 isChecked = holder.check_box.isChecked();
 
-                type_list = sd.getTypeList();
-                if(type_list==null) {
-                    type_list = new ArrayList<Boolean>();
-                    for (int i = 0; i < 8; i++)
-                        type_list.add(false);
-                }
-
-
-                    System.out.println("zzzzz" + type_list);
-                    type_list.set(position, isChecked);
-
+                type_list.set(position, isChecked);
                 sd.setTypeList(type_list);
             }
         });

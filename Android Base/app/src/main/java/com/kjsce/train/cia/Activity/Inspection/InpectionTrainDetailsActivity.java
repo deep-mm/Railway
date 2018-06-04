@@ -353,7 +353,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
             try{
                 detailedCards = sd.getDetailedCard();
-                if(position<(detailedCards.size()-1))
+                if(position<(detailedCards.size()))
                     return true;
 
                 else
