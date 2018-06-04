@@ -13,6 +13,7 @@ import com.example.amey.loginfirebase.Listener.AddGeneralCardListener;
 import com.example.amey.loginfirebase.Listener.GetDetailedReportListListener;
 import com.example.amey.loginfirebase.Listener.GetDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.GetGeneralReportListener;
+import com.example.amey.loginfirebase.Listener.GetLatestDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.RemoveDetailedReportListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,28 +29,37 @@ public class DetailedReportUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDetailedReportDatabaseReference;
 
-    public void getDetailedReport(String trainNumber,String dateTime, final GetDetailedReportListener getDetailedReportListener)
+    public void getDetailedReport(final String trainNumber, final GetDetailedReportListener getDetailedReportListener)
     {
-        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber+dateTime);
-
-        mDetailedReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        LatestUtility latestUtility = new LatestUtility();
+        latestUtility.getLatestDetailedReport(trainNumber, new GetLatestDetailedReportListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DetailedReport detailedReport1 = dataSnapshot.getValue(DetailedReport.class);
-                System.out.println("Detailed Report:"+detailedReport1);
-                getDetailedReportListener.onCompleteTask(detailedReport1);
-            }
+            public void onCompleteTask(String timestamp) {
+                mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber).child(timestamp);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                getDetailedReportListener.onCompleteTask(null);
+                mDetailedReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DetailedReport detailedReport1 = dataSnapshot.getValue(DetailedReport.class);
+                        System.out.println("Detailed Report:"+detailedReport1);
+                        getDetailedReportListener.onCompleteTask(detailedReport1);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        getDetailedReportListener.onCompleteTask(null);
+                    }
+                });
+
             }
         });
+
+
     }
 
     public void addDetailedReport(final DetailedReport detailedReport,AddDetailedReportListener listener)
     {
-        AudioUtility audioUtility = new AudioUtility();
+       /* AudioUtility audioUtility = new AudioUtility();
         audioUtility.uploadBogeyAudio(detailedReport.getBogeyEntityList(), new AddBogeyAudioListener() {
             @Override
             public void onCompleteTask(List<BogeyEntity> bogeyEntityList) {
@@ -59,19 +69,19 @@ public class DetailedReportUtility {
                     public void onCompleteTask(DetailedReport dR) {
                         if(dR == null){
                             mFirebaseDatabase = FirebaseDatabase.getInstance();
-                            mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(detailedReport.getTrainNumber()+detailedReport.getDateTime());
+                            mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(detailedReport.getTrainNumber()).child(detailedReport.getDateTime());
                             mDetailedReportDatabaseReference.setValue(detailedReport);
                         }
                         else{
                             dR = combineReports(dR,detailedReport);
                             mFirebaseDatabase = FirebaseDatabase.getInstance();
-                            mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(dR.getTrainNumber()+dR.getDateTime());
+                            mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(dR.getTrainNumber()).child(dR.getDateTime());
                             mDetailedReportDatabaseReference.setValue(dR);
                         }
                     }
                 });
             }
-        });
+        });*/
 
 
     }
