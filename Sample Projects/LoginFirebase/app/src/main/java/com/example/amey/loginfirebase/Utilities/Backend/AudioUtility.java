@@ -1,15 +1,19 @@
 package com.example.amey.loginfirebase.Utilities.Backend;
 
+
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 
+
 import com.example.amey.loginfirebase.Entity.BogeyEntity;
 import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
-import com.example.amey.loginfirebase.Listener.AddBogeyAudioListener;
-import com.example.amey.loginfirebase.Listener.GetAudioListener;
+import com.example.amey.loginfirebase.Entity.Card.GeneralCard;
 import com.example.amey.loginfirebase.Listener.AddAudioListener;
+import com.example.amey.loginfirebase.Listener.AddBogeyAudioListener;
+import com.example.amey.loginfirebase.Listener.AddGeneralAudioListener;
+import com.example.amey.loginfirebase.Listener.GetAudioListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
@@ -31,6 +35,26 @@ public class AudioUtility {
     int counterU=0;
     int counterR=0;
 
+    public void uploadGeneralAudio(final List<GeneralCard> generalCardList, final AddGeneralAudioListener listener){
+
+        for(int i=0;i<generalCardList.size();i++){
+            final int counterI = i;
+            uploadAudio(generalCardList.get(i).getAudio(), new AddAudioListener() {
+                @Override
+                public void onCompleteTask(List<String> audioS) {
+                    List<GeneralCard> newGeneralCards = new ArrayList<GeneralCard>();
+                    GeneralCard generalCard = generalCardList.get(counterI);
+                    generalCard.setAudio(audioS);
+                    newGeneralCards.add(generalCard);
+
+                    if(counterI == generalCardList.size()-1){
+                        listener.onCompleteTask(newGeneralCards);
+                    }
+                }
+            });
+        }
+    }
+
     public void uploadBogeyAudio(final List<BogeyEntity> bogeyEntities, final AddBogeyAudioListener listener){
         final List<BogeyEntity> newBogeyEntityList = new ArrayList<BogeyEntity>();
         for(int i=0;i<bogeyEntities.size();i++){
@@ -44,7 +68,7 @@ public class AudioUtility {
                         BogeyEntity newBogeyEntity = new BogeyEntity();
                         newBogeyEntity = bogeyEntities.get(counterI);
                         newBogeyEntity.getDetailedCard().get(counterJ).setAudio(audioS);
-
+                        newBogeyEntityList.add(newBogeyEntity);
                         if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
                             listener.onCompleteTask(newBogeyEntityList);
                         }

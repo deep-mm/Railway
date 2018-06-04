@@ -91,9 +91,9 @@ public class StructureActivity extends AppCompatActivity {
             intent = new Intent(this , AudioActivity.class);
             startActivity(intent);
         }
-        public void toAImage (View view)
+        public void toImage (View view)
         {
-            //intent = new Intent(this , ImageActivity.class);
+            intent = new Intent(this , ImageActivity.class);
             startActivity(intent);
         }
         public void toUser(View view){

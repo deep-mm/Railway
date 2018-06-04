@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.amey.loginfirebase.Entity.BogeyEntity;
 import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
@@ -13,16 +14,22 @@ import com.example.amey.loginfirebase.Entity.TrainEntity;
 import com.example.amey.loginfirebase.Entity.UserEntity;
 import com.example.amey.loginfirebase.Listener.AddDetailedCardListener;
 import com.example.amey.loginfirebase.Listener.AddDetailedReportListener;
+import com.example.amey.loginfirebase.Listener.GetDetailedReportListListener;
 import com.example.amey.loginfirebase.Listener.GetDetailedReportListener;
+import com.example.amey.loginfirebase.Listener.GetLatestDetailedReportListener;
 import com.example.amey.loginfirebase.Listener.GetTrainListener;
 import com.example.amey.loginfirebase.Listener.GetUserListener;
 import com.example.amey.loginfirebase.Listener.RemoveDetailedReportListener;
+import com.example.amey.loginfirebase.Listener.SetLatestDetailedReportListener;
 import com.example.amey.loginfirebase.R;
 import com.example.amey.loginfirebase.Utilities.Backend.DetailedCardUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.DetailedReportUtility;
+import com.example.amey.loginfirebase.Utilities.Backend.LatestUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.TrainUtility;
 import com.example.amey.loginfirebase.Utilities.Backend.UserUtility;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 public class DetailedReportActivity extends AppCompatActivity {
     private Button get_det, add_det, rem_det;
@@ -112,5 +119,44 @@ public class DetailedReportActivity extends AppCompatActivity {
 
         });
     }
+
+    public void getDetailedL(View view){
+        DetailedReportUtility detailedReportUtility=new DetailedReportUtility();
+        detailedReportUtility.getDetailedReportList(new GetDetailedReportListListener() {
+            @Override
+            public void onCompleteTask(List<DetailedReport> detailedReportList) {
+                Toast.makeText(getApplicationContext(),detailedReportList.toString(),Toast.LENGTH_SHORT).show();
+
+                System.out.println("dddd"+detailedReportList);
+            }
+        });
+
+
+
+    }
+
+    public void setLatestR(View view){
+        DetailedReport detailedRep = new DetailedReport("Ramani", "Dombivli",
+                "1511092", "Rajdhani", "231097", "Amey",  null, null);
+        LatestUtility latestUtility = new LatestUtility();
+        latestUtility.setLatestDetailedReport(detailedRep, new SetLatestDetailedReportListener() {
+            @Override
+            public void onCompleteTask(String result) {
+
+            }
+        });
+
+    }
+
+    public void getLatestR(View view){
+        LatestUtility latestUtility = new LatestUtility();
+        latestUtility.getLatestDetailedReport("1511092", new GetLatestDetailedReportListener() {
+            @Override
+            public void onCompleteTask(String timestamp) {
+                System.out.println("ttt"+timestamp);
+            }
+        });
+    }
+
 
 }

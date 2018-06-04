@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
@@ -21,17 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.StructureActivity"></activity>
-        <activity android:name=".Activity.InputActivity"></activity>
-        <activity android:name=".Activity.AuthActivity"></activity>
-        <activity android:name=".Activity.AudioActivity"></activity>
-        <activity android:name=".Activity.DetailedReportActivity"></activity>
-        <activity android:name=".Activity.GeneralReportActivity"></activity>
-        <activity android:name=".Activity.TrainActivity"></activity>
-
-
-
-
+        <activity android:name=".Activity.StructureActivity" />
+        <activity android:name=".Activity.InputActivity" />
+        <activity android:name=".Activity.AuthActivity" />
+        <activity android:name=".Activity.AudioActivity" />
+        <activity android:name=".Activity.DetailedReportActivity" />
+        <activity android:name=".Activity.GeneralReportActivity" />
+        <activity android:name=".Activity.TrainActivity" />
+        <activity android:name=".Activity.ImageActivity"></activity>
     </application>
 
 </manifest>
