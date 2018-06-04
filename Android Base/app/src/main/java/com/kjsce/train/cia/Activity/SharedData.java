@@ -11,6 +11,7 @@ import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Entity.UserEntity;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SharedData {
@@ -70,6 +71,15 @@ public class SharedData {
     public String getTrainNo(){
         String train = pref.getString("train_no", "");
         return train;
+    }
+
+    public void setBogie(String bogie){
+        editor.putString("bogie", bogie).commit();
+    }
+
+    public String getBogie(){
+        String bogie = pref.getString("bogie", "");
+        return bogie;
     }
 
     public void setCoachList(List<String> coach_list){
@@ -169,6 +179,12 @@ public class SharedData {
     public void clearAll(){
         editor.clear();
         editor.commit();
+    }
+
+    public void clear(){
+
+        List<BogeyEntity> bogeyEntities = new ArrayList<BogeyEntity>();
+        setBogieEntity(bogeyEntities);
     }
 
 

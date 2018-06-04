@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity;
+import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ashwini on 27-03-2018.
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
     ArrayList<String> coach;
     Context context;
+    SharedData sd;
 
     public GridAdapter(Context context, ArrayList<String> coach) {
         super();
@@ -41,15 +46,21 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
         viewHolder.coach.setText(coach.get(i));
         int position = i;
+        sd = new SharedData(context);
 
         viewHolder.setClickListener(new ItemClickListener() {
 
             @Override
             public void onClick(View view, int position) {
-                Intent i = new Intent(context, InspectionBogeyReportActivity.class);
-                i.putExtra("coach",viewHolder.coach.getText().toString());
-                i.putExtra("coach_index",position);
-                context.startActivity(i);
+                if(!check(coach.get(i))) {
+                    Intent i = new Intent(context, InspectionBogeyReportActivity.class);
+                    sd.setBogie(viewHolder.coach.getText().toString());
+                    i.putExtra("coach_index", position);
+                    context.startActivity(i);
+                }
+                else{
+                    Toast.makeText(context,"This bogie is already inspected",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -80,6 +91,20 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
         public void onClick(View view) {
             clickListener.onClick(view,getPosition());
 
+        }
+    }
+
+    public boolean check(String Bogie) {
+        try {
+            List<BogeyEntity> bogeyEntities = sd.getBogieEntity();
+            for (int i = 0; i < bogeyEntities.size(); i++) {
+                if (bogeyEntities.get(i).getBogeyNumber().equalsIgnoreCase(Bogie)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
         }
     }
 

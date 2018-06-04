@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                             .content("Please Wait")
                             .progress(true, 0)
                             .show();
+                    progressStart();
                     signIn(get_username,get_password);
                 }
             }
@@ -69,6 +71,15 @@ public class LoginActivity extends AppCompatActivity {
         sd = new SharedData(getApplicationContext());
 
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    public void progressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void progressStop(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void checkType(FirebaseUser user){
@@ -127,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                                     .show();
                         }
                         materialDialog.hide();
+                        progressStop();
                     }
                 });
     }

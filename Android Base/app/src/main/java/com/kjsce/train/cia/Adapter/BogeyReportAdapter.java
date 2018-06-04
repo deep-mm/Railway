@@ -80,7 +80,7 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
 
 
         //textwatchers i.e storeCard contains all the information of all the cards store them in database
-        holder.in_comment.setText(comment);
+        holder.in_comment.setText(Mvalues.get(position).getComment());
         holder.in_comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -107,8 +107,10 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         {
             holder.in_type.setVisibility(View.GONE);
             type = Spinner_list.get(0);
-            comment_text = comment;
+            comment_text = Mvalues.get(position).getComment();
         }
+
+        holder.in_type.setSelection(getIndex(holder.in_type,Mvalues.get(position).getType()));
         holder.in_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -161,6 +163,18 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
         });
 
 
+    }
+
+    private int getIndex(Spinner spinner, String myString){
+
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).equals(myString)){
+                index = i;
+            }
+        }
+        return index;
     }
 
     @Override
