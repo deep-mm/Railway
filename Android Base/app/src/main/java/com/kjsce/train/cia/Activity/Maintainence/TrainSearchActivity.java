@@ -18,11 +18,19 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
 import com.kjsce.train.cia.Activity.LoginActivity;
+import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Adapter.TrainSearchListAdapter;
+import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Entity.TrainSearchListItem;
+import com.kjsce.train.cia.Entity.UserEntity;
+import com.kjsce.train.cia.Listeners.GetTrainListListener;
+import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.Backend.TrainUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +43,26 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
      private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     TextView name,udesignation,uid;
+    String typeOfInspection="";
+    String selectedStation = "";
+    UserEntity userEntity;
+    TrainEntity selectedTrain;
+    List<TrainEntity> trainEntities;
+    Boolean flag = false;
+    MaterialDialog materialDialog;
+    SharedData sd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_train_search);
 
+        sd = new SharedData(getApplicationContext());
+        syncData();
 
         //navigation drawer
-
+        userEntity = sd.getUserEntity();
         mDrawerLayout =findViewById(R.id.drawer);
         mToggle= new android.support.v7.app.ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
@@ -68,28 +87,21 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
         recyclerView=findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        trainEntities = sd.getTrainEntityList();
         trainSearchListItems =new ArrayList<>();
 
-        //List of Trains
+        for (int i=0;i<sd.getTrainList().size();i++)
+        {
+            String split[] = sd.getTrainList().get(i).split("\\s+");
+            trainSearchListItems.add(new TrainSearchListItem(split[0],split[1]));
+        }
 
-        trainSearchListItems.add(new TrainSearchListItem("11019","CSTM BBS"));
-        trainSearchListItems.add(new TrainSearchListItem("11093","CSTM BBS"));
-        trainSearchListItems.add(new TrainSearchListItem("12105","CSTM GONDIA"));
-        trainSearchListItems.add(new TrainSearchListItem("12137","CSTM FZR"));
-        trainSearchListItems.add(new TrainSearchListItem("11057","CSTM ASR"));
-        trainSearchListItems.add(new TrainSearchListItem("12123","CSTM PUNE"));
-        trainSearchListItems.add(new TrainSearchListItem("51027","CSTM PVR"));
-        trainSearchListItems.add(new TrainSearchListItem("51029","CSTM BJP"));
-        trainSearchListItems.add(new TrainSearchListItem("51033","CSTM SNSI"));
-        trainSearchListItems.add(new TrainSearchListItem("11027","CSTM MAS"));
-        trainSearchListItems.add(new TrainSearchListItem("11041","CSTM MAS"));
-        trainSearchListItems.add(new TrainSearchListItem("22105","CSTM PUNE"));
-        trainSearchListItems.add(new TrainSearchListItem("22107","CSTM LUR"));
-        trainSearchListItems.add(new TrainSearchListItem("22147","CSTM SNSI"));
-        trainSearchListItems.add(new TrainSearchListItem("11007","CSTM PUNE"));
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
+            }
+        });
         adapter=new TrainSearchListAdapter(trainSearchListItems,this);
         recyclerView.setAdapter(adapter);
 
@@ -163,6 +175,31 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
           }
 
         return true;
+    }
+
+    public void syncData() {
+
+        materialDialog = new MaterialDialog.Builder(TrainSearchActivity.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .show();
+        List<String> data = new ArrayList<String>();
+        TrainUtility trainUtility = new TrainUtility();
+        trainUtility.getTrainList(new GetTrainListListener() {
+            @Override
+            public void onCompleteTask(List<TrainEntity> trainEntityList) {
+                for (int i = 0; i < trainEntityList.size(); i++) {
+                    TrainEntity trainEntity = trainEntityList.get(i);
+                    data.add(trainEntity.getTrainNumber() + "  " + trainEntity.getTrainName());
+                }
+
+
+                sd.setTrainList(data);
+                sd.setTrainEntityList(trainEntityList);
+                materialDialog.hide();
+            }
+        });
     }
 
 }

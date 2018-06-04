@@ -16,13 +16,14 @@ import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dhaval on 02-06-2018.
  */
 
 public class MaintainenceImageAdapter extends RecyclerView.Adapter<MaintainenceImageAdapter.ViewHolder>{
-    private final ArrayList<String> Mvalues;
+    private final List<String> Mvalues;
     MaterialDialog materialDialog;
 
 
@@ -32,7 +33,7 @@ public class MaintainenceImageAdapter extends RecyclerView.Adapter<MaintainenceI
         Mvalues = null;
     }
 
-    public MaintainenceImageAdapter(ArrayList mvalues,Context c) {
+    public MaintainenceImageAdapter(List mvalues, Context c) {
         Mvalues = mvalues;
         context = c;
 

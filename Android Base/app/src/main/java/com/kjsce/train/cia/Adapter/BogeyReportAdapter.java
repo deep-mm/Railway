@@ -36,7 +36,6 @@ import java.util.List;
 public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.ViewHolder>{
     private final List<DetailedCard> Mvalues;
     private ArrayList<String> Spinner_list = null;
-    public int SELECT_PICTURE = 100;
     public StoreCard storeCard = new StoreCard();
     ArrayAdapter<String> spinner_adapter;
     Context context;
@@ -108,9 +107,11 @@ public class BogeyReportAdapter extends RecyclerView.Adapter<BogeyReportAdapter.
             holder.in_type.setVisibility(View.GONE);
             type = Spinner_list.get(0);
             comment_text = Mvalues.get(position).getComment();
+            holder.remove.setVisibility(View.GONE);
         }
 
         holder.in_type.setSelection(getIndex(holder.in_type,Mvalues.get(position).getType()));
+        holder.in_type_text.setText(Mvalues.get(position).getType());
         holder.in_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -20,9 +20,9 @@
         <activity android:name=".Activity.Inspection.InspectionBogeyReportActivity" />
         <activity android:name=".Activity.Inspection.InpectionTrainDetailsActivity" />
         <activity android:name=".Activity.Inspection.InspectionBogeyActivity" />
-        <activity android:name=".Activity.Maintainence.TrainSearchActivity">
+        <activity android:name=".Activity.SplashActivity">
         </activity>
-        <activity android:name=".Activity.SplashActivity" >
+        <activity android:name=".Activity.Maintainence.TrainSearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -10,15 +10,23 @@ import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.Maintainence.BogeyActivity;
 import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entity.Report.DetailedReport;
+import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Entity.TrainSearchListItem;
+import com.kjsce.train.cia.Listeners.GetDetailedReportListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.Backend.DetailedReportUtility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainSearchListAdapter extends RecyclerView.Adapter<TrainSearchListAdapter.ViewHolder> {
 
     private List<TrainSearchListItem> trainSearchListItems;
     private Context context;
+    DetailedCard detailedcard;
+    DetailedReport detailedReports;
 
     public TrainSearchListAdapter(List<TrainSearchListItem> trainSearchListItems, Context context) {
         this.trainSearchListItems = trainSearchListItems;
@@ -40,15 +48,36 @@ public class TrainSearchListAdapter extends RecyclerView.Adapter<TrainSearchList
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                List<TrainEntity> trainEntities;
+                TrainEntity selectedTrain;
                 // Intent to open next activity on Item click
                 SharedData sd = new SharedData(context);
                 sd.setTrain(trainName);
                 sd.setTrainNo(trainNo);
-                Intent i =new Intent(context, BogeyActivity.class);
-                i.putExtra("TrainNo",trainNo);
-                i.putExtra("TrainName",trainName);
-                context.startActivity(i);
+
+                trainEntities = sd.getTrainEntityList();
+                selectedTrain = trainEntities.get(position);
+                sd.setTrainEntity(selectedTrain);
+
+                DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
+
+
+                detailedReportUtility.getDetailedReport(selectedTrain.getTrainNumber(), new GetDetailedReportListener() {
+                    @Override
+                    public void onCompleteTask(DetailedReport detailedReport) {
+                        detailedReports = detailedReport;
+
+                        System.out.println("detailreport"+detailedReports);
+                        sd.setDetailedReport(detailedReports);
+                        Intent i =new Intent(context, BogeyActivity.class);
+                        i.putExtra("TrainNo",selectedTrain.getTrainNumber());
+                        i.putExtra("TrainName",selectedTrain.getTrainName());
+                        context.startActivity(i);
+                    }
+                });
+
+
+
             }
         });
     }

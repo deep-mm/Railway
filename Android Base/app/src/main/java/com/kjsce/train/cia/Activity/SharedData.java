@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entity.Report.DetailedReport;
 import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Entity.UserEntity;
 
@@ -176,6 +177,29 @@ public class SharedData {
         return trainEntity;
     }
 
+
+
+    public void setDetailedReport(DetailedReport train){
+        String json = gson.toJson(train);
+        editor.putString("detailreport", json).commit();
+    }
+
+    public DetailedReport getDetailedReport(){
+        String json = pref.getString("detailreport", "");
+        DetailedReport detailedreport = gson.fromJson(json,DetailedReport.class);
+        return detailedreport;
+    }
+
+    public void setBogeyEntityobject(BogeyEntity bogeyEntity){
+        String json = gson.toJson(bogeyEntity);
+        editor.putString("BogeyEntity",json).commit();
+    }
+
+    public BogeyEntity getBogeyEntityobject(){
+        String json = pref.getString("BogeyEntity", "");
+        BogeyEntity bogeyEntity = gson.fromJson(json, BogeyEntity.class);
+        return bogeyEntity;
+    }
     public void clearAll(){
         editor.clear();
         editor.commit();

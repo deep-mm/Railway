@@ -10,10 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kjsce.train.cia.Activity.Maintainence.BogeyReportActivity;
+import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Entity.BogeyEntity;
+import com.kjsce.train.cia.Entity.Report.DetailedReport;
 import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ashwini on 27-03-2018.
@@ -22,6 +26,9 @@ import java.util.ArrayList;
 public class MaintainenceGridAdapter extends RecyclerView.Adapter<MaintainenceGridAdapter.ViewHolder> {
     ArrayList<String> coach;
     Context context;
+    DetailedReport detailedReport;
+    List<BogeyEntity> bogeyEntities;
+    SharedData sd;
 
     public MaintainenceGridAdapter(Context context, ArrayList<String> coach) {
         super();
@@ -44,8 +51,18 @@ public class MaintainenceGridAdapter extends RecyclerView.Adapter<MaintainenceGr
 
         viewHolder.setClickListener(new ItemClickListener() {
 
+
+
             @Override
             public void onClick(View view, int position) {
+                sd = new SharedData(context);
+
+                detailedReport = sd.getDetailedReport();
+                bogeyEntities = detailedReport.getBogeyEntityList();
+                sd.setBogieEntity(bogeyEntities);
+
+                sd.setBogie(bogeyEntities.get(i).getBogeyNumber());
+                sd.setBogeyEntityobject(bogeyEntities.get(i));
                 context.startActivity(new Intent(context, BogeyReportActivity.class));
                 Toast.makeText(context,"Clicked",Toast.LENGTH_SHORT).show();
             }
