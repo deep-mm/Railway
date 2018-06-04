@@ -24,6 +24,8 @@ public class LatestUtility {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mLatestDatabaseReference = mFirebaseDatabase.getReference().child("Latest").child("DetailedReport").child(detailedReport.getTrainNumber());
         mLatestDatabaseReference.setValue(latestEntity);
+
+        setLatestDetailedReportListener.onCompleteTask("success");
     }
 
     public void getLatestDetailedReport(String trainNumber, final GetLatestDetailedReportListener getLatestDetailedReportListener){

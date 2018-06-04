@@ -193,6 +193,9 @@ public class ImageUtility {
                 final int counterI = i;
                 final int counterJ = j;
                 System.out.println("i: " + i + "j: " + j + " size: " + detailedCards.get(j).getImage().size());
+                if(detailedCards.get(j).getImage().size() == 0){
+                    listener.onCompleteTask(bogeyEntities);
+                }
                 uploadImage(detailedCards.get(j).getImage(), new AddImageListener() {
                     @Override
                     public void onCompleteTask(List<String> imageS) {

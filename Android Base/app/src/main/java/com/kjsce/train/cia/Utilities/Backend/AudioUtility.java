@@ -221,6 +221,9 @@ public class AudioUtility {
                 final int counterI = i;
                 final int counterJ = j;
                 System.out.println("i: " + i + "j: " + j + " size: " + detailedCards.get(j).getAudio().size());
+                if(detailedCards.get(j).getAudio().size() == 0){
+                    listener.onCompleteTask(bogeyEntities);
+                }
                 uploadAudio(detailedCards.get(j).getAudio(), new AddAudioListener() {
                     @Override
                     public void onCompleteTask(List<String> audioS) {

@@ -13,7 +13,7 @@ public class DetailedCardUtility
     public void addDetailedCard(final DetailedReport detailedReport, final DetailedCard card, final String bogeyNumber , final AddDetailedCardListener listener){
 
         final DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
-        detailedReportUtility.getDetailedReport(detailedReport.getTrainNumber(), detailedReport.getDateTime(), new GetDetailedReportListener() {
+        detailedReportUtility.getDetailedReport(detailedReport.getTrainNumber(), new GetDetailedReportListener() {
             @Override
             public void onCompleteTask(DetailedReport dR) {
                 if(dR == null){
