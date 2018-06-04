@@ -516,8 +516,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
         try {
             String name= timeStamp1;
-            paths.add(name);
-            adapter.notifyDataSetChanged();
             File f = new File(myDir, name + ".jpg");
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
