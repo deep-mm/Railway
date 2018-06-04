@@ -40,10 +40,10 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<TrainSearchListItem> trainSearchListItems;
-     private DrawerLayout mDrawerLayout;
+    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    TextView name,udesignation,uid;
-    String typeOfInspection="";
+    TextView name, udesignation, uid;
+    String typeOfInspection = "";
     String selectedStation = "";
     UserEntity userEntity;
     TrainEntity selectedTrain;
@@ -59,126 +59,6 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
         setContentView(R.layout.activity_train_search);
 
         sd = new SharedData(getApplicationContext());
-        syncData();
-
-        //navigation drawer
-        userEntity = sd.getUserEntity();
-        mDrawerLayout =findViewById(R.id.drawer);
-        mToggle= new android.support.v7.app.ActionBarDrawerToggle(this,mDrawerLayout,R.string.open,R.string.close);
-        mDrawerLayout.addDrawerListener(mToggle);
-        mToggle.syncState();
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        android.support.design.widget.NavigationView navigationView =findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View headerView = navigationView.getHeaderView(0);
-        name=(TextView) headerView.findViewById(R.id.name);
-        name.setPaintFlags(name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        name.setText("Aman Agarwal");
-
-
-        udesignation=(TextView) headerView.findViewById(R.id.udesignation);
-        udesignation.setPaintFlags(udesignation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        udesignation.setText("Inspector");
-
-        uid=(TextView) headerView.findViewById(R.id.uid);
-        uid.setText("MH12345");
-
-        recyclerView=findViewById(R.id.recyclerview);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        trainEntities = sd.getTrainEntityList();
-        trainSearchListItems =new ArrayList<>();
-
-        for (int i=0;i<sd.getTrainList().size();i++)
-        {
-            String split[] = sd.getTrainList().get(i).split("\\s+");
-            trainSearchListItems.add(new TrainSearchListItem(split[0],split[1]));
-        }
-
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        adapter=new TrainSearchListAdapter(trainSearchListItems,this);
-        recyclerView.setAdapter(adapter);
-
-        EditText searchText=findViewById(R.id.search_field);
-        searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filter(editable.toString());
-            }
-        });
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
-    public void filter(String text)
-    {
-        List<TrainSearchListItem> filterList=new ArrayList<>();
-        for(TrainSearchListItem item: trainSearchListItems)
-        {
-            if((item.gettNo().toLowerCase().contains(text.toLowerCase())) || (item.gettName().toLowerCase().contains(text.toLowerCase())) )
-            {
-                filterList.add(item);
-            }
-        }
-        adapter=new TrainSearchListAdapter(filterList,this);
-        recyclerView.setAdapter(adapter);
-    }
-
-     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item))
-        {
-            return  true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected( MenuItem item) {
-        int id =item.getItemId();
-
-        if(id==R.id.help)
-        {
-            Toast.makeText(this,"help selected",Toast.LENGTH_SHORT).show();
-
-        }
-        if(id==R.id.logout)
-        {
-          Toast.makeText(this,"logout selected",Toast.LENGTH_SHORT).show();
-            FirebaseAuth.getInstance().signOut();
-            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
-            startActivity(i);
-          }
-
-        return true;
-    }
-
-    public void syncData() {
-
         materialDialog = new MaterialDialog.Builder(TrainSearchActivity.this)
                 .title("Syncing Data")
                 .content("Please Wait")
@@ -198,9 +78,116 @@ public class TrainSearchActivity extends AppCompatActivity implements SearchView
                 sd.setTrainList(data);
                 sd.setTrainEntityList(trainEntityList);
                 materialDialog.hide();
+
+                //navigation drawer
+                userEntity = sd.getUserEntity();
+                mDrawerLayout = findViewById(R.id.drawer);
+                mToggle = new android.support.v7.app.ActionBarDrawerToggle(TrainSearchActivity.this, mDrawerLayout, R.string.open, R.string.close);
+                mDrawerLayout.addDrawerListener(mToggle);
+                mToggle.syncState();
+                //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                android.support.design.widget.NavigationView navigationView = findViewById(R.id.navigation_view);
+                navigationView.setNavigationItemSelectedListener(TrainSearchActivity.this);
+
+                View headerView = navigationView.getHeaderView(0);
+                name = (TextView) headerView.findViewById(R.id.name);
+                name.setPaintFlags(name.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                name.setText("Aman Agarwal");
+
+
+                udesignation = (TextView) headerView.findViewById(R.id.udesignation);
+                udesignation.setPaintFlags(udesignation.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                udesignation.setText("Inspector");
+
+                uid = (TextView) headerView.findViewById(R.id.uid);
+                uid.setText("MH12345");
+
+                recyclerView = findViewById(R.id.recyclerview);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(TrainSearchActivity.this));
+                trainEntities = sd.getTrainEntityList();
+                trainSearchListItems = new ArrayList<>();
+
+                for (int i = 0; i < sd.getTrainList().size(); i++) {
+                    String split[] = sd.getTrainList().get(i).split("\\s+");
+                    trainSearchListItems.add(new TrainSearchListItem(split[0], split[1]));
+                }
+
+                recyclerView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                adapter = new TrainSearchListAdapter(trainSearchListItems, TrainSearchActivity.this);
+                recyclerView.setAdapter(adapter);
+
+                EditText searchText = findViewById(R.id.search_field);
+                searchText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        filter(editable.toString());
+                    }
+                });
             }
         });
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    public void filter(String text) {
+        List<TrainSearchListItem> filterList = new ArrayList<>();
+        for (TrainSearchListItem item : trainSearchListItems) {
+            if ((item.gettNo().toLowerCase().contains(text.toLowerCase())) || (item.gettName().toLowerCase().contains(text.toLowerCase()))) {
+                filterList.add(item);
+            }
+        }
+        adapter = new TrainSearchListAdapter(filterList, this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.help) {
+            Toast.makeText(this, "help selected", Toast.LENGTH_SHORT).show();
+
+        }
+        if (id == R.id.logout) {
+            Toast.makeText(this, "logout selected", Toast.LENGTH_SHORT).show();
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(i);
+        }
+
+        return true;
+    }
 }
 
