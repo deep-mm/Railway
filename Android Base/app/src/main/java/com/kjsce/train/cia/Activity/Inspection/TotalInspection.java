@@ -8,10 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Adapter.MaintainenceBogeyReportAdapter;
 import com.kjsce.train.cia.Entity.MaintainenceCardFiles;
+import com.kjsce.train.cia.Entity.Report.DetailedReport;
+import com.kjsce.train.cia.Entity.TrainEntity;
+import com.kjsce.train.cia.Listeners.GetDetailedReportListListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.Backend.DetailedReportUtility;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TotalInspection extends AppCompatActivity {
     ArrayList<MaintainenceCardFiles> cards = new ArrayList<MaintainenceCardFiles>();
@@ -25,11 +30,28 @@ public class TotalInspection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_total_inspection);
 
+        sd = new SharedData(getApplicationContext());
         String date ="adsas";
         String train = "123 trainn";
+
+        List<TrainEntity> trainEntities = sd.getTrainEntityList();
+        DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
+        List<DetailedReport> detailedReports = new ArrayList<DetailedReport>();
+        for(int i=0;i<trainEntities.size();i++){
+            detailedReportUtility.getDetailedReportList(trainEntities.get(i).getTrainNumber(), new GetDetailedReportListListener() {
+                @Override
+                public void onCompleteTask(List<DetailedReport> detailedReportList) {
+                    detailedReports.addAll(detailedReportList);
+                }
+            });
+        }
         //Get all reports from bhavik and display
         sd = new SharedData(getApplicationContext());
         //System.out.println("train"+sd.getTrain());
+
+        for(int i=0;i<detailedReports.size();i++){
+
+        }
         MaintainenceCardFiles m = new MaintainenceCardFiles(train,date);//example card
         reportvalues.add(m);
 

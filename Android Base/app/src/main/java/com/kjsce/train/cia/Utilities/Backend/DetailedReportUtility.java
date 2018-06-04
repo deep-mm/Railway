@@ -9,8 +9,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Entity.Report.DetailedReport;
+import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Listeners.AddBogeyAudioListener;
 import com.kjsce.train.cia.Listeners.AddDetailedReportListener;
 import com.kjsce.train.cia.Listeners.GetDetailedReportListListener;
@@ -23,10 +25,11 @@ import java.util.List;
 public class DetailedReportUtility {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDetailedReportDatabaseReference;
+    private SharedData sd;
 
     public void getDetailedReport(String trainNumber,String dateTime, final GetDetailedReportListener getDetailedReportListener)
     {
-        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber).child(dateTime);
+        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber);
 
         mDetailedReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -96,7 +99,7 @@ public class DetailedReportUtility {
 
     }
 
-    public void getDetailedReportList(final GetDetailedReportListListener getDetailedReportListListener){
+    public void getDetailedReportList(String trainNumber, final GetDetailedReportListListener getDetailedReportListListener){
 
         final List<DetailedReport> detailedReportList = new ArrayList<>();
 
@@ -112,7 +115,7 @@ public class DetailedReportUtility {
             }
         };
 
-        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport");
+        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber);
         mDetailedReportDatabaseReference.addValueEventListener(valueEventListener);
 
         ChildEventListener childEventListener = new ChildEventListener() {
