@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedData sd;
     Boolean success;
     private FirebaseAuth mAuth;
+    MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (get_username.equalsIgnoreCase("") || get_password.equalsIgnoreCase("")) {
                     Toast.makeText(getApplicationContext(), "Fields cannot be left empty", Toast.LENGTH_SHORT).show();
                 } else {
+                    materialDialog = new MaterialDialog.Builder(LoginActivity.this)
+                            .title("Logging In")
+                            .content("Please Wait")
+                            .progress(true, 0)
+                            .show();
+                    progressStart();
                     signIn(get_username,get_password);
                 }
             }
@@ -65,6 +73,15 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    public void progressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void progressStop(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
     public void checkType(FirebaseUser user){
 
         UserUtility userUtility = new UserUtility();
@@ -78,7 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     i = new Intent(getApplicationContext(), TrainSearchActivity.class);
                 }
-                System.out.println("USerEntity"+userEntity);
                 sd.setUserEntity(userEntity);
                 startActivity(i);
             }
@@ -121,6 +137,8 @@ public class LoginActivity extends AppCompatActivity {
                                     })
                                     .show();
                         }
+                        materialDialog.hide();
+                        progressStop();
                     }
                 });
     }

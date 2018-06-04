@@ -36,17 +36,17 @@ import java.util.List;
 public class InspectionBogeyReportActivity extends AppCompatActivity {
     ArrayList<CardFiles> cards = new ArrayList<CardFiles>();
     ArrayList<String> spinner_list = new ArrayList<String>();
-    TextView next,previous;
+    TextView next, previous;
     Button add;
     ImageButton back_button;
     BogeyReportAdapter adapter;
-    String[] permissions={Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    TextView bogey_number,train_number;
-    String previous_coach="",next_coach="";
+    String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    TextView bogey_number, train_number;
+    String previous_coach = "", next_coach = "";
     SharedData sd;
     List<String> coach_list = new ArrayList<String>();
-    int position,position_bogey;
-    LinearLayout detailed,general;
+    int position, position_bogey;
+    LinearLayout detailed, general;
     List<BogeyEntity> bogeyEntities;
     List<DetailedCard> detailedCards;
 
@@ -59,108 +59,126 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inpection_bogey_report);
         setResult(RESULT_OK);
-        previous = (TextView)findViewById(R.id.previous);
-        bogey_number = (TextView)findViewById(R.id.bogey_number);
-        train_number = (TextView)findViewById(R.id.train_number);
+        previous = (TextView) findViewById(R.id.previous);
+        bogey_number = (TextView) findViewById(R.id.bogey_number);
+        train_number = (TextView) findViewById(R.id.train_number);
         sd = new SharedData(getApplicationContext());
         back_button = (ImageButton) findViewById(R.id.back_button);
         detailed = (LinearLayout) findViewById(R.id.bottom_bar);
         general = (LinearLayout) findViewById(R.id.bottom_bar_1);
 
-        detailedCards = new ArrayList<DetailedCard>();
-        if(check()){
-            BogeyEntity bogeyEntity = bogeyEntities.get(position_bogey);
-            detailedCards = bogeyEntity.getDetailedCard();
-            System.out.println("xxxxx"+detailedCards);
-            sd.setDetailedCards(detailedCards);
-        }
+
+
+        detailedCards = sd.getDetailedCard();
+        if(detailedCards == null)
+            detailedCards = new ArrayList<DetailedCard>();
+
         coach_list = sd.getCoachList();
 
-        if(getIntent().hasExtra("type")){
-            String type = getIntent().getExtras().getString("type");
-            if(type.equalsIgnoreCase("detailed")){
-                detailed.setVisibility(View.VISIBLE);
-                general.setVisibility(View.GONE);
-            }
-            else{
-                detailed.setVisibility(View.GONE);
-                general.setVisibility(View.VISIBLE);
-                String train[] = sd.getTrain().split("\\s+");
-                bogey_number.setText(train[1]);
-                train_number.setText(train[0]);
-            }
-        }
-        if(getIntent().hasExtra("coach")){
-            bogey_number.setText(getIntent().getExtras().getString("coach"));
+        String type = sd.getType();
+        if (type.equalsIgnoreCase("detailed")) {
+            detailed.setVisibility(View.GONE);
+            general.setVisibility(View.VISIBLE);
+            bogey_number.setText(sd.getBogie());
+        } else {
+            detailed.setVisibility(View.GONE);
+            general.setVisibility(View.VISIBLE);
             String train[] = sd.getTrain().split("\\s+");
+            bogey_number.setText(train[1]);
             train_number.setText(train[0]);
         }
 
-        if(getIntent().hasExtra("coach_index")){
+
+
+        if (getIntent().hasExtra("coach_index")) {
             position = getIntent().getExtras().getInt("coach_index");
-            if(position>0) {
-                previous_coach = coach_list.get(position-1);
+            if (position > 0) {
+                previous_coach = coach_list.get(position - 1);
             }
-            if(position!=coach_list.size()-1) {
-                next_coach = coach_list.get(position+1);
+            if (position != coach_list.size() - 1) {
+                next_coach = coach_list.get(position + 1);
             }
         }
 
         general.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
-                        .title("Confirm")
-                        .content("Are you sure you want to end inspection?")
-                        .positiveText("Yes")
-                        .negativeText("No")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
-                                Intent intent = new Intent(getApplicationContext(),InspectionMenuActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
-                                //
-                            }
-                        })
-                        .show();
+                String type = sd.getType();
+                if (type.equalsIgnoreCase("detailed")) {
+                    new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
+                            .title("Confirm")
+                            .content("Are you sure you want to end inspection of this coach?")
+                            .positiveText("Yes")
+                            .negativeText("No")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    onNext();
+                                    Intent intent = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    //
+                                }
+                            })
+                            .show();
+                } else {
+                    new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
+                            .title("Confirm")
+                            .content("Are you sure you want to end inspection of this train?")
+                            .positiveText("Yes")
+                            .negativeText("No")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    //General Report Upload
+                                    Intent intent = new Intent(getApplicationContext(), InspectionMenuActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    //
+                                }
+                            })
+                            .show();
+                }
+
             }
         });
 
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!previous_coach.equalsIgnoreCase("")) {
+                if (!previous_coach.equalsIgnoreCase("")) {
                     onNext();
                     Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
                     i.putExtra("coach", previous_coach);
-                    i.putExtra("coach_index",position-1);
+                    i.putExtra("coach_index", position - 1);
                     startActivity(i);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"This is the first coach",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "This is the first coach", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        next = (TextView)findViewById(R.id.next);
+        next = (TextView) findViewById(R.id.next);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!next_coach.equalsIgnoreCase("")) {
+                if (!next_coach.equalsIgnoreCase("")) {
                     onNext();
                     Intent i = new Intent(getApplicationContext(), InspectionBogeyReportActivity.class);
                     i.putExtra("coach", next_coach);
-                    i.putExtra("coach_index",position+1);
+                    i.putExtra("coach_index", position + 1);
                     startActivity(i);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"This is the last coach",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "This is the last coach", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -179,8 +197,8 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
         spinner_list.add("Undergear");
         spinner_list.add("Electricals");
         spinner_list.add("Windows");
-        final RecyclerView card = (RecyclerView)findViewById(R.id.card_list);
-        adapter = new BogeyReportAdapter(detailedCards,spinner_list,InspectionBogeyReportActivity.this,true,"");
+        final RecyclerView card = (RecyclerView) findViewById(R.id.card_list);
+        adapter = new BogeyReportAdapter(detailedCards, spinner_list, InspectionBogeyReportActivity.this, true, "");
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         card.setLayoutManager(mlayoutmanager);
         card.setAdapter(adapter);
@@ -202,38 +220,78 @@ public class InspectionBogeyReportActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
-        onNext();
-        Intent i = new Intent(getApplicationContext(), InspectionBogeyActivity.class);
-        startActivity(i);
+    public void onBackPressed() {
+        if(sd.getType().equals("detailed")) {
+            new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
+                    .title("Confirm")
+                    .content("All data will be lost, Confirm?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            Intent i = new Intent(getApplicationContext(),InspectionBogeyActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                        }
+                    })
+                    .show();
+        }
+        else{
+            new MaterialDialog.Builder(InspectionBogeyReportActivity.this)
+                    .title("Confirm")
+                    .content("All data will be lost, Confirm?")
+                    .positiveText("Yes")
+                    .negativeText("No")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            Intent i = new Intent(getApplicationContext(),InspectionMenuActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                        }
+                    })
+                    .show();
+        }
     }
 
-    public void onNext(){
-        BogeyEntity bogeyEntity = new BogeyEntity(bogey_number.getText().toString(),"",sd.getDetailedCard(),null);
+    public void onNext() {
+        BogeyEntity bogeyEntity = new BogeyEntity(bogey_number.getText().toString(), "", sd.getDetailedCard(), null);
         List<BogeyEntity> bogeyEntities = sd.getBogieEntity();
+        if(bogeyEntities==null)
+            bogeyEntities = new ArrayList<BogeyEntity>();
+
         bogeyEntities.add(bogeyEntity);
         sd.setBogieEntity(bogeyEntities);
+        List<DetailedCard> detailedCards = new ArrayList<DetailedCard>();
+        sd.setDetailedCards(detailedCards);
     }
 
     public boolean check() {
         try {
-            String bogey = bogey_number.getText().toString();
+            String bogey = sd.getBogie();
             bogeyEntities = sd.getBogieEntity();
             for (int i = 0; i < bogeyEntities.size(); i++) {
-                System.out.println("xxxxx"+bogey);
-                System.out.println("xxxxx"+bogeyEntities.get(i).getBogeyNumber());
+                System.out.println("xxxxx" + bogey);
+                System.out.println("xxxxx" + bogeyEntities.get(i).getBogeyNumber());
                 if (bogeyEntities.get(i).getBogeyNumber().equalsIgnoreCase(bogey)) {
                     position_bogey = i;
                     return true;
                 }
             }
             return false;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
-
 
 
 }

@@ -11,6 +11,7 @@ import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Entity.UserEntity;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SharedData {
@@ -72,8 +73,14 @@ public class SharedData {
         return train;
     }
 
+    public void setBogie(String bogie){
+        editor.putString("bogie", bogie).commit();
+    }
 
-
+    public String getBogie(){
+        String bogie = pref.getString("bogie", "");
+        return bogie;
+    }
 
     public void setCoachList(List<String> coach_list){
         String coach = gson.toJson(coach_list);
@@ -85,6 +92,18 @@ public class SharedData {
         Type listType = new TypeToken<List<String>>() {}.getType();
         List<String> coach_list = gson.fromJson(json, listType);
         return coach_list;
+    }
+
+    public void setTrainList(List<String> train_list){
+        String train = gson.toJson(train_list);
+        editor.putString("train_list",train).commit();
+    }
+
+    public List<String> getTrainList(){
+        String json = pref.getString("train_list", "");
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        List<String> train_list = gson.fromJson(json, listType);
+        return train_list;
     }
 
     public void setTypeList(List<Boolean> type_list){
@@ -123,6 +142,18 @@ public class SharedData {
         return card_list;
     }
 
+    public void setTrainEntityList(List<TrainEntity> cards){
+        String card = gson.toJson(cards);
+        editor.putString("train_entity_list",card).commit();
+    }
+
+    public List<TrainEntity> getTrainEntityList(){
+        String json = pref.getString("train_entity_list", "");
+        Type listType = new TypeToken<List<TrainEntity>>() {}.getType();
+        List<TrainEntity> card_list = gson.fromJson(json, listType);
+        return card_list;
+    }
+
     public void setUserEntity(UserEntity userEntity){
         String json = gson.toJson(userEntity);
         editor.putString("userEntity",json).commit();
@@ -148,6 +179,11 @@ public class SharedData {
     public void clearAll(){
         editor.clear();
         editor.commit();
+    }
+
+    public void clear(){
+        List<BogeyEntity> bogeyEntities = new ArrayList<BogeyEntity>();
+        setBogieEntity(bogeyEntities);
     }
 
 

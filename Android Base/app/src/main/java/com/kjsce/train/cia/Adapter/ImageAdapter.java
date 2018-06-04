@@ -7,11 +7,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.ImageShow;
+import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -21,12 +24,9 @@ import java.util.List;
  * Created by Dhaval on 09-04-2018.
  */
 
-/**
- * Created by Dhaval on 26-03-2018.
- */
-
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
     private final List<String> Mvalues;
+    MaterialDialog materialDialog;
 
 
     Context context;
@@ -48,6 +48,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
         return new ViewHolder(view);
 
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
@@ -69,9 +70,20 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder>{
                         MediaPlayer mp = new MediaPlayer();
 
                         try {
+                            materialDialog = new MaterialDialog.Builder(context)
+                                    .title("Audio")
+                                    .content("Playing Audio")
+                                    .progress(true, 0)
+                                    .show();
                             mp.setDataSource(Mvalues.get(position));
                             mp.prepare();
                             mp.start();
+                            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mediaPlayer) {
+                                    materialDialog.hide();
+                                }
+                            });
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

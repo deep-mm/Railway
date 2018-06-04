@@ -10,10 +10,13 @@ import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.Maintainence.BogeyActivity;
 import com.kjsce.train.cia.Entity.MaintainenceCardFiles;
+import com.kjsce.train.cia.Entity.Report.DetailedReport;
+import com.kjsce.train.cia.Entity.Report.GeneralReport;
 import com.kjsce.train.cia.Listeners.ItemClickListener;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dhaval on 30-04-2018.
@@ -21,8 +24,8 @@ import java.util.ArrayList;
 
 public class MaintainenceBogeyReportAdapter extends RecyclerView.Adapter<MaintainenceBogeyReportAdapter.ViewHolder> {
 
-    private final ArrayList<MaintainenceCardFiles> Mvalues;
-    private final ArrayList<MaintainenceCardFiles> reportvalues;
+    private final List<DetailedReport> Mvalues;
+    private final List<GeneralReport> reportvalues;
 
     Context context;
 
@@ -31,8 +34,8 @@ public class MaintainenceBogeyReportAdapter extends RecyclerView.Adapter<Maintai
         reportvalues = null;
     }
 
-    public MaintainenceBogeyReportAdapter(ArrayList mvalues,ArrayList reportvalues, Context c) {
-        Mvalues = mvalues;
+    public MaintainenceBogeyReportAdapter(List<DetailedReport> mvalues,List<GeneralReport> reportvalues, Context c) {
+        this.Mvalues = mvalues;
         this.reportvalues = reportvalues;
         context = c;
 
@@ -49,10 +52,12 @@ public class MaintainenceBogeyReportAdapter extends RecyclerView.Adapter<Maintai
     public void onBindViewHolder(MaintainenceBogeyReportAdapter.ViewHolder holder, final int position) {
 
 
-       holder.train.setText(Mvalues.get(position).getTrain_name());
-       holder.in_date.setText(Mvalues.get(position).getDate().toString());
-        String Name = Mvalues.get(position).getTrain_name();
-        String traind[] = Name.split(" ");
+       holder.train.setText(Mvalues.get(position).getTrainNumber()+" "+Mvalues.get(position).getTrainName());
+       holder.in_date.setText(Mvalues.get(position).getDateTime());
+        String Name = Mvalues.get(position).getTrainName();
+        String traind[] = new String[2];
+        traind[0] = Mvalues.get(position).getTrainNumber();
+        traind[1] = Mvalues.get(position).getTrainName();
         holder.setClickListener(new ItemClickListener() {
 
             @Override
