@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class InspectionBogeyActivity extends AppCompatActivity {
     RelativeLayout generateReport;
     TextView train_name;
     List<BogeyEntity> bogeyEntities;
+    MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,20 +72,44 @@ public class InspectionBogeyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                bogeyEntities =sd.getBogieEntity();
-                TrainEntity trainEntity1 = sd.getTrainEntity();
+                new MaterialDialog.Builder(InspectionBogeyActivity.this)
+                        .title("Confirm")
+                        .content("Are you sure you want to End Inspection of this train?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                materialDialog = new MaterialDialog.Builder(InspectionBogeyActivity.this)
+                                        .title("Generating Report")
+                                        .content("Please Wait")
+                                        .progress(true, 0)
+                                        .show();
+                                progressStart();
+                                bogeyEntities =sd.getBogieEntity();
+                                TrainEntity trainEntity1 = sd.getTrainEntity();
 
-                DetailedReport detailedReport = new DetailedReport(sd.getStation(),sd.getType(),trainEntity.getTrainNumber(),trainEntity.getTrainNumber(),
-                        "2018",trainEntity.getManufacturer(),bogeyEntities,null);
-                DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
-                detailedReportUtility.addDetailedReport(detailedReport, new AddDetailedReportListener() {
-                    @Override
-                    public void onCompleteTask(String result) {
-                        Toast.makeText(getApplicationContext(),"Complete",Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Intent i = new Intent(getApplicationContext(), InspectionTrainReportActivity.class);
-                startActivity(i);
+                                DetailedReport detailedReport = new DetailedReport(sd.getStation(),sd.getType(),trainEntity.getTrainNumber(),trainEntity.getTrainNumber(),
+                                        "2018",trainEntity.getManufacturer(),bogeyEntities,null);
+                                DetailedReportUtility detailedReportUtility = new DetailedReportUtility();
+                                detailedReportUtility.addDetailedReport(detailedReport, new AddDetailedReportListener() {
+                                    @Override
+                                    public void onCompleteTask(String result) {
+                                        materialDialog.hide();
+                                        progressStop();
+                                    }
+                                });
+                                sd.clear();
+                                Intent i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
+                                startActivity(i);
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -110,5 +136,28 @@ public class InspectionBogeyActivity extends AppCompatActivity {
                 })
                 .show();
 
+    }
+
+    public boolean check(String Bogie) {
+        try {
+            bogeyEntities = sd.getBogieEntity();
+            for (int i = 0; i < bogeyEntities.size(); i++) {
+                if (bogeyEntities.get(i).getBogeyNumber().equalsIgnoreCase(Bogie)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void progressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void progressStop(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

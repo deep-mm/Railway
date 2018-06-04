@@ -40,7 +40,8 @@ public class InspectionMenuActivity extends AppCompatActivity {
         logout_button = (RelativeLayout) findViewById(R.id.logout_button);
         sd = new SharedData(getApplicationContext());
 
-        syncData();
+        if(sd.getTrainList()==null)
+            syncData();
 
       createreport.setOnClickListener(new View.OnClickListener() {
             @Override

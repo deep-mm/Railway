@@ -27,6 +27,7 @@ public class TotalInspection extends AppCompatActivity {
 
         String date ="adsas";
         String train = "123 trainn";
+        //Get all reports from bhavik and display
         sd = new SharedData(getApplicationContext());
         //System.out.println("train"+sd.getTrain());
         MaintainenceCardFiles m = new MaintainenceCardFiles(train,date);//example card

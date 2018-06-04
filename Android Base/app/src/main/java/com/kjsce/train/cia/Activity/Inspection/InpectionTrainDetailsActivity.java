@@ -22,6 +22,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -87,6 +88,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
     List<DetailedCard> detailedCards;
     DetailedCard detailedCard;
     int position;
+    MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             mic = (ImageButton)findViewById(R.id.mic);
             sd = new SharedData(getApplicationContext());
 
-            checkBoxList = getTypes();
+
             detailedCards = new ArrayList<DetailedCard>();
 
             if(check()) {
@@ -114,12 +116,22 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
                 paths = detailedCard.getImage();
                 paths.addAll(detailedCard.getAudio());
                 Problem p = detailedCard.getProblem();
-                System.out.println("yyyyy"+p.getList());
                 sd.setTypeList(p.getList());
+                typeval.setText(detailedCard.getType());
+                descriptionval.setText(detailedCard.getComment());
+                checkBoxList = getTypes();
             }
             else{
+                checkBoxList = getTypes();
+                List<Boolean> type = new ArrayList<Boolean>();
+                for(int i=0;i<checkBoxList.size();i++)
+                    type.add(false);
+
+                sd.setTypeList(type);
                 detailedCards = new ArrayList<DetailedCard>();
             }
+
+
 
             done = (RelativeLayout) findViewById(R.id.done);
             notdone = (RelativeLayout) findViewById(R.id.notdone);
@@ -144,10 +156,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
                     showPictureDialog();
                 }
             });
-            mStorage = FirebaseStorage.getInstance().getReference();
 
-        //mRecordLabel = (TextView) findViewById(R.id.recordLabel);
-        //mRecordBtn = (Button) findViewById(R.id.recordBtn);
         mProgress = new ProgressDialog(this);
         timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -157,14 +166,20 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(!flag){
-                    mic.setImageDrawable(getResources().getDrawable(R.drawable.recording_stop));
+                    mic.setBackground(getResources().getDrawable(R.drawable.recording_stop));
                     flag = true;
+                    materialDialog = new MaterialDialog.Builder(InpectionTrainDetailsActivity.this)
+                            .title("Recording")
+                            .content("Speak Now")
+                            .progress(true, 0)
+                            .show();
                     startRecording();
                 }
 
                 else{
-                    mic.setImageDrawable(getResources().getDrawable(R.drawable.mic));
+                    mic.setBackground(getResources().getDrawable(R.drawable.mic));
                     flag = false;
+                    materialDialog.hide();
                     stopRecording();
                 }
             }
@@ -183,22 +198,29 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
                 }
                 typeList = sd.getTypeList();
-                System.out.println("zzzzzy"+typeList);
                 for (int i=0;i<checkBoxList.size();i++){
                     if(typeList.get(i)==null)
                         box.add(false);
                     else
                         box.add(typeList.get(i));
                 }
-                System.out.println("zzzzzy"+box);
                 Problem problem = getProblem(box);
                 problem.setList(box);
                 DetailedCard detailedCard = new DetailedCard(problem,typeval.getText().toString(),images,descriptionval.getText().toString(),
                         false,audio);
-                detailedCards.add(detailedCard);
+                if(check()){
+                    detailedCards.remove(position);
+                    detailedCards.add(position,detailedCard);
+                }
+                else {
+                    if(detailedCards==null)
+                        detailedCards = new ArrayList<DetailedCard>();
+
+                    System.out.println("mmmmm"+detailedCard);
+                    detailedCards.add(detailedCard);
+                }
                 sd.setDetailedCards(detailedCards);
                 Intent intent = new Intent(getApplicationContext(),InspectionBogeyReportActivity.class);
-                //Set train and bogie number
                 startActivity(intent);
             }
         });
@@ -331,7 +353,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
             try{
                 detailedCards = sd.getDetailedCard();
-                if(position<detailedCards.size())
+                if(position<(detailedCards.size()-1))
                     return true;
 
                 else
@@ -501,7 +523,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             File f = new File(myDir, name + ".jpg");
             f.createNewFile();
             FileOutputStream fo = new FileOutputStream(f);
-          //  Toast.makeText(InpectionTrainDetailsActivity.this, filePath.toString(), Toast.LENGTH_LONG).show();
 
             fo.write(bytes.toByteArray());
             MediaScannerConnection.scanFile(this,
@@ -512,7 +533,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
 
             return f.getAbsolutePath();
         } catch (IOException e1) {
-            Toast.makeText(InpectionTrainDetailsActivity.this,"afsdgbfh", Toast.LENGTH_LONG).show();
             e1.printStackTrace();
         }
         return "";
@@ -571,6 +591,15 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         }
     }
 
+    public void progressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void progressStop(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
     @Override
     public void onBackPressed(){
         new MaterialDialog.Builder(InpectionTrainDetailsActivity.this)
@@ -581,7 +610,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
-                        Intent i = new Intent(getApplicationContext(),InspectionMenuActivity.class);
+                        Intent i = new Intent(getApplicationContext(),InspectionBogeyReportActivity.class);
                         startActivity(i);
                     }
                 })
