@@ -4,6 +4,7 @@ import com.example.amey.loginfirebase.Entity.Analysis.DetailedBogeyAnalysis;
 import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
 import com.example.amey.loginfirebase.Entity.Report.DetailedReport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BogeyEntity {
@@ -13,7 +14,7 @@ public class BogeyEntity {
     private DetailedBogeyAnalysis detailedBogeyAnalysis;
 
     public BogeyEntity() {
-
+        detailedCard = new ArrayList<DetailedCard>();
     }
 
     public BogeyEntity(String bogeyNumber, String type, List<DetailedCard> detailedCard, DetailedBogeyAnalysis detailedBogeyAnalysis) {
@@ -63,5 +64,13 @@ public class BogeyEntity {
                 ", detailedCard=" + detailedCard +
                 ", detailedBogeyAnalysis=" + detailedBogeyAnalysis +
                 '}';
+    }
+
+    public BogeyEntity copy(BogeyEntity bogeyEntity){
+        this.bogeyNumber = bogeyEntity.bogeyNumber;
+        this.type = bogeyEntity.type;
+        this.detailedBogeyAnalysis = bogeyEntity.detailedBogeyAnalysis;
+        this.detailedCard = bogeyEntity.detailedCard;
+        return this;
     }
 }

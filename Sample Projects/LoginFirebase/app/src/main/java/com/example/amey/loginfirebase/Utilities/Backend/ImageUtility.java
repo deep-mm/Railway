@@ -9,7 +9,9 @@ import com.example.amey.loginfirebase.Entity.Card.DetailedCard;
 import com.example.amey.loginfirebase.Entity.Card.GeneralCard;
 import com.example.amey.loginfirebase.Listener.AddAudioListener;
 import com.example.amey.loginfirebase.Listener.AddBogeyImageListener;
+import com.example.amey.loginfirebase.Listener.AddGeneralCardImageListener;
 import com.example.amey.loginfirebase.Listener.AddGeneralImageListener;
+import com.example.amey.loginfirebase.Listener.AddSingleImageUploadListener;
 import com.example.amey.loginfirebase.Listener.GetImageListener;
 import com.example.amey.loginfirebase.Listener.AddImageListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,53 +29,16 @@ import java.util.List;
 public class ImageUtility {
 
     private StorageReference mStorage;
+    List<GeneralCard> newGeneralCards = new ArrayList<GeneralCard>();
+    /*
     int i;
+
     List<String> imageS=new ArrayList<String>();
     List<String> imageL=new ArrayList<String>();
     int counterU=0;
-    int counterR=0;
+    int counterR=0;*/
 
-    public void uploadGeneralImage(final List<GeneralCard> generalCardList, final AddGeneralImageListener listener){
-        for(int i=0;i<generalCardList.size();i++){
-            final int counterI = i;
-            uploadImage(generalCardList.get(i).getImage(), new AddImageListener() {
-                @Override
-                public void onCompleteTask(List<String> imageS) {
-                    List<GeneralCard> newGeneralCards = new ArrayList<GeneralCard>();
-                    GeneralCard generalCard = generalCardList.get(counterI);
-                    generalCard.setAudio(imageS);
-                    newGeneralCards.add(generalCard);
-
-                    if(counterI == generalCardList.size()-1){
-                        listener.onCompleteTask(newGeneralCards);
-                    }
-                }
-            });
-        }
-    }
-
-    public void uploadBogeyImage(final List<BogeyEntity> bogeyEntities, final AddBogeyImageListener listener){
-        final List<BogeyEntity> newBogeyEntityList = new ArrayList<BogeyEntity>();
-        for(int i=0;i<bogeyEntities.size();i++){
-            final List<DetailedCard> detailedCards = bogeyEntities.get(i).getDetailedCard();
-            for(int j=0;j<detailedCards.size();j++){
-                final int counterI = i;
-                final int counterJ = j;
-                uploadImage(detailedCards.get(j).getImage(), new AddImageListener() {
-                    @Override
-                    public void onCompleteTask(List<String> imageS) {
-                        BogeyEntity newBogeyEntity = new BogeyEntity();
-                        newBogeyEntity = bogeyEntities.get(counterI);
-                        newBogeyEntity.getDetailedCard().get(counterJ).setImage(imageS);
-                        newBogeyEntityList.add(newBogeyEntity);
-                        if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
-                            listener.onCompleteTask(newBogeyEntityList);
-                        }
-                    }
-                });
-            }
-        }
-    }
+   /*
 
 
     public void uploadImage(final List<String> imageL, final AddImageListener listener)
@@ -81,9 +46,11 @@ public class ImageUtility {
         String timeStamp;
         int n;
 
+        System.out.println("Image size: " + imageL.size());
         mStorage = FirebaseStorage.getInstance().getReference();
         for(i=0;i<imageL.size();i++) {
 
+            final int counterU = i;
             n = imageL.get(i).length();
             timeStamp = imageL.get(i).substring((n-19),(n-4));
             StorageReference imageStorageReference = mStorage.child("Image").child(timeStamp + ".jpg");
@@ -91,18 +58,26 @@ public class ImageUtility {
             imageStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    counterU++;
+
                     Uri downloadUri=taskSnapshot.getDownloadUrl();
                     imageS.add(downloadUri.toString());
-                    System.out.println("added");
-                    if(counterU==(imageL.size())){
-                        System.out.println("true");
-                        listener.onCompleteTask(imageS);
+
+                    if(counterU==(imageL.size()-1)){
+
+                        List<String> images = new ArrayList<String>();
+                        for(int i=0;i<imageS.size();i++){
+                            images.add(imageS.get(i));
+                        }
+                        imageS.clear();
+
+                        listener.onCompleteTask(images);
                     }
                 }
             });
         }
     }
+
+
 
     public void retrieveImage(final List<String> imageS,final GetImageListener listener) throws IOException {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -139,5 +114,102 @@ public class ImageUtility {
             });
 
         }
+    }*/
+
+    //Final
+    public void uploadSingleImage(String image, final AddSingleImageUploadListener listener) throws IOException {
+
+       int n = image.length();
+       String timeStamp = image.substring((n-19),(n-4));
+
+       mStorage = FirebaseStorage.getInstance().getReference();
+       StorageReference imageStorageReference = mStorage.child("Image").child(timeStamp + ".jpg");
+       Uri uri = Uri.fromFile(new File(image));
+
+       imageStorageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+           @Override
+           public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+               Uri downloadUri=taskSnapshot.getDownloadUrl();
+               String newImage = downloadUri.toString();
+               listener.onCompleteTask(newImage);
+
+           }
+       });
+   }
+
+    //Final
+    public void uploadImage(final List<String> imageL, final AddImageListener listener){
+
+       final List<String> imageS = new ArrayList<String>();
+       for(int i=0;i<imageL.size();i++){
+           try {
+               uploadSingleImage(imageL.get(i), new AddSingleImageUploadListener() {
+                   @Override
+                   public void onCompleteTask(String image) {
+                       imageS.add(image);
+                       if(imageS.size() == imageL.size())
+                           listener.onCompleteTask(imageS);
+                   }
+               });
+           }
+           catch(Exception e){
+               e.printStackTrace();
+           }
+       }
+   }
+
+    //Final
+    public void uploadGeneralImage(final List<GeneralCard> generalCardList, final AddGeneralImageListener listener){
+        System.out.println("Called");
+        for(int i=0;i<generalCardList.size();i++){
+            final int counterI = i;
+            uploadImage(generalCardList.get(i).getImage(), new AddImageListener() {
+                @Override
+                public void onCompleteTask(List<String> imageS) {
+
+                    GeneralCard generalCard = new GeneralCard();
+                    generalCard.copy(generalCardList.get(counterI));
+                    generalCard.setImage(imageS);
+                    generalCard.setAudio(generalCardList.get(counterI).getAudio());
+
+                    newGeneralCards.add(generalCard);
+                    if(counterI == generalCardList.size()-1){
+                        listener.onCompleteTask(newGeneralCards);
+                    }
+                }
+            });
+        }
     }
+
+    //Final
+    public void uploadBogeyImage(final List<BogeyEntity> bogeyEntities, final AddBogeyImageListener listener){
+        final List<BogeyEntity> newBogeyEntityList = new ArrayList<BogeyEntity>();
+
+        for(int i=0;i<bogeyEntities.size();i++){
+            newBogeyEntityList.add(new BogeyEntity().copy(bogeyEntities.get(i)));
+        }
+
+        for(int i=0;i<bogeyEntities.size();i++){
+            final List<DetailedCard> detailedCards = bogeyEntities.get(i).getDetailedCard();
+            for(int j=0;j<detailedCards.size();j++){
+                final int counterI = i;
+                final int counterJ = j;
+                System.out.println("i: " + i + "j: " + j + " size: " + detailedCards.get(j).getImage().size());
+                uploadImage(detailedCards.get(j).getImage(), new AddImageListener() {
+                    @Override
+                    public void onCompleteTask(List<String> imageS) {
+
+                        newBogeyEntityList.get(counterI).getDetailedCard().get(counterJ).setImage(imageS);
+
+                        if(counterI == bogeyEntities.size()-1 && counterJ == detailedCards.size()-1){
+                            listener.onCompleteTask(newBogeyEntityList);
+                        }
+                    }
+                });
+            }
+        }
+    }
+
+
 }

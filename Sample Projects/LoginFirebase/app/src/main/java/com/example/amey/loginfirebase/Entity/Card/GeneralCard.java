@@ -83,4 +83,18 @@ public class GeneralCard {
                 ", problemStatus=" + problemStatus +
                 '}';
     }
+
+    public boolean equals(GeneralCard g1, GeneralCard g2){
+        if(g1.submittedBy.equals(g2.submittedBy) && g1.type.equals(g2.type) && g1.comment.equals(g2.comment) && (g1.problemStatus == g2.problemStatus)){
+            return true;
+        }
+        return false;
+    }
+
+    public void copy(GeneralCard generalCard){
+        this.submittedBy = generalCard.submittedBy;
+        this.type = generalCard.type;
+        this.comment = generalCard.comment;
+        this.problemStatus = generalCard.problemStatus;
+    }
 }
