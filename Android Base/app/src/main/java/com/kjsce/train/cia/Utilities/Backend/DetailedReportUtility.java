@@ -24,7 +24,7 @@ public class DetailedReportUtility {
 
     public void getDetailedReport(String trainNumber,String dateTime, final GetDetailedReportListener getDetailedReportListener)
     {
-        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber+dateTime);
+        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber).child(dateTime);
 
         mDetailedReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
