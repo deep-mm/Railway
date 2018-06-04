@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.R;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 public class MaintainenceImageAdapter extends RecyclerView.Adapter<MaintainenceImageAdapter.ViewHolder>{
     private final ArrayList<String> Mvalues;
+    MaterialDialog materialDialog;
 
 
     Context context;
@@ -47,6 +49,10 @@ public class MaintainenceImageAdapter extends RecyclerView.Adapter<MaintainenceI
     public void onBindViewHolder(MaintainenceImageAdapter.ViewHolder holder, final int position) {
 
         holder.image_name.setText(Mvalues.get(position));
+
+
+
+
         if(Mvalues.get(position).contains("3gp"))
             holder.type = "audio";
 
@@ -60,16 +66,32 @@ public class MaintainenceImageAdapter extends RecyclerView.Adapter<MaintainenceI
                     MediaPlayer mp = new MediaPlayer();
 
                     try {
+                        materialDialog = new MaterialDialog.Builder(context)
+                                .title("Audio")
+                                .content("Playing Audio")
+                                .progress(true, 0)
+                                .show();
                         mp.setDataSource(Mvalues.get(position));
                         mp.prepare();
                         mp.start();
+                        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                materialDialog.hide();
+                            }
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 else{
-                    Intent i = new Intent(context, ImageShow.class);
+                   /* Intent i = new Intent(context, ImageShow.class);
                     i.putExtra("path",Mvalues.get(position));
+                    context.startActivity(i);*/
+
+                    // mToast(getLayoutPosition(),image_name.getText());
+                    Intent i=new Intent(context,ImageShow.class);
+                    i.putExtra("url",holder.image_name.getText());
                     context.startActivity(i);
                 }
             }
