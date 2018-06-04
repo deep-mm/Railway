@@ -83,4 +83,11 @@ public class GeneralCard {
                 ", problemStatus=" + problemStatus +
                 '}';
     }
+
+    public void copy(GeneralCard generalCard){
+        this.submittedBy = generalCard.submittedBy;
+        this.type = generalCard.type;
+        this.comment = generalCard.comment;
+        this.problemStatus = generalCard.problemStatus;
+    }
 }

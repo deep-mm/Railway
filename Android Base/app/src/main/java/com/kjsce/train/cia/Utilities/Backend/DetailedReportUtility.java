@@ -67,7 +67,6 @@ public class DetailedReportUtility {
             }
         });
 
-
     }
 
     public DetailedReport combineReports(DetailedReport originalReport,DetailedReport newReport){
