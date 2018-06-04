@@ -5,7 +5,7 @@ import com.kjsce.train.cia.Entity.BogeyEntity;
 
 import java.util.List;
 
-public interface AddBogeyAudioListener
+public interface AddBogeyImageListener
 {
     void onCompleteTask(List<BogeyEntity> bogeyEntityList);
 }

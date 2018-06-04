@@ -63,4 +63,12 @@ public class BogeyEntity {
                 ", detailedBogeyAnalysis=" + detailedBogeyAnalysis +
                 '}';
     }
+
+    public BogeyEntity copy(BogeyEntity bogeyEntity){
+        this.bogeyNumber = bogeyEntity.bogeyNumber;
+        this.type = bogeyEntity.type;
+        this.detailedBogeyAnalysis = bogeyEntity.detailedBogeyAnalysis;
+        this.detailedCard = bogeyEntity.detailedCard;
+        return this;
+    }
 }

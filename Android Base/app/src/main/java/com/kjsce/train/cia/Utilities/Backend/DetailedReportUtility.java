@@ -14,11 +14,13 @@ import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Entity.Report.DetailedReport;
 import com.kjsce.train.cia.Entity.TrainEntity;
 import com.kjsce.train.cia.Listeners.AddBogeyAudioListener;
+import com.kjsce.train.cia.Listeners.AddBogeyImageListener;
 import com.kjsce.train.cia.Listeners.AddDetailedReportListener;
 import com.kjsce.train.cia.Listeners.GetDetailedReportListListener;
 import com.kjsce.train.cia.Listeners.GetDetailedReportListener;
 import com.kjsce.train.cia.Listeners.GetLatestDetailedReportListener;
 import com.kjsce.train.cia.Listeners.RemoveDetailedReportListener;
+import com.kjsce.train.cia.Listeners.SetLatestDetailedReportListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,37 +49,79 @@ public class DetailedReportUtility {
                         getDetailedReportListener.onCompleteTask(null);
                     }
                 });
+            }
+        });
+    }
 
+    public void addDetailedReport(final DetailedReport detailedReport, AddDetailedReportListener listener) {
+        AudioUtility audioUtility = new AudioUtility();
+        audioUtility.uploadBogeyAudio(detailedReport.getBogeyEntityList(), new AddBogeyAudioListener() {
+            @Override
+            public void onCompleteTask(List<BogeyEntity> bogeyEntityList) {
+                detailedReport.setBogeyEntityList(bogeyEntityList);
+                System.out.println("Audio uploaded");
+
+                ImageUtility imageUtility = new ImageUtility();
+                imageUtility.uploadBogeyImage(detailedReport.getBogeyEntityList(), new AddBogeyImageListener() {
+                    @Override
+                    public void onCompleteTask(List<BogeyEntity> bogeyEntityList) {
+                        detailedReport.setBogeyEntityList(bogeyEntityList);
+                        System.out.println("Image uploaded");
+
+                        getExistingDetailedReport(detailedReport.getTrainNumber(), detailedReport.getDateTime(), new GetDetailedReportListener() {
+                            @Override
+                            public void onCompleteTask(DetailedReport dR) {
+                                if(dR == null){
+                                    System.out.println("Adding report");
+
+                                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                                    mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(detailedReport.getTrainNumber()).child(detailedReport.getDateTime());
+                                    mDetailedReportDatabaseReference.setValue(detailedReport);
+                                    LatestUtility latestUtility = new LatestUtility();
+                                    latestUtility.setLatestDetailedReport(detailedReport, new SetLatestDetailedReportListener() {
+                                        @Override
+                                        public void onCompleteTask(String result) {
+                                            System.out.println("Detailed report added");
+                                            listener.onCompleteTask("success");
+                                        }
+                                    });
+                                }
+                                else{
+                                    System.out.println("Combining report");
+                                    dR = combineReports(dR,detailedReport);
+                                    mFirebaseDatabase = FirebaseDatabase.getInstance();
+                                    mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(dR.getTrainNumber()).child(dR.getDateTime());
+                                    mDetailedReportDatabaseReference.setValue(dR);
+                                    System.out.println("Detailed report added");
+                                    listener.onCompleteTask("success");
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
 
 
     }
 
-    public void addDetailedReport(final DetailedReport detailedReport, AddDetailedReportListener listener) {
-       /* AudioUtility audioUtility = new AudioUtility();
-        audioUtility.uploadBogeyAudio(detailedReport.getBogeyEntityList(), new AddBogeyAudioListener() {
+    public void getExistingDetailedReport(String trainNumber,String dateTime, final GetDetailedReportListener getDetailedReportListener)
+    {
+        mDetailedReportDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("DetailedReport").child(trainNumber).child(dateTime);
+
+        mDetailedReportDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onCompleteTask(List<BogeyEntity> bogeyEntityList) {
-                detailedReport.setBogeyEntityList(bogeyEntityList);
-                getDetailedReport(detailedReport.getTrainNumber(), detailedReport.getDateTime(), new GetDetailedReportListener() {
-                    @Override
-                    public void onCompleteTask(DetailedReport dR) {
-                        if(dR == null){
-                            mFirebaseDatabase = FirebaseDatabase.getInstance();
-                            mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(detailedReport.getTrainNumber()).child(detailedReport.getDateTime());
-                            mDetailedReportDatabaseReference.setValue(detailedReport);
-                        }
-                        else{
-                            dR = combineReports(dR,detailedReport);
-                            mFirebaseDatabase = FirebaseDatabase.getInstance();
-                            mDetailedReportDatabaseReference = mFirebaseDatabase.getReference().child("DetailedReport").child(dR.getTrainNumber()).child(dR.getDateTime());
-                            mDetailedReportDatabaseReference.setValue(dR);
-                        }
-                    }
-                });
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DetailedReport detailedReport1 = dataSnapshot.getValue(DetailedReport.class);
+                System.out.println("Detailed Report:"+detailedReport1);
+                getDetailedReportListener.onCompleteTask(detailedReport1);
             }
-        });*/
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                getDetailedReportListener.onCompleteTask(null);
+            }
+        });
     }
 
         public DetailedReport combineReports (DetailedReport originalReport, DetailedReport
