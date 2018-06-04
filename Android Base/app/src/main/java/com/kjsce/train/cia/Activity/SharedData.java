@@ -182,7 +182,6 @@ public class SharedData {
     }
 
     public void clear(){
-
         List<BogeyEntity> bogeyEntities = new ArrayList<BogeyEntity>();
         setBogieEntity(bogeyEntities);
     }
