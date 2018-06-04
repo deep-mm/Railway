@@ -488,8 +488,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 saveImage(bitmap);
-                paths.add(filePath.toString());
-                adapter.notifyDataSetChanged();
                 //imageView.setImageBitmap(bitmap);
             }
             catch (IOException e)
@@ -500,8 +498,6 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         else if (requestCode == CAMERA && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            paths.add(filePath.toString());
-            adapter.notifyDataSetChanged();
             //imageView.setImageBitmap(thumbnail);
             saveImage(thumbnail);
         }
@@ -512,7 +508,7 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         ContextWrapper c = new ContextWrapper(getApplicationContext());
-        File myDir=new File(Environment.getExternalStorageDirectory(),"/CIA/Inspection/Audio/Sent");
+        File myDir=new File(Environment.getExternalStorageDirectory(),"/CIA/Inspection/Image/Sent");
         // have the object build the directory structure, if needed.
         if (!myDir.exists()) {
             myDir.mkdirs();
@@ -530,6 +526,8 @@ public class InpectionTrainDetailsActivity extends AppCompatActivity {
             MediaScannerConnection.scanFile(this,
                     new String[]{f.getPath()},
                     new String[]{"image/jpeg"}, null);
+            paths.add(f.getAbsolutePath());
+            adapter.notifyDataSetChanged();
             fo.close();
             Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
 
