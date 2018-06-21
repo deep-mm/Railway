@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.kjsce.train.cia.R;
-import com.squareup.picasso.Picasso;
+
 
 import java.io.File;
 
