@@ -17,7 +17,8 @@ import com.kjsce.train.cia.Listener.GetTrainListListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrainUtility {
+public class TrainUtility
+{
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mTrainDatabaseReference;
 
