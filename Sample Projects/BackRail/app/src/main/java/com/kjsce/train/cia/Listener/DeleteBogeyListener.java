@@ -1,5 +1,5 @@
 package com.kjsce.train.cia.Listener;
 
-public interface AddTrainListener {
+public interface DeleteBogeyListener {
     void onCompleteTask(String result);
 }
