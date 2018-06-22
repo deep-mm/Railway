@@ -4,20 +4,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.kjsce.train.cia.Entities.BogeyEntity;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Listener.OnCardListChangeListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.BogeyUtility;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class BogeyActivity extends AppCompatActivity {
 
     private BogeyUtility bogeyUtility = new BogeyUtility("1511092", new OnCardListChangeListener() {
         @Override
-        public void onDataChanged(List<CardEntity> newCardList) {
-            for(int i=0;i<newCardList.size();i++)
-                System.out.println(newCardList.get(i));
+        public void onDataChanged(BogeyEntity newBogeyEntity) {
+            newBogeyEntity.print();
         }
     });
 
@@ -25,22 +28,24 @@ public class BogeyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bogey);
-
     }
 
     public void getCards(View view){
-        List<CardEntity> cardEntityList = bogeyUtility.getCards();
-        for(int i=0;i<cardEntityList.size();i++){
-            System.out.println(cardEntityList.get(i));
-        }
+        BogeyEntity bogeyEntity = bogeyUtility.getBogeyEntity();
+        bogeyEntity.print();
     }
 
     public void addCard(View view){
-        bogeyUtility.addCard(new CardEntity("Amey", "1511092t", "231097"));
+        SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy_HH:mm:ss");
+        Date date = new Date();
+        String dateTime = formatter.format(date);
+        bogeyUtility.addCard(new CardEntity("Amey" + new Random().nextInt(10), "1511092t", dateTime,"subtype+count" + new Random().nextInt(10),"2"));
     }
 
     public void setCard(View view){
-        bogeyUtility.setCard(new CardEntity("Amey", "1511092t", "Ghar", "Hello", null, null, "231097", null, null));
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy_HH:mm:ss");
+        Date date = new Date();
+        bogeyUtility.setCard(new CardEntity("Amey", "1511092t", "Ghar", "Hello", null, null, formatter.format(date), null, null));
     }
 
     public void removeCard(View view){
