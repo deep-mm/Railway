@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TrainUtility
 {
-    private FirebaseDatabase mFirebaseDatabase;
+    private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference mTrainDatabaseReference;
 
     public void addTrain(String trainNo, AddTrainListener addTrainListener){
@@ -136,8 +136,5 @@ public class TrainUtility
             }
         };
         mTrainDatabaseReference.addChildEventListener(childEventListener);
-
-
-
     }
 }
