@@ -13,11 +13,13 @@ public class CardEntity
     private String dateTime;
     private String problem;
     private String subType;
+    private String id;
+    private boolean problemStatus;
 
     public CardEntity() {
     }
 
-    public CardEntity(String sender, String trainNumber, String dateTime) {
+    public CardEntity(String sender, String trainNumber, String dateTime,String id,String problem) {
         this.sender = sender;
         this.trainNumber = trainNumber;
         this.placeOfInspection = null;
@@ -25,8 +27,9 @@ public class CardEntity
         this.image = null;
         this.audio = null;
         this.dateTime = dateTime;
-        this.problem = null;
+        this.problem = problem;
         this.subType = null;
+        this.id = id;
     }
 
     public CardEntity(String sender, String trainNumber, String placeOfInspection, String comment, List<String> image, List<String> audio, String dateTime, String problem, String subType) {
@@ -39,6 +42,36 @@ public class CardEntity
         this.dateTime = dateTime;
         this.problem = problem;
         this.subType = subType;
+    }
+
+    public CardEntity(String sender, String trainNumber, String placeOfInspection, String comment, List<String> image, List<String> audio, String dateTime, String problem, String subType, String id, boolean problemStatus) {
+        this.sender = sender;
+        this.trainNumber = trainNumber;
+        this.placeOfInspection = placeOfInspection;
+        this.comment = comment;
+        this.image = image;
+        this.audio = audio;
+        this.dateTime = dateTime;
+        this.problem = problem;
+        this.subType = subType;
+        this.id = id;
+        this.problemStatus = problemStatus;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isProblemStatus() {
+        return problemStatus;
+    }
+
+    public void setProblemStatus(boolean problemStatus) {
+        this.problemStatus = problemStatus;
     }
 
     public String getSender() {
@@ -118,13 +151,10 @@ public class CardEntity
         return "CardEntity{" +
                 "sender='" + sender + '\'' +
                 ", trainNumber='" + trainNumber + '\'' +
-                ", placeOfInspection='" + placeOfInspection + '\'' +
-                ", comment='" + comment + '\'' +
-                ", image=" + image +
-                ", audio=" + audio +
                 ", dateTime='" + dateTime + '\'' +
                 ", problem='" + problem + '\'' +
                 ", subType='" + subType + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 
@@ -142,5 +172,7 @@ public class CardEntity
         this.image = cardEntity.image;
         this.problem = cardEntity.problem;
         this.subType = cardEntity.subType;
+        this.id = cardEntity.id;
+        this.problemStatus = cardEntity.problemStatus;
     }
 }
