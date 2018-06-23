@@ -19,7 +19,8 @@ public class BogeyActivity extends AppCompatActivity {
 
     private BogeyUtility bogeyUtility = new BogeyUtility("1511092", new OnCardListChangeListener() {
         @Override
-        public void onDataChanged(BogeyEntity newBogeyEntity) {
+        public void onDataChanged(BogeyEntity newBogeyEntity,String position,int action) {
+            System.out.println(position);
             newBogeyEntity.print();
         }
     });

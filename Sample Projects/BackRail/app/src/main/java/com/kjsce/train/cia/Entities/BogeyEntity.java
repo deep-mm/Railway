@@ -35,12 +35,6 @@ public class BogeyEntity
         }
 
         bogeyProblems.put(cardEntity.getProblem(),idEntities);
-        /*IdEntity idEntity = bogeyProblems.get(cardEntity.getProblem());
-        if(idEntity == null)
-            idEntity = new IdEntity(cardEntity);
-        else
-            idEntity.addProblem(cardEntity);
-        bogeyProblems.put(cardEntity.getProblem(),idEntity);*/
     }
 
     public void removeProblem(CardEntity cardEntity){
@@ -58,13 +52,6 @@ public class BogeyEntity
         }
 
         bogeyProblems.put(cardEntity.getProblem(),idEntities);
-        /*IdEntity idEntity = bogeyProblems.get(cardEntity.getProblem());
-        if(idEntity == null)
-            return;
-        idEntity.removeProblem(cardEntity);
-        if(idEntity.getProblemListSize() == 0)
-            bogeyProblems.remove(idEntity);
-        bogeyProblems.put(cardEntity.getProblem(),idEntity);*/
     }
 
     public void updateProblem(CardEntity cardEntity){
@@ -84,13 +71,6 @@ public class BogeyEntity
         }
 
         bogeyProblems.put(cardEntity.getProblem(),idEntities);
-        /*IdEntity idEntity = bogeyProblems.get(cardEntity.getProblem());
-        if(idEntity == null)
-            idEntity = new IdEntity(cardEntity);
-        else
-            idEntity.updateProblem(cardEntity);
-        bogeyProblems.put(cardEntity.getProblem(),idEntity);*/
-
     }
 
     public ArrayList<IdEntity> getIdEntity(String problem){
