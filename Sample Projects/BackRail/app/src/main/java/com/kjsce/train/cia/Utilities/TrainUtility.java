@@ -13,92 +13,34 @@ import com.kjsce.train.cia.Listener.AddTrainListener;
 import com.kjsce.train.cia.Listener.DeleteBogeyListener;
 import com.kjsce.train.cia.Listener.GetBogeyListListener;
 import com.kjsce.train.cia.Listener.GetTrainListListener;
+import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
+import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrainUtility
 {
-    private FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+    private TrainEntity trainEntity;
+    private String trainNo;
+
+    private OnBogeyListChangeListener onBogeyListChangeListener;
+
     private DatabaseReference mTrainDatabaseReference;
+    private ValueEventListener valueEventListener;
+    private ChildEventListener childEventListener;
 
-    public void addTrain(String trainNo, AddTrainListener addTrainListener){
-        List<String> bogeyList = new ArrayList<>();
-        bogeyList.add("null");
-        TrainEntity trainEntity = new TrainEntity();
-        trainEntity.setBogeyList(bogeyList);
-        mTrainDatabaseReference = mFirebaseDatabase.getInstance().getReference().child("Trains").child(trainNo);
-        mTrainDatabaseReference.setValue(trainEntity);
-        addTrainListener.onCompleteTask("Done Add Train");
-    }
+    public TrainUtility(final String trainNo){
+        this.trainNo=trainNo;
+        trainEntity=new TrainEntity(trainNo);
 
-    public void addBogey(final String bogeyNo, String trainNo, final AddBogeyListener addBogeyListener){
-        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Trains").child(trainNo);
-        mTrainDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mTrainDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Trains").child(trainNo);
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> bogeyList;
-                TrainEntity trainEntity = dataSnapshot.getValue(TrainEntity.class);
-                bogeyList = trainEntity.getBogeyList();
-                bogeyList.remove("null");
-                if(!bogeyList.contains(bogeyNo))
-                    bogeyList.add(bogeyNo);
-                trainEntity.setBogeyList(bogeyList);
-                mTrainDatabaseReference.setValue(trainEntity);
-                addBogeyListener.onCompleteTask("Done Bogey Add");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void getBogeyList(String trainNo, final GetBogeyListListener getBogeyListListener){
-        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Trains").child(trainNo);
-        mTrainDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                TrainEntity trainEntity = dataSnapshot.getValue(TrainEntity.class);
-                getBogeyListListener.onCompleteTask(trainEntity);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void deleteBogey(final String bogeyNo, String trainNo, final DeleteBogeyListener deleteBogeyListener){
-        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Trains").child(trainNo);
-        mTrainDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> bogeyList;
-                TrainEntity trainEntity = dataSnapshot.getValue(TrainEntity.class);
-                bogeyList = trainEntity.getBogeyList();
-                bogeyList.remove(bogeyNo);
-                trainEntity.setBogeyList(bogeyList);
-                mTrainDatabaseReference.setValue(trainEntity);
-                deleteBogeyListener.onCompleteTask("Done Delete Bogey");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void getTrainList(final GetTrainListListener getTrainListListener){
-        final List<String> trainList = new ArrayList<>();
-
-        ValueEventListener tripListner = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                getTrainListListener.onCompleteTask(trainList);
+                if(onBogeyListChangeListener!=null)
+                    onBogeyListChangeListener.onDataChanged(trainEntity);
             }
 
             @Override
@@ -107,12 +49,10 @@ public class TrainUtility
             }
         };
 
-        mTrainDatabaseReference= mFirebaseDatabase.getInstance().getReference().child("Trains");
-        mTrainDatabaseReference.addValueEventListener(tripListner);
-        ChildEventListener childEventListener = new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                trainList.add(dataSnapshot.getKey());
+                trainEntity.getBogeyList().add(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -122,7 +62,7 @@ public class TrainUtility
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                trainEntity.getBogeyList().remove(dataSnapshot.getValue(String.class));
             }
 
             @Override
@@ -135,6 +75,63 @@ public class TrainUtility
 
             }
         };
+
+        mTrainDatabaseReference.addValueEventListener(valueEventListener);
+        mTrainDatabaseReference.addChildEventListener(childEventListener);
+
+    }
+
+    public TrainUtility(String trainNo,OnBogeyListChangeListener onBogeyListChangeListener){
+        this(trainNo);
+        this.onBogeyListChangeListener=onBogeyListChangeListener;
+    }
+
+    public String getTrainNo() {
+        return trainNo;
+    }
+
+    public void setTrainNo(String trainNo) {
+        mTrainDatabaseReference.removeEventListener(valueEventListener);
+        mTrainDatabaseReference.removeEventListener(childEventListener);
+        this.trainNo = trainNo;
+        this.trainEntity=new TrainEntity(trainNo);
+        mTrainDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Trains").child(trainNo);
+        mTrainDatabaseReference.addChildEventListener(childEventListener);
+        mTrainDatabaseReference.addValueEventListener(valueEventListener);
+
+    }
+
+    public OnBogeyListChangeListener getOnBogeyListChangeListener() {
+        return onBogeyListChangeListener;
+    }
+
+    public void setOnBogeyListChangeListener(OnBogeyListChangeListener onBogeyListChangeListener) {
+        this.onBogeyListChangeListener = onBogeyListChangeListener;
+    }
+
+    public void removeUpdating(){
+        mTrainDatabaseReference.removeEventListener(valueEventListener);
+        mTrainDatabaseReference.removeEventListener(childEventListener);
+    }
+
+    public void startUpdating(){
+        mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
     }
+
+    public TrainEntity getTrainEntity() {
+        return trainEntity;
+    }
+
+    public void addBogey(String bogeyNo){
+            mTrainDatabaseReference.child(bogeyNo).setValue(bogeyNo);
+    }
+
+    public void deleteBogey(String bogeyNo){
+        mTrainDatabaseReference.child(bogeyNo).setValue(null);
+    }
+
+
+
+
 }

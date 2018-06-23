@@ -1,11 +1,15 @@
 package com.kjsce.train.cia.Entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainEntity {
+    private String trainNo;
     private List<String> bogeyList;
 
-    public TrainEntity() {
+    public TrainEntity(String trainNo) {
+        this.trainNo = trainNo;
+        bogeyList = new ArrayList<>();
     }
 
     public TrainEntity(List<String> bogeyList) {
