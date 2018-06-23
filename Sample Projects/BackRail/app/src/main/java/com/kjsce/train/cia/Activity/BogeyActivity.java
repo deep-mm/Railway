@@ -94,6 +94,10 @@ public class BogeyActivity extends AppCompatActivity {
     }
 
     public void uploadAudio(View view){
+        ArrayList<String> audioS = new ArrayList<>();
+        audioS.add("");
+        audioS.add("");
+        audioS.add("");
 
     }
 

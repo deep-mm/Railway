@@ -8,6 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kjsce.train.cia.Entities.BogeyEntity;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Listener.AddAudioListener;
 import com.kjsce.train.cia.Listener.AddImageListener;
 import com.kjsce.train.cia.Listener.OnCardListChangeListener;
 
@@ -27,7 +28,7 @@ public class BogeyUtility
     private ChildEventListener childEventListener;                  //When a child is changed
 
     private ImageUtility imageUtility = new ImageUtility();         //Uploading images
-
+    private AudioUtility audioUtility = new AudioUtility();
     //-------------------------------------------------------Constructors------------------------------------------------------------------------------
 
     public BogeyUtility(final String bogeyNumber){
@@ -142,7 +143,13 @@ public class BogeyUtility
                 @Override
                 public void onCompleteTask(List<String> imageS) {
                     cardEntity.setImage(imageS);
-                    mTrainDatabaseReference.child(cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber()).setValue(cardEntity);
+                    audioUtility.uploadAudio(cardEntity.getAudio(), cardEntity.getBogeyNumber(), new AddAudioListener() {
+                        @Override
+                        public void onCompleteTask(List<String> audioS) {
+                            cardEntity.setAudio(audioS);
+                            mTrainDatabaseReference.child(cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber()).setValue(cardEntity);
+                        }
+                    });
                 }
             });
         }
