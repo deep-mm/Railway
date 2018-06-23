@@ -7,21 +7,6 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/addTrainB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="addTrainB"
-        android:text="Add Train"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/addBogeyB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,22 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addTrainB" />
-
-    <Button
-        android:id="@+id/getBogeyListB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="getBogeyListB"
-        android:text="Get Bogey List"
-        app:layout_constraintBottom_toTopOf="@+id/addTrainB"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/deleteBogeyB" />
 
     <Button
         android:id="@+id/deleteBogeyB"
@@ -61,7 +31,7 @@
         android:layout_marginTop="8dp"
         android:onClick="deleteBogeyB"
         android:text="Delete Bogey"
-        app:layout_constraintBottom_toTopOf="@+id/getBogeyListB"
+        app:layout_constraintBottom_toTopOf="@+id/addBogeyB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

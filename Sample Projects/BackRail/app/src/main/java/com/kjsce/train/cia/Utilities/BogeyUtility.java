@@ -6,15 +6,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kjsce.train.cia.Entities.BogeyEntity;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Listener.AddImageListener;
 import com.kjsce.train.cia.Listener.OnCardListChangeListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BogeyUtility
 {
-    private List<CardEntity> cardEntityList;                        //Contains all the cards
+    private BogeyEntity bogeyEntity;                                //Contains all the cards
+    private String position;                                        //Contains where the child is changed
+    private int action;                                             //Contains the action
 
     private String bogeyNumber;                                     //Used for reference
     private OnCardListChangeListener onCardListChangeListener;      //Used for the frontend team to update spontaneously
@@ -23,21 +26,21 @@ public class BogeyUtility
     private ValueEventListener valueEventListener;                  //When the value is changed
     private ChildEventListener childEventListener;                  //When a child is changed
 
+    private ImageUtility imageUtility = new ImageUtility();         //Uploading images
+
     //-------------------------------------------------------Constructors------------------------------------------------------------------------------
 
-    public BogeyUtility(String bogeyNumber){
+    public BogeyUtility(final String bogeyNumber){
         this.bogeyNumber = bogeyNumber;
-        cardEntityList = new ArrayList<CardEntity>();
+        position = "";
+        bogeyEntity = new BogeyEntity(bogeyNumber);
         mTrainDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Bogeys").child(bogeyNumber);
 
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 if(onCardListChangeListener != null)
-                    onCardListChangeListener.onDataChanged(cardEntityList);
-
-                System.out.println(cardEntityList.size());
+                    onCardListChangeListener.onDataChanged(bogeyEntity,position,action);
             }
 
             @Override
@@ -49,27 +52,26 @@ public class BogeyUtility
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                cardEntityList.add(dataSnapshot.getValue(CardEntity.class));
+                CardEntity cardEntity = dataSnapshot.getValue(CardEntity.class);
+                action = 1;
+                position = cardEntity.getProblem() + "/" + cardEntity.getId() + "/" + cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber();
+                bogeyEntity.addProblem(dataSnapshot.getValue(CardEntity.class));
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 CardEntity cardEntity = dataSnapshot.getValue(CardEntity.class);
-                for(int i=cardEntityList.size()-1;i>=0;i--){
-                    if(cardEntityList.get(i).equals(cardEntity)){
-                        cardEntityList.get(i).copy(cardEntity);
-                    }
-                }
+                action = 2;
+                position = cardEntity.getProblem() + "/" + cardEntity.getId() + "/" + cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber();
+                bogeyEntity.updateProblem(dataSnapshot.getValue(CardEntity.class));
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 CardEntity cardEntity = dataSnapshot.getValue(CardEntity.class);
-                for(int i=cardEntityList.size()-1;i>=0;i--){
-                    if(cardEntityList.get(i).equals(cardEntity)){
-                        cardEntityList.remove(i);
-                    }
-                }
+                action = 3;
+                position = cardEntity.getProblem() + "/" + cardEntity.getId() + "/" + cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber();
+                bogeyEntity.removeProblem(dataSnapshot.getValue(CardEntity.class));
             }
 
             @Override
@@ -103,6 +105,7 @@ public class BogeyUtility
         mTrainDatabaseReference.removeEventListener(valueEventListener);
         mTrainDatabaseReference.removeEventListener(childEventListener);
         this.bogeyNumber = bogeyNumber;
+        this.bogeyEntity = new BogeyEntity(bogeyNumber);
         mTrainDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Bogeys").child(bogeyNumber);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
@@ -129,16 +132,32 @@ public class BogeyUtility
 
     //-------------------------------------------------------Main methods------------------------------------------------------------------------------
 
-    public List<CardEntity> getCards(){
-        return cardEntityList;
+    public BogeyEntity getBogeyEntity(){
+        return bogeyEntity;
     }
 
-    public void addCard(CardEntity cardEntity){
-        mTrainDatabaseReference.child(cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber()).setValue(cardEntity);
+    public void addCard(final CardEntity cardEntity){
+        if(cardEntity.getImage().size() > 0){
+            imageUtility.uploadImage(cardEntity.getImage(), cardEntity.getBogeyNumber(), new AddImageListener() {
+                @Override
+                public void onCompleteTask(List<String> imageS) {
+                    cardEntity.setImage(imageS);
+                    mTrainDatabaseReference.child(cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber()).setValue(cardEntity);
+                }
+            });
+        }
     }
 
-    public void setCard(CardEntity cardEntity){
-        mTrainDatabaseReference.child(cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber()).setValue(cardEntity);
+    public void setCard(final CardEntity cardEntity){
+        if(cardEntity.getImage().size() > 0){
+            imageUtility.uploadImage(cardEntity.getImage(), cardEntity.getBogeyNumber(), new AddImageListener() {
+                @Override
+                public void onCompleteTask(List<String> imageS) {
+                    cardEntity.setImage(imageS);
+                    mTrainDatabaseReference.child(cardEntity.getDateTime() + cardEntity.getSender() + cardEntity.getTrainNumber()).setValue(cardEntity);
+                }
+            });
+        }
     }
 
     public void removeCard(String dateTime, String sender, String trainNumber){
