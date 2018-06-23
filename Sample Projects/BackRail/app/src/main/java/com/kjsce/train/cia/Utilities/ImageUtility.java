@@ -14,6 +14,7 @@ import com.kjsce.train.cia.Listener.AddImageListener;
 import com.kjsce.train.cia.Listener.AddSingleImageUploadListener;
 import com.kjsce.train.cia.Listener.GetImageListener;
 import com.kjsce.train.cia.Listener.GetSingleImageListener;
+import com.kjsce.train.cia.Listener.RemoveSingleImageListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,4 +111,9 @@ public class ImageUtility
             });
         }
     }
+
+    /*public void removeSingleImage(final String imageS,final String bogeyNumber,final RemoveSingleImageListener listener){
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(bogeyNumber);
+        storageReference.
+    }*/
 }

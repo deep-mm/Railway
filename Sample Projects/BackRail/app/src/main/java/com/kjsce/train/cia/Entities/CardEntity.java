@@ -4,6 +4,7 @@ import java.util.List;
 
 public class CardEntity
 {
+    private String bogeyNumber;
     private String sender;
     private String trainNumber;
     private String placeOfInspection;
@@ -56,6 +57,29 @@ public class CardEntity
         this.subType = subType;
         this.id = id;
         this.problemStatus = problemStatus;
+    }
+
+    public CardEntity(String bogeyNumber, String sender, String trainNumber, String placeOfInspection, String comment, List<String> image, List<String> audio, String dateTime, String problem, String subType, String id, boolean problemStatus) {
+        this.bogeyNumber = bogeyNumber;
+        this.sender = sender;
+        this.trainNumber = trainNumber;
+        this.placeOfInspection = placeOfInspection;
+        this.comment = comment;
+        this.image = image;
+        this.audio = audio;
+        this.dateTime = dateTime;
+        this.problem = problem;
+        this.subType = subType;
+        this.id = id;
+        this.problemStatus = problemStatus;
+    }
+
+    public String getBogeyNumber() {
+        return bogeyNumber;
+    }
+
+    public void setBogeyNumber(String bogeyNumber) {
+        this.bogeyNumber = bogeyNumber;
     }
 
     public String getId() {
@@ -149,12 +173,18 @@ public class CardEntity
     @Override
     public String toString() {
         return "CardEntity{" +
-                "sender='" + sender + '\'' +
+                "bogeyNumber='" + bogeyNumber + '\'' +
+                ", sender='" + sender + '\'' +
                 ", trainNumber='" + trainNumber + '\'' +
+                ", placeOfInspection='" + placeOfInspection + '\'' +
+                ", comment='" + comment + '\'' +
+                ", image=" + image +
+                ", audio=" + audio +
                 ", dateTime='" + dateTime + '\'' +
                 ", problem='" + problem + '\'' +
                 ", subType='" + subType + '\'' +
                 ", id='" + id + '\'' +
+                ", problemStatus=" + problemStatus +
                 '}';
     }
 
@@ -174,5 +204,6 @@ public class CardEntity
         this.subType = cardEntity.subType;
         this.id = cardEntity.id;
         this.problemStatus = cardEntity.problemStatus;
+        this.bogeyNumber = cardEntity.bogeyNumber;
     }
 }
