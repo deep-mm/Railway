@@ -23,6 +23,7 @@ import com.kjsce.train.cia.Listener.AddUserListener;
 import com.kjsce.train.cia.Listener.DeleteUserListener;
 import com.kjsce.train.cia.Listener.GetUserListListener;
 import com.kjsce.train.cia.Listener.GetUserListener;
+import com.kjsce.train.cia.Listener.OnUserListChangeListener;
 import com.kjsce.train.cia.Listener.SetUserListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.UserUtility;
@@ -32,6 +33,12 @@ import java.util.concurrent.TimeUnit;
 
 public class UserActivity extends AppCompatActivity {
 
+    private UserUtility userUtility = new UserUtility(new OnUserListChangeListener() {
+        @Override
+        public void OnDataChanged(List<String> newUserList) {
+            Toast.makeText(getApplicationContext(), "User List   "+newUserList.toString(), Toast.LENGTH_LONG).show();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,26 +46,20 @@ public class UserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user);
     }
 
-    public void addUser(View view)
-    {
-        UserUtility userUtility = new UserUtility();
-        userUtility.addUser(new UserEntity("Amey", "InspectionOfficer", "0122"), "8655633463", new AddUserListener() {
-            @Override
-            public void onCompleteTask(String result) {
-                Toast.makeText(getApplicationContext(),"User added!", Toast.LENGTH_LONG).show();
-            }
-        });
+    public void addUser(View view) {
+        userUtility.addUser(new UserEntity("Parakh", "CRP", "1225", "6556334638"));
     }
 
     public void deleteUser(View view)
     {
-        UserUtility userUtility = new UserUtility();
-        userUtility.deleteUser("8655633463", new DeleteUserListener() {
-            @Override
-            public void onCompleteTask(String result) {
-                Toast.makeText(getApplicationContext(), "User Deleted!", Toast.LENGTH_LONG).show();
-            }
-        });
+        userUtility.deleteUser("8888888888");
+    }
+
+    public void getUserList(View view)
+    {
+       List<String> userList =  userUtility.getUserList();
+        Toast.makeText(getApplicationContext(), "User LIST: "+userList.toString(), Toast.LENGTH_LONG).show();
+
     }
 
     public void getUser(View view)
@@ -72,28 +73,6 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 
-    public void setUser(View view)
-    {
-        UserUtility userUtility = new UserUtility();
-        userUtility.setUser(new UserEntity("BP", "InspectionOfficer", "0122"), "8888888888", new SetUserListener() {
-            @Override
-            public void onCompleteTask(UserEntity userEntity) {
-                Toast.makeText(getApplicationContext(),"User updated!", Toast.LENGTH_LONG).show();
-            }
 
-        });
-    }
-
-    public void getUserList(View view)
-    {
-        UserUtility userUtility = new UserUtility();
-        userUtility.getUserList(new GetUserListListener() {
-            @Override
-            public void onCompleteTask(List<String> userList) {
-                Toast.makeText(getApplicationContext(),userList.toString(),Toast.LENGTH_LONG).show();
-                System.out.println("userlist: "+userList);
-            }
-        });
-    }
 
 }

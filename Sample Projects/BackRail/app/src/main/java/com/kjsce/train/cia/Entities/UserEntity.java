@@ -4,14 +4,16 @@ public class UserEntity {
     String name;
     String designation;
     String lastLoginTime;
+    String mobileNumber;
 
     public UserEntity() {
     }
 
-    public UserEntity(String name, String designation, String lastLoginTime) {
+    public UserEntity(String name, String designation, String lastLoginTime, String mobileNumber) {
         this.name = name;
         this.designation = designation;
         this.lastLoginTime = lastLoginTime;
+        this.mobileNumber = mobileNumber;
     }
 
     public String getName() {
@@ -38,12 +40,21 @@ public class UserEntity {
         this.lastLoginTime = lastLoginTime;
     }
 
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
     @Override
     public String toString() {
         return "UserEntity{" +
                 "name='" + name + '\'' +
                 ", designation='" + designation + '\'' +
                 ", lastLoginTime='" + lastLoginTime + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
                 '}';
     }
 }
