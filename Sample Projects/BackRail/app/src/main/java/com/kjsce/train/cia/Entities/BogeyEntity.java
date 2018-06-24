@@ -7,6 +7,51 @@ import java.util.Map;
 public class BogeyEntity
 {
     String bogeyNumber;
+    ArrayList<ProblemEntity> problemEntities;
+
+    public BogeyEntity(String bogeyNumber) {
+        this.bogeyNumber = bogeyNumber;
+        problemEntities = new ArrayList<ProblemEntity>();
+    }
+
+    public BogeyEntity(String bogeyNumber, ArrayList<ProblemEntity> problemEntities) {
+        this.bogeyNumber = bogeyNumber;
+        this.problemEntities = problemEntities;
+    }
+
+    public String getBogeyNumber() {
+        return bogeyNumber;
+    }
+
+    public void setBogeyNumber(String bogeyNumber) {
+        this.bogeyNumber = bogeyNumber;
+    }
+
+    public ArrayList<ProblemEntity> getProblemEntities() {
+        return problemEntities;
+    }
+
+    public void setProblemEntities(ArrayList<ProblemEntity> problemEntities) {
+        this.problemEntities = problemEntities;
+    }
+
+    public void addProblem(ProblemEntity problemEntity){
+        problemEntities.add(problemEntity);
+    }
+
+    public void removeProblem(ProblemEntity problemEntity){
+        problemEntities.remove(problemEntity);
+    }
+
+    @Override
+    public String toString() {
+        return "BogeyEntity{" +
+                "bogeyNumber='" + bogeyNumber + '\'' +
+                ", problemEntities=" + problemEntities +
+                '}';
+    }
+
+    /*String bogeyNumber;
     Map<String,ArrayList<IdEntity>> bogeyProblems;
 
     public BogeyEntity(String bogeyNumber){
@@ -89,5 +134,5 @@ public class BogeyEntity
         for(Map.Entry<String,ArrayList<IdEntity>> entry:bogeyProblems.entrySet()){
             System.out.println(entry.getKey() + " " + entry.getValue().size() + ":\n" + entry.getValue() + "\n");
         }
-    }
+    }*/
 }

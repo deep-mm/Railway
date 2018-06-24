@@ -7,12 +7,20 @@ import android.view.View;
 
 import com.kjsce.train.cia.Entities.BogeyEntity;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.CardReferenceEntity;
+import com.kjsce.train.cia.Entities.IdReferenceEntity;
+import com.kjsce.train.cia.Entities.IndexEntryEntity;
+import com.kjsce.train.cia.Entities.ProblemReferenceEntity;
 import com.kjsce.train.cia.Listener.AddImageListener;
 import com.kjsce.train.cia.Listener.AddSingleImageUploadListener;
+import com.kjsce.train.cia.Listener.CardListener;
 import com.kjsce.train.cia.Listener.GetImageListener;
+import com.kjsce.train.cia.Listener.IdListener;
 import com.kjsce.train.cia.Listener.OnCardListChangeListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.BogeyUtility;
+import com.kjsce.train.cia.Utilities.CardUtility;
+import com.kjsce.train.cia.Utilities.IdUtility;
 import com.kjsce.train.cia.Utilities.ImageUtility;
 
 import java.io.File;
@@ -24,13 +32,45 @@ import java.util.Random;
 
 public class BogeyActivity extends AppCompatActivity {
 
-    private BogeyUtility bogeyUtility = new BogeyUtility("1511093", new OnCardListChangeListener() {
+    private CardUtility cardUtility = new CardUtility(new IdReferenceEntity("1511092", "Toilet", "id1"), new CardListener() {
+        @Override
+        public void onCardAdded(CardEntity cardEntity) {
+            System.out.println("Card added:\n" + cardEntity);
+        }
+
+        @Override
+        public void onCardRemoved(CardEntity cardEntity) {
+            System.out.println("Card removed:\n" + cardEntity);
+        }
+
+        @Override
+        public void onDataChanged(ArrayList<CardEntity> cardEntities) {
+            System.out.println("Total cards present: \n");
+            for(int i=0;i<cardEntities.size();i++)
+                System.out.println(cardEntities.get(i));
+        }
+
+        @Override
+        public void onCardChanged(CardEntity cardEntity) {
+            System.out.println("Card changed:\n" + cardEntity);
+        }
+    });
+
+    private IdUtility idUtility = new IdUtility(new ProblemReferenceEntity("1511092", "Toilet"), new IdListener() {
+        @Override
+        public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
+            System.out.println("List changed");
+            for(int i=0;i<idList.size();i++)
+                System.out.println(idList.get(i));
+        }
+    });
+    /*private BogeyUtility bogeyUtility = new BogeyUtility("1511093", new OnCardListChangeListener() {
         @Override
         public void onDataChanged(BogeyEntity newBogeyEntity,String position,int action) {
             System.out.println(position);
             newBogeyEntity.print();
         }
-    });
+    });*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +78,40 @@ public class BogeyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bogey);
     }
 
-    public void getCards(View view){
-        BogeyEntity bogeyEntity = bogeyUtility.getBogeyEntity();
-        bogeyEntity.print();
-    }
-
     public void addCard(View view){
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy_HH:mm:ss");
         Date date = new Date();
         String dateTime = formatter.format(date);
-        bogeyUtility.addCard(new CardEntity("Amey" + new Random().nextInt(10), "1511092t", dateTime,"subtype+count" + new Random().nextInt(10),"2"));
+
+        cardUtility.uploadCard(new CardEntity(dateTime,"Amey","1511092t","Hello"), new CardReferenceEntity("1511092","Toilet","id1",false));
     }
+
+    public void removeCard(View view){
+        cardUtility.removeCard(new CardEntity("24062018_22:25:06","Amey","1511092t"),new CardReferenceEntity("1511092","Toilet","3",false));
+    }
+
+    public void getCards(View view){
+        ArrayList<CardEntity> cardEntities = cardUtility.getCardsList();
+        System.out.println("Total cards present:\n");
+        for(int i=0;i<cardEntities.size();i++)
+            System.out.println(cardEntities.get(i));
+
+    }
+
+    public void getIdList(View view){
+        ArrayList<IndexEntryEntity> idList = idUtility.getIdList();
+        System.out.println("Total ids present:\n");
+        for(int i=0;i<idList.size();i++){
+            System.out.println(idList.get(i));
+        }
+    }
+
+    /*public void getCards(View view){
+        BogeyEntity bogeyEntity = bogeyUtility.getBogeyEntity();
+        bogeyEntity.print();
+    }
+
+
 
     public void setCard(View view){
         ArrayList<String> imageL = new ArrayList<>();
@@ -99,6 +162,6 @@ public class BogeyActivity extends AppCompatActivity {
         audioS.add("");
         audioS.add("");
 
-    }
+    }*/
 
 }

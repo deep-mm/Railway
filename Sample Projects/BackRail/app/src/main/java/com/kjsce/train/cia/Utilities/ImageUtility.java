@@ -49,22 +49,24 @@ public class ImageUtility
 
     public void uploadImage(final List<String> imageL,final String bogeyNumber, final AddImageListener listener){
 
-        final List<String> imageS = new ArrayList<String>();
-        for(int i=0;i<imageL.size();i++){
-            try {
-                uploadSingleImage(imageL.get(i),bogeyNumber, new AddSingleImageUploadListener() {
-                    @Override
-                    public void onCompleteTask(String image) {
-                        imageS.add(image);
-                        if(imageS.size() == imageL.size())
-                            listener.onCompleteTask(imageS);
-                    }
-                });
-            }
-            catch(Exception e){
-                e.printStackTrace();
+        if(imageL != null) {
+            final List<String> imageS = new ArrayList<String>();
+            for (int i = 0; i < imageL.size(); i++) {
+                try {
+                    uploadSingleImage(imageL.get(i), bogeyNumber, new AddSingleImageUploadListener() {
+                        @Override
+                        public void onCompleteTask(String image) {
+                            imageS.add(image);
+                            if (imageS.size() == imageL.size())
+                                listener.onCompleteTask(imageS);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+        listener.onCompleteTask(null);
     }
 
     public void retrieveSingleImage(final String imageS,final GetSingleImageListener listener) throws  IOException{
@@ -95,21 +97,24 @@ public class ImageUtility
     }
 
     public void retrieveImage(final List<String> imageS,final GetImageListener listener) throws IOException {
-        final ArrayList<String> imageL = new ArrayList<String>();
-        counter = 0;
-        for (int i = 0; i < imageS.size(); i++)
-        {
-            retrieveSingleImage(imageS.get(i), new GetSingleImageListener() {
-                @Override
-                public void onCompleteTask(String image) {
-                    counter++;
-                    imageL.add(image);
-                    if(counter == imageS.size()){
-                        listener.onCompleteTask(imageL);
+
+        if(imageS != null) {
+            final ArrayList<String> imageL = new ArrayList<String>();
+            counter = 0;
+            for (int i = 0; i < imageS.size(); i++) {
+                retrieveSingleImage(imageS.get(i), new GetSingleImageListener() {
+                    @Override
+                    public void onCompleteTask(String image) {
+                        counter++;
+                        imageL.add(image);
+                        if (counter == imageS.size()) {
+                            listener.onCompleteTask(imageL);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
+        listener.onCompleteTask(null);
     }
 
     /*public void removeSingleImage(final String imageS,final String bogeyNumber,final RemoveSingleImageListener listener){

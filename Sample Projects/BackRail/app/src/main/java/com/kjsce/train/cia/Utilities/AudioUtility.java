@@ -47,20 +47,23 @@ public class AudioUtility {
     public void uploadAudio(final List<String> audioL, final String bogeyNumber, final AddAudioListener addAudioListener) {
 
         final List<String> audioS = new ArrayList<String>();
-        for (int i = 0; i < audioL.size(); i++) {
-            try {
-                uploadSingleAudio(audioL.get(i), bogeyNumber, new AddSingleAudioUploadListener() {
-                    @Override
-                    public void onCompleteTask(String image) {
-                        audioS.add(image);
-                        if (audioS.size() == audioL.size())
-                            addAudioListener.onCompleteTask(audioS);
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
+        if(audioL != null) {
+            for (int i = 0; i < audioL.size(); i++) {
+                try {
+                    uploadSingleAudio(audioL.get(i), bogeyNumber, new AddSingleAudioUploadListener() {
+                        @Override
+                        public void onCompleteTask(String audio) {
+                            audioS.add(audio);
+                            if (audioS.size() == audioL.size())
+                                addAudioListener.onCompleteTask(audioS);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
+        addAudioListener.onCompleteTask(null);
     }
 
     public void retrieveSingleAudio(final String audioS, final GetSingleAudioListener getSingleAudioListener) throws IOException {
@@ -93,17 +96,20 @@ public class AudioUtility {
     public void retrieveAudio(final List<String> audioS, final GetAudioListener getAudioListener) throws IOException {
         final ArrayList<String> audioL = new ArrayList<String>();
         counter = 0;
-        for (int i = 0; i < audioS.size(); i++) {
-            retrieveSingleAudio(audioS.get(i), new GetSingleAudioListener() {
-                @Override
-                public void onCompleteTask(String audio) {
-                    counter++;
-                    audioL.add(audio);
-                    if (counter == audioS.size()) {
-                        getAudioListener.onCompleteTask(audioL);
+        if (audioS != null) {
+            for (int i = 0; i < audioS.size(); i++) {
+                retrieveSingleAudio(audioS.get(i), new GetSingleAudioListener() {
+                    @Override
+                    public void onCompleteTask(String audio) {
+                        counter++;
+                        audioL.add(audio);
+                        if (counter == audioS.size()) {
+                            getAudioListener.onCompleteTask(audioL);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
+        getAudioListener.onCompleteTask(null);
     }
 }

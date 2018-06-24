@@ -62,4 +62,14 @@
         android:onClick="uploadAudio"
         android:text="Audio" />
 
+    <Button
+        android:id="@+id/getIdListButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/getCardsButton"
+        android:layout_marginBottom="198dp"
+        android:onClick="getIdList"
+        android:text="Get IDS" />
+
 </RelativeLayout>

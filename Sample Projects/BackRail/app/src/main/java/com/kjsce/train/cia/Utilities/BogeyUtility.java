@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BogeyUtility
 {
-    private BogeyEntity bogeyEntity;                                //Contains all the cards
+    /*private BogeyEntity bogeyEntity;                                //Contains all the cards
     private String position;                                        //Contains where the child is changed
     private int action;                                             //Contains the action
 
@@ -169,5 +169,5 @@ public class BogeyUtility
 
     public void removeCard(String dateTime, String sender, String trainNumber){
         mTrainDatabaseReference.child(dateTime + sender + trainNumber).setValue(null);
-    }
+    }*/
 }
