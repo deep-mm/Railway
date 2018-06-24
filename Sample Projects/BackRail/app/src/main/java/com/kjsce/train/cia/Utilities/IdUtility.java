@@ -26,8 +26,10 @@ public class IdUtility
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 IndexEntity indexEntity = dataSnapshot.getValue(IndexEntity.class);
-                indexEntryEntities = indexEntity.getIndex();
-                listener.onIdListChanged(indexEntity.getIndex());
+                if(indexEntity != null) {
+                    indexEntryEntities = indexEntity.getIndex();
+                    listener.onIdListChanged(indexEntity.getIndex());
+                }
             }
 
             @Override
