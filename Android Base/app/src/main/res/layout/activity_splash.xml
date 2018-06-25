@@ -8,9 +8,22 @@
     android:background="@color/colorWhite">
 
     <ImageView
+        android:id="@+id/image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_centerInParent="true"
-        android:background="@mipmap/train"/>
+        android:background="@mipmap/train_icon"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/secondaryText"
+        android:textStyle="italic"
+        android:layout_below="@id/image"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:text="Central Railways Inspection"/>
 
 </RelativeLayout>

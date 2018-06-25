@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/type_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/audio_left"
+                android:background="@drawable/rectangle"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="4dp"
+                android:elevation="2dp"
+                >
+
+                <TextView
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText"
+                    android:text="Audio 1"
+                    android:layout_margin="8dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/audio_text_left"/>
+
+                <ImageView
+                    android:id="@+id/audio_button_left"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
+                    android:background="@mipmap/play_button"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="125dp"
+                android:id="@+id/image_left"
+                android:background="@drawable/rectangle"
+                android:padding="8dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="4dp"
+                android:elevation="2dp"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_left"
+                android:background="@drawable/rectangle"
+                android:padding="8dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="4dp"
+                android:elevation="2dp"
+                android:text="This is pretty good"
+                android:textColor="@color/primaryText"
+                android:textSize="16sp"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/train_icon_left"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/type_left"
+            android:background="@mipmap/train_side_left"/>
+
+        <TextView
+            android:id="@+id/name_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondaryText"
+            android:text="Deep Mehta"
+            android:textSize="12sp"
+            android:layout_below="@id/type_left"
+            android:layout_toRightOf="@id/train_icon_left"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/time_text_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/secondaryText"
+            android:text="25/07/18 23:11:19"
+            android:layout_below="@id/name_text_left"
+            android:layout_toRightOf="@id/train_icon_left"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:id="@+id/right">
+
+        <RelativeLayout
+            android:id="@+id/type_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/audio_right"
+                android:background="@drawable/rectangle"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="4dp"
+                android:layout_alignParentRight="true"
+                android:elevation="2dp">
+
+                <TextView
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText"
+                    android:text="Audio 1"
+                    android:layout_margin="8dp"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/audio_text_right"/>
+
+                <ImageView
+                    android:id="@+id/audio_button_right"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
+                    android:background="@mipmap/play_button"/>
+
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="125dp"
+                android:id="@+id/image_right"
+                android:background="@drawable/rectangle"
+                android:padding="8dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="4dp"
+                android:elevation="2dp"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_right"
+                android:background="@drawable/rectangle"
+                android:padding="8dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="4dp"
+                android:elevation="2dp"
+                android:text="This is pretty good"
+                android:textColor="@color/primaryText"
+                android:textSize="16sp"
+                android:layout_alignParentRight="true"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/train_icon_right"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/type_right"
+        android:background="@mipmap/train_side_right"/>
+
+    <TextView
+        android:id="@+id/name_text_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondaryText"
+        android:text="Deep Mehta"
+        android:textSize="12sp"
+        android:layout_below="@id/type_right"
+        android:layout_toLeftOf="@id/train_icon_right"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/time_text_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondaryText"
+        android:textSize="12sp"
+        android:text="25/07/18 23:11:19"
+        android:layout_below="@id/name_text_right"
+        android:layout_toLeftOf="@id/train_icon_right"/>
+
+    </RelativeLayout>
+</RelativeLayout>

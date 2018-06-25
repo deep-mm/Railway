@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kjsce.train.cia.Activity.Maintainence.BogeyActivity;
+import com.kjsce.train.cia.Activity.MainActivity;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.Report.DetailedReport;
@@ -18,7 +18,6 @@ import com.kjsce.train.cia.Listeners.GetDetailedReportListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.Backend.DetailedReportUtility;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrainSearchListAdapter extends RecyclerView.Adapter<TrainSearchListAdapter.ViewHolder> {
@@ -69,7 +68,7 @@ public class TrainSearchListAdapter extends RecyclerView.Adapter<TrainSearchList
 
                         System.out.println("detailreport"+detailedReports);
                         sd.setDetailedReport(detailedReports);
-                        Intent i =new Intent(context, BogeyActivity.class);
+                        Intent i =new Intent(context, MainActivity.class);
                         i.putExtra("TrainNo",selectedTrain.getTrainNumber());
                         i.putExtra("TrainName",selectedTrain.getTrainName());
                         context.startActivity(i);

@@ -8,19 +8,15 @@ import android.os.Bundle;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
-import com.kjsce.train.cia.Activity.Maintainence.TrainSearchActivity;
-import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
 
 public class SplashActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static int SPLASH_TIME_OUT = 2000;
-    public SharedData sd;
-    public Helper helper;
-    Intent i;
+    private SharedData sharedData;
+    private Helper helper;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        mAuth = FirebaseAuth.getInstance();
-        sd = new SharedData(getApplicationContext());
-        helper = new Helper(getApplicationContext());
+        initialize();
 
         if(helper.isNetworkConnected()) {
 
@@ -46,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
         else{
             new MaterialDialog.Builder(this)
                     .title("No Internet Connection")
-                    .content("You need active internet connection to login")
+                    .content("You need active internet connection")
                     .positiveText("Retry")
                     .negativeText("Exit")
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -59,12 +53,18 @@ public class SplashActivity extends AppCompatActivity {
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            finishAffinity();
+                            onBackPressed();
                         }
                     })
                     .show();
         }
         
+    }
+
+    public void initialize(){
+        mAuth = FirebaseAuth.getInstance();
+        sharedData = new SharedData(getApplicationContext());
+        helper = new Helper(getApplicationContext());
     }
 
     @Override
@@ -73,23 +73,13 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void checkLoggedIn(){
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            UserEntity userEntity = sd.getUserEntity();
-            if(userEntity.getType().equals("inspection")){
-                i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
-                startActivity(i);
-                finish();
-            }
-                else{
-                i = new Intent(getApplicationContext(), TrainSearchActivity.class);
-                startActivity(i);
-                finish();
-            }
+        if(sharedData.isLoggedIn()){
+            intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
         }
         else{
-            i = new Intent(this,LoginActivity.class);
-            startActivity(i);
+            intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
         }
     }
 }

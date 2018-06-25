@@ -2,11 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kjsce.train.cia">
 
-    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -15,27 +16,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.Inspection.InspectionMenuActivity"></activity>
         <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.Inspection.InspectionBogeyReportActivity" />
-        <activity android:name=".Activity.Inspection.InpectionTrainDetailsActivity" />
-        <activity android:name=".Activity.Inspection.InspectionBogeyActivity" />
         <activity android:name=".Activity.SplashActivity">
-        </activity>
-        <activity android:name=".Activity.Maintainence.TrainSearchActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Maintainence.MaintainenceMenuActivity" />
-        <activity android:name=".Activity.Maintainence.MaintainenceTrainDetailsActivity" />
-        <activity android:name=".Activity.Maintainence.BogeyActivity" />
-        <activity android:name=".Activity.Maintainence.BogeyReportActivity" />
         <activity android:name=".Activity.ImageShow" />
-        <activity android:name=".Activity.Inspection.InspectionTrainReportActivity" />
-        <activity android:name=".Activity.Inspection.TotalInspection"></activity>
+        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.CardDetails" />
+        <activity android:name=".Activity.Details" />
+        <activity android:name=".Activity.NotifyContacts" />
+        <activity android:name=".Activity.SelectType" />
+        <activity android:name=".Activity.AddUser" />
+        <activity android:name=".Activity.CoachSearch" />
+        <activity android:name=".Activity.Notifications"></activity>
     </application>
 
 </manifest>
