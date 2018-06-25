@@ -32,8 +32,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
@@ -44,6 +42,8 @@ import com.kjsce.train.cia.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
     private String placeOfInspection, searchBoxValue;
     private RecyclerView details;
     private MaterialDialog materialDialog;
-    private TapTargetSequence tapTargetSequence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +183,6 @@ public class MainActivity extends AppCompatActivity
         nextButton = (ImageButton) findViewById(R.id.button_next);
         data1 = new ArrayList<String>();
         searchBoxValue = "";
-        sequence();
     }
 
     @Override
@@ -318,10 +316,6 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         navigationView.setCheckedItem(R.id.creport);
-        sharedData.isFirstTime(true);
-        if (sharedData.isFirstTime()) {
-            tapTargetSequence.start();
-        }
     }
 
     public void onProgressStart() {
@@ -341,27 +335,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void sequence() {
-        tapTargetSequence = new TapTargetSequence(this)
-                .targets(
-                        TapTarget.forView(findViewById(R.id.search_bar), "Search your train by name or number",
-                                "If your train doesn't show up here, directly click next to add it on the list"),
-                        TapTarget.forView(findViewById(R.id.button_next), "Go to coach search", "Clcik here to go to the coach search screen"))
-                .listener(new TapTargetSequence.Listener() {
-                    // This listener will tell us when interesting(tm) events happen in regards
-                    // to the sequence
+        new MaterialTapTargetPrompt.Builder(MainActivity.this)
+                .setTarget(findViewById(R.id.button_next))
+                .setPrimaryText("Move forward to select coach")
+                .setSecondaryText("If none of the trains appear in your search, click on this and add the train you want to inspect")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
                     @Override
-                    public void onSequenceFinish() {
-                        // Yay
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                        {
+                            // User has pressed the prompt target
+                        }
                     }
-
-                    @Override
-                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-
-                    }
-
-                    @Override
-                    public void onSequenceCanceled(TapTarget lastTarget) {
-                    }
-                });
+                })
+                .show();
     }
 }

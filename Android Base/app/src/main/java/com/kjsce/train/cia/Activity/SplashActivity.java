@@ -1,9 +1,11 @@
 package com.kjsce.train.cia.Activity;
 
+import android.app.KeyguardManager;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,6 +19,8 @@ public class SplashActivity extends AppCompatActivity {
     private SharedData sharedData;
     private Helper helper;
     private Intent intent;
+    private KeyguardManager keyguardManager;
+    private static int CODE_AUTHENTICATION_VERIFICATION=241;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,7 @@ public class SplashActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
+        keyguardManager = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
     }
 
     @Override
@@ -72,10 +77,31 @@ public class SplashActivity extends AppCompatActivity {
         finishAffinity();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK && requestCode==CODE_AUTHENTICATION_VERIFICATION)
+        {
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this, "Failure: Unable to verify user's identity", Toast.LENGTH_SHORT).show();
+            finishAffinity();
+        }
+    }
+
     public void checkLoggedIn(){
         if(sharedData.isLoggedIn()){
-            intent = new Intent(getApplicationContext(),MainActivity.class);
-            startActivity(intent);
+            if(keyguardManager.isKeyguardSecure()) {
+                intent = keyguardManager.createConfirmDeviceCredentialIntent("Authentication","Please Authenticate yourself to the app");
+                startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
+            }
+            else {
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
         }
         else{
             intent = new Intent(this,LoginActivity.class);

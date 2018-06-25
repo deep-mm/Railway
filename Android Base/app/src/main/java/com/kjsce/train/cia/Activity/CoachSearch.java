@@ -22,6 +22,8 @@ import com.kjsce.train.cia.R;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+
 public class CoachSearch extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private MaterialDialog materialDialog;
@@ -49,7 +51,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             }
         });
 
-        //TODO: Get list of all trains from database
+        //TODO: Get list of all coaches from database
         //train_list = sharedData.getTrainList();
         coach_list.add("C54321/D");
         coach_list.add("123672/E");
