@@ -6,12 +6,14 @@ public class CardReferenceEntity
     private String problem;
     private String id;
     private boolean problemStatus;
+    private String subtype;
 
-    public CardReferenceEntity(String bogeyNumber, String problem, String id, boolean problemStatus) {
+    public CardReferenceEntity(String bogeyNumber, String problem, String id, boolean problemStatus, String subtype) {
         this.bogeyNumber = bogeyNumber;
         this.problem = problem;
         this.id = id;
         this.problemStatus = problemStatus;
+        this.subtype = subtype;
     }
 
     public String getBogeyNumber() {
@@ -53,13 +55,22 @@ public class CardReferenceEntity
         this.problemStatus = problemStatus;
     }
 
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
+
     @Override
     public String toString() {
         return "CardReferenceEntity{" +
                 "bogeyNumber='" + bogeyNumber + '\'' +
                 ", problem='" + problem + '\'' +
                 ", id='" + id + '\'' +
-                ", problemStatus='" + problemStatus + '\'' +
+                ", problemStatus=" + problemStatus +
+                ", subtype='" + subtype + '\'' +
                 '}';
     }
 }

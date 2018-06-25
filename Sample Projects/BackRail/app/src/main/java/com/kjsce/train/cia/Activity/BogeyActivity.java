@@ -83,11 +83,11 @@ public class BogeyActivity extends AppCompatActivity {
         Date date = new Date();
         String dateTime = formatter.format(date);
 
-        cardUtility.uploadCard(new CardEntity(dateTime,"Amey","1511092t","Hello"), new CardReferenceEntity("1511092","Toilet","id2",false));
+        cardUtility.uploadCard(new CardEntity(dateTime,"Amey","1511092t","Hello"), new CardReferenceEntity("1511092","Toilet","id1",false,"subtype1"));
     }
 
     public void removeCard(View view){
-        cardUtility.removeCard(new CardEntity("24062018_22:25:06","Amey","1511092t"),new CardReferenceEntity("1511092","Toilet","3",false));
+        cardUtility.removeCard(new CardEntity("24062018_22:25:06","Amey","1511092t"),new CardReferenceEntity("1511092","Toilet","3",false,"subtype1"));
     }
 
     public void getCards(View view){

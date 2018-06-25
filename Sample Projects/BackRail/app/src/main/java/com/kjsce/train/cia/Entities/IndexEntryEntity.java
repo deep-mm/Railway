@@ -5,6 +5,7 @@ public class IndexEntryEntity
     private String id;
     private boolean problemStatus;
     private int numberOfCards;
+    private String subtype;
 
     public IndexEntryEntity() {
     }
@@ -18,6 +19,19 @@ public class IndexEntryEntity
         this.id = id;
         this.problemStatus = problemStatus;
         this.numberOfCards = numberOfCards;
+    }
+
+    public IndexEntryEntity(String id, boolean problemStatus, String subtype) {
+        this.id = id;
+        this.problemStatus = problemStatus;
+        this.subtype = subtype;
+    }
+
+    public IndexEntryEntity(String id, boolean problemStatus, int numberOfCards, String subtype) {
+        this.id = id;
+        this.problemStatus = problemStatus;
+        this.numberOfCards = numberOfCards;
+        this.subtype = subtype;
     }
 
     public boolean isProblemStatus() {
@@ -44,19 +58,28 @@ public class IndexEntryEntity
         this.numberOfCards = numberOfCards;
     }
 
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
+    }
+
     @Override
     public String toString() {
         return "IndexEntryEntity{" +
                 "id='" + id + '\'' +
                 ", problemStatus=" + problemStatus +
-                ", numberOfCards='" + numberOfCards + '\'' +
+                ", numberOfCards=" + numberOfCards +
+                ", subtype='" + subtype + '\'' +
                 '}';
     }
 
     @Override
     public boolean equals(Object o){
         if(o instanceof IndexEntryEntity){
-            if(this.id.equals(((IndexEntryEntity) o).getId()) && this.problemStatus == ((IndexEntryEntity) o).isProblemStatus())
+            if(this.id.equals(((IndexEntryEntity) o).getId()) && this.problemStatus == ((IndexEntryEntity) o).isProblemStatus() && this.getSubtype().equals(((IndexEntryEntity) o).getSubtype()))
                 return true;
             return false;
         }

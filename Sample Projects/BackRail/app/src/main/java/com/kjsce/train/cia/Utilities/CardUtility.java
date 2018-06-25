@@ -113,7 +113,7 @@ public class CardUtility
                 if(index == null){
                     index = new IndexEntity(new ArrayList<IndexEntryEntity>());
                 }
-                if(index.addIndex(new IndexEntryEntity(cardReferenceEntity.getId(),cardReferenceEntity.isProblemStatus()))) {
+                if(index.addIndex(new IndexEntryEntity(cardReferenceEntity.getId(),cardReferenceEntity.isProblemStatus(),cardReferenceEntity.getSubtype()))) {
                     temp.setValue(index);
                     System.out.println("Index: " + index);
                 }
