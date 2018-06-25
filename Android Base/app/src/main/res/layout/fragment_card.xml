@@ -1,63 +1,87 @@
-<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="wrap_content">
-        <!-- Bottom View Start-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/rectangle_white"
+    android:elevation="5dp">
+
+    <!-- this view reveals when swipe left -->
+    <RelativeLayout
+        android:tag="reveal-left"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/solved_icon"/>
+    </RelativeLayout>
+
+    <!-- this is the item front view -->
+    <RelativeLayout
+        android:background="@color/colorWhite"
+        android:tag="front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <LinearLayout
-            android:background="#66ddff00"
-            android:id="@+id/bottom_wrapper"
-            android:layout_width="160dp"
-            android:weightSum="1"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <!--What you want to show-->
+            android:id="@+id/sub_type"
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/sub_type_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sub-type :"
+            android:textColor="@color/primaryText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/sub_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cleanliness"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/secondaryText"
+            android:textSize="16sp"/>
+
         </LinearLayout>
-        <!-- Bottom View End-->
 
-        <!-- Surface View Start -->
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/rectangle_white"
-                android:elevation="3dp">
-
-            <ImageButton
-                android:id="@+id/remove"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
-                android:elevation="5dp"
-                android:background="@mipmap/delete_button" />
-
+            android:id="@+id/last_updated"
+            android:layout_margin="8dp"
+            android:layout_below="@id/sub_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/sub_type"
+                android:id="@+id/last_updated_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="8dp"
-                android:text="Sub-type :"
+                android:text="Last Updated :"
                 android:textColor="@color/primaryText"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/sub_type_text"
+                android:id="@+id/last_updated_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Cleanliness"
+                android:text="23/06/18 23:11:18"
                 android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@id/sub_type"
                 android:textColor="@color/secondaryText"
                 android:textSize="16sp"/>
 
-            </RelativeLayout>
-            <!--What you want to show in SurfaceView-->
         </LinearLayout>
-        <!-- Surface View End -->
-    </com.daimajia.swipe.SwipeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+

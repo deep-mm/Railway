@@ -317,6 +317,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        navigationView.setCheckedItem(R.id.creport);
         sharedData.isFirstTime(true);
         if (sharedData.isFirstTime()) {
             tapTargetSequence.start();

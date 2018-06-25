@@ -44,6 +44,14 @@
                     android:textColor="#fff"
                     android:textSize="20sp" />
 
+                <ImageButton
+                    android:id="@+id/done_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
+                    android:background="@mipmap/done_button"/>
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>

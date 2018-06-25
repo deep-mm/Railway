@@ -25,7 +25,7 @@ import java.util.Locale;
 public class CoachSearch extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private MaterialDialog materialDialog;
-    private ImageButton backButton, nextButton;
+    private ImageButton backButton, nextButton, submitButton;
     private RecyclerView details;
     private TrainAdapter trainAdapter;
     private ArrayList<String> coach_list, data1, allCoaches;
@@ -80,6 +80,31 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 }
             }
         });
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(CoachSearch.this)
+                        .title("Confirm")
+                        .content("Are you sure you want to submit?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                intent = new Intent(getApplicationContext(),NotifyContacts.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
     public void onProgressStart(){
@@ -103,6 +128,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         helper = new Helper(getApplicationContext());
         backButton = (ImageButton) findViewById(R.id.back_button);
         nextButton = (ImageButton) findViewById(R.id.button_next);
+        submitButton = (ImageButton) findViewById(R.id.done_button);
         searchView = (SearchView) findViewById(R.id.search_bar);
         coach_list = new ArrayList<String>();
         nextButton = (ImageButton) findViewById(R.id.button_next);
@@ -146,7 +172,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
-                        intent = new Intent(getApplicationContext(),MainActivity.class);
+                        intent = new Intent(getApplicationContext(),NotifyContacts.class);
                         startActivity(intent);
                     }
                 })

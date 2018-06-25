@@ -1,5 +1,6 @@
 package com.kjsce.train.cia.Activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,6 +26,7 @@ public class NotifyContacts extends AppCompatActivity {
     private CheckBoxAdapter checkBoxAdapter;
     private ArrayList<UserEntity> userEntities;
     private MaterialDialog materialDialog;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,11 @@ public class NotifyContacts extends AppCompatActivity {
         setContentView(R.layout.activity_notify_contacts);
 
         initialize();
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setName("Deep Mehta");
+        userEntity.setDesignation("CRPF");
+        userEntities.add(userEntity);
 
         final RecyclerView details = (RecyclerView) findViewById(R.id.details);
         checkBoxAdapter = new CheckBoxAdapter(userEntities, NotifyContacts.this);
@@ -50,7 +57,9 @@ public class NotifyContacts extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Update the notifications database
+                //TODO: Update the notifications database
+                intent = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent);
             }
         });
     }

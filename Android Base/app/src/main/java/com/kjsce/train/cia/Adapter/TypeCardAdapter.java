@@ -10,6 +10,7 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.andexert.library.RippleView;
+import com.kjsce.train.cia.Activity.CardsActivity;
 import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.UserEntity;
@@ -51,7 +52,7 @@ public class TypeCardAdapter extends RecyclerView.Adapter<TypeCardAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 sharedData.setType(Mvalues.get(position));
-                Intent intent = new Intent(context, Details.class);
+                Intent intent = new Intent(context, CardsActivity.class);
                 context.startActivity(intent);
             }
         });

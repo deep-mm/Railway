@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kjsce.train.cia.Activity.Inspection.InspectionBogeyReportActivity">
+    tools:context="com.kjsce.train.cia.Activity.CardsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -42,15 +42,6 @@
                     android:textAlignment="center"
                     android:textColor="#fff"
                     android:textSize="20sp" />
-
-                <ImageButton
-                    android:id="@+id/done_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="8dp"
-                    android:background="@mipmap/done_button"/>
 
 
             </RelativeLayout>
@@ -92,7 +83,7 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/card_list"
+                android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="LinearLayoutManager"

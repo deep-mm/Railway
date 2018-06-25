@@ -63,13 +63,14 @@ public class CardDetails extends AppCompatActivity {
     private Helper helper;
     private CardDetailsAdapter cardDetailsAdapter;
     private ArrayList<DetailedCard> detailedCards;
-    private String audioFilePath, imageFilePath, text, subTypeSelected;
+    private String audioFilePath, imageFilePath, text, subTypeSelected, subType;
     private Uri filePath;
     private Boolean flag;
     private final int PICK_IMAGE_REQUEST = 10;
     private final int CAMERA = 100;
     private ArrayList<String> subTypes;
     private MaterialDialog materialDialog;
+    private Boolean flag_subType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +135,9 @@ public class CardDetails extends AppCompatActivity {
 
         textBox.addTextChangedListener(filterTextWatcher);
 
-
-        subTypes.add("Select a subtype");
+        subTypes = getTypes(sharedData.getType());
+        subTypes.add(0,"Select a subtype");
+        subTypes.add("Other");
         final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(
                 this,R.layout.support_simple_spinner_dropdown_item,subTypes){
             @Override
@@ -184,6 +186,16 @@ public class CardDetails extends AppCompatActivity {
 
             }
         });
+
+        if(getIntent().hasExtra("flag")){
+            flag_subType = getIntent().getExtras().getBoolean("flag");
+        }
+
+        if(!flag_subType){
+            subType = getIntent().getExtras().getString("subType");
+            subTypeSpinner.setSelection(getPosition(subType)+1);
+            subTypeSpinner.setEnabled(false);
+        }
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
@@ -227,6 +239,15 @@ public class CardDetails extends AppCompatActivity {
         subTypeSelected = "";
     }
 
+    public int getPosition(String type){
+        int i;
+        for(i=0;i<subTypes.size();i++){
+            if(subTypes.get(i).equalsIgnoreCase(type))
+                return i;
+        }
+        return 0;
+    }
+
     public void record() {
         String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
         audioFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -259,6 +280,11 @@ public class CardDetails extends AppCompatActivity {
                 getInputName();
                 System.out.println("File Path: "+audioFilePath);
                 //Create an object with audio file path in it
+                DetailedCard detailedCard = new DetailedCard();
+                detailedCard.setComment(audioFilePath);
+                detailedCards.add(detailedCard);
+                cardDetailsAdapter.notifyDataSetChanged();
+
             } else if (resultCode == RESULT_CANCELED) {
                 // Oops! User has canceled the recording
             }
@@ -302,10 +328,10 @@ public class CardDetails extends AppCompatActivity {
                 }).show();
     }
 
-    public ArrayList<String> getTypes(){
+    public ArrayList<String> getTypes(String problem){
 
         ArrayList<String> type = new ArrayList<String>();
-        switch("Toilets"){
+        switch(problem){
 
             case "Toilets":
                 return (new ToiletProblem().getTypes());

@@ -45,8 +45,9 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     public void onBindViewHolder(final com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-
-        //Determine type and side of the card
+        side = "left";
+        type = "audio";
+        //TODO: Determine type and side of the card
 
         if(side.equalsIgnoreCase("left")) {
             holder.left.setVisibility(View.VISIBLE);
@@ -56,6 +57,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.audio_left.setVisibility(View.VISIBLE);
                 holder.image_left.setVisibility(View.GONE);
                 holder.text_left.setVisibility(View.GONE);
+
+                holder.audio_text_left.setText(Mvalues.get(position).getComment());
             }
 
             else if(type.equalsIgnoreCase("image")){
@@ -82,6 +85,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.audio_right.setVisibility(View.VISIBLE);
                 holder.image_right.setVisibility(View.GONE);
                 holder.text_right.setVisibility(View.GONE);
+
+                holder.audio_text_right.setText(Mvalues.get(position).getComment());
             }
 
             else if(type.equalsIgnoreCase("image")){
@@ -221,7 +226,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     {
         RelativeLayout left,right,audio_left,audio_right;
         ImageView image_left,image_right,audio_button_left,audio_button_right,train_icon_left,train_icon_right;
-        TextView text_left,text_right,name_text_left,time_text_left,name_text_right,time_text_right;
+        TextView text_left,text_right,name_text_left,time_text_left,name_text_right,time_text_right,audio_text_left,audio_text_right;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -243,6 +248,9 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             time_text_left = (TextView) itemView.findViewById(R.id.time_text_left);
             name_text_right = (TextView) itemView.findViewById(R.id.name_text_right);
             time_text_right = (TextView) itemView.findViewById(R.id.time_text_right);
+
+            audio_text_left = (TextView) itemView.findViewById(R.id.audio_text_left);
+            audio_text_right = (TextView) itemView.findViewById(R.id.audio_text_right);
         }
     }
 }
