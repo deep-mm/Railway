@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="#CDD1D0"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.AddUser">
 
@@ -173,7 +173,7 @@
         android:id="@+id/train_gif"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:src="@drawable/train_image"
+        android:background="@drawable/train_image"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

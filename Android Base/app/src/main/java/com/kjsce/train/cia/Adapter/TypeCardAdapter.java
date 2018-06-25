@@ -10,6 +10,7 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import com.andexert.library.RippleView;
+import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 public class TypeCardAdapter extends RecyclerView.Adapter<TypeCardAdapter.ViewHolder>{
     private final ArrayList<String> Mvalues;
     Context context;
+    SharedData sharedData;
 
     public TypeCardAdapter() {
         Mvalues = null;
@@ -42,13 +44,15 @@ public class TypeCardAdapter extends RecyclerView.Adapter<TypeCardAdapter.ViewHo
     @Override
     public void onBindViewHolder(final TypeCardAdapter.ViewHolder holder, final int position) {
 
-        SharedData sd = new SharedData(context);
+        sharedData = new SharedData(context);
         holder.type_text.setText(Mvalues.get(position));
 
         holder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Go to next page, with cards
+                sharedData.setType(Mvalues.get(position));
+                Intent intent = new Intent(context, Details.class);
+                context.startActivity(intent);
             }
         });
     }

@@ -53,8 +53,9 @@
     <SearchView
         android:id="@+id/search_bar"
         android:layout_width="300dp"
+        android:layout_below="@id/app_bar"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="20dp"
         android:fadingEdge="horizontal|vertical"
         android:filterTouchesWhenObscured="false"
@@ -67,13 +68,20 @@
         <requestFocus />
     </SearchView>
 
-    <ListView
-        android:id="@+id/train_list"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_bar">
+        android:layout_below="@id/search_bar"
+        android:layout_marginTop="8dp">
 
-    </ListView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/fragment_train" />
+
+    </ScrollView>
 
     <ImageButton
         android:id="@+id/button_next"

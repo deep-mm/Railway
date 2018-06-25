@@ -6,8 +6,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.R;
@@ -21,6 +23,7 @@ public class Details extends AppCompatActivity {
     private ArrayList<String> detailedCards;
     private SharedData sharedData;
     private Helper helper;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,5 +57,21 @@ public class Details extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+    }
+
+    public void onProgressStart(){
+        materialDialog = new MaterialDialog.Builder(Details.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .show();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void onProgressStop(){
+        materialDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

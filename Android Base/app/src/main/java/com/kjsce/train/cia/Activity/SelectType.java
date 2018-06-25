@@ -1,5 +1,6 @@
 package com.kjsce.train.cia.Activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.TypeCardAdapter;
 import com.kjsce.train.cia.R;
@@ -21,6 +24,7 @@ public class SelectType extends AppCompatActivity {
     private ImageButton backButton;
     private ArrayList<String> type_list;
     private TypeCardAdapter typeCardAdapter;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,24 @@ public class SelectType extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
+        new MaterialDialog.Builder(SelectType.this)
+                .title("Finish")
+                .content("Are you sure you want to exit from coach inspection of "+sharedData.getBogie()+" ?")
+                .positiveText("Yes")
+                .negativeText("No")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        intent = new Intent(getApplicationContext(),CoachSearch.class);
+                        startActivity(intent);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                    }
+                })
+                .show();
     }
 }
 

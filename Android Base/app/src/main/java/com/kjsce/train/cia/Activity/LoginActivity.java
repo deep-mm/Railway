@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.kjsce.train.cia.Entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 1000;
     private ArrayList<String> users;
     private Intent intent;
+    private UserEntity userEntity;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 if(users.contains(user.getPhoneNumber())){
                     sharedData.isLoggedIn(true);
+                    //TODO: Get user entity by mobile number and store in sharedData
+                    //sharedData.setUserEntity(userEntity);
                     intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                 }
@@ -97,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         users = new ArrayList<String>();
         users.add("+919999999999");
+        //TODO: Get list of all user mobile numbers from database
     }
 
     @Override
@@ -139,11 +146,22 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-}
-
-
-/*materialDialog = new MaterialDialog.Builder(InspectionMenuActivity.this)
+    public void onProgressStart(){
+        materialDialog = new MaterialDialog.Builder(LoginActivity.this)
         .title("Syncing Data")
         .content("Please Wait")
         .progress(true, 0)
-        .show();*/
+        .show();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void onProgressStop(){
+        materialDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+}
+
+

@@ -6,8 +6,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Entity.UserEntity;
@@ -20,8 +22,9 @@ public class NotifyContacts extends AppCompatActivity {
     private SharedData sharedData;
     private Helper helper;
     private ImageButton sendButton, backButton;
-    CheckBoxAdapter checkBoxAdapter;
-    ArrayList<UserEntity> userEntities;
+    private CheckBoxAdapter checkBoxAdapter;
+    private ArrayList<UserEntity> userEntities;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,22 @@ public class NotifyContacts extends AppCompatActivity {
         sendButton = (ImageButton) findViewById(R.id.send_button);
         backButton = (ImageButton) findViewById(R.id.back_button);
         userEntities = new ArrayList<UserEntity>();
+    }
+
+    public void onProgressStart(){
+        materialDialog = new MaterialDialog.Builder(NotifyContacts.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .show();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void onProgressStop(){
+        materialDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     @Override

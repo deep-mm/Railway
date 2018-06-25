@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -68,6 +69,7 @@ public class CardDetails extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 10;
     private final int CAMERA = 100;
     private ArrayList<String> subTypes;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,6 +416,22 @@ public class CardDetails extends AppCompatActivity {
         });
 
         return flag;
+    }
+
+    public void onProgressStart(){
+        materialDialog = new MaterialDialog.Builder(CardDetails.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .show();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void onProgressStop(){
+        materialDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     @Override

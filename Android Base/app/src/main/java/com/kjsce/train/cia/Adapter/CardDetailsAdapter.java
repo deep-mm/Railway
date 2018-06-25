@@ -1,39 +1,22 @@
 package com.kjsce.train.cia.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckedTextView;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
-import com.kjsce.train.cia.Entity.CardFiles;
-import com.kjsce.train.cia.Entity.StoreCard;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder>{

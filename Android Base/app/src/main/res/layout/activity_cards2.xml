@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.CoachSearch">
+    tools:context="com.kjsce.train.cia.Activity.CardsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -38,10 +38,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:text="Select Coach"
+                    android:text="Create Report"
                     android:textAlignment="center"
                     android:textColor="#fff"
                     android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/done_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="8dp"
+                    android:background="@mipmap/done_button"/>
 
 
             </RelativeLayout>
@@ -49,39 +58,57 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="300dp"
+
+
+    <RelativeLayout
+        android:id="@+id/train_details"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="20dp"
-        android:fadingEdge="horizontal|vertical"
-        android:filterTouchesWhenObscured="false"
-        android:icon="@drawable/search"
-        android:iconifiedByDefault="false"
+        android:layout_below="@id/app_bar"
+        android:layout_margin="8dp"
+        android:padding="8dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/curve"
-        android:queryHint="Search Bogie">
+        android:background="@drawable/rectangle">
 
-        <requestFocus />
-    </SearchView>
+        <TextView
+            android:id="@+id/bogey_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coach: B123045/C"
+            android:textColor="@color/primaryText"
+            android:textStyle="bold"
+            android:textSize="20dp" />
 
-    <ListView
-        android:id="@+id/train_list"
-        android:layout_width="match_parent"
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/search_bar">
+        android:layout_below="@id/train_details">
 
-    </ListView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/card_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/fragment_card" />
+        </RelativeLayout>
+
+    </ScrollView>
 
     <ImageButton
-        android:id="@+id/button_next"
+        android:id="@+id/add_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@mipmap/next_icon"
-        android:textAllCaps="false"
-        android:layout_margin="8dp" />
+        android:layout_margin="10dp"
+        android:elevation="5dp"
+        android:background="@mipmap/add_button"/>
 
 </RelativeLayout>

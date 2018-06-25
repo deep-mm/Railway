@@ -38,22 +38,13 @@ public class SharedData {
         editor.putBoolean("login", check).commit();
     }
 
-    public void setType(String type){
-        editor.putString("type", type).commit();
+    public void setPlaceOfInspection(String place){
+        editor.putString("place", place).commit();
     }
 
-    public String getType(){
-        String type = pref.getString("type", "");
-        return type;
-    }
-
-    public void setStation(String type){
-        editor.putString("station", type).commit();
-    }
-
-    public String getStation(){
-        String type = pref.getString("station", "");
-        return type;
+    public String getPlaceOfInspection(){
+        String place = pref.getString("place", "");
+        return place;
     }
 
     public void setTrain(String train){
@@ -65,13 +56,13 @@ public class SharedData {
         return train;
     }
 
-    public void setTrainNo(String train){
-        editor.putString("train_no", train).commit();
+    public void setType(String type){
+        editor.putString("type", type).commit();
     }
 
-    public String getTrainNo(){
-        String train = pref.getString("train_no", "");
-        return train;
+    public String getType(){
+        String type = pref.getString("type", "");
+        return type;
     }
 
     public void setBogie(String bogie){
@@ -81,18 +72,6 @@ public class SharedData {
     public String getBogie(){
         String bogie = pref.getString("bogie", "");
         return bogie;
-    }
-
-    public void setCoachList(List<String> coach_list){
-        String coach = gson.toJson(coach_list);
-        editor.putString("coach_list",coach).commit();
-    }
-
-    public List<String> getCoachList(){
-        String json = pref.getString("coach_list", "");
-        Type listType = new TypeToken<List<String>>() {}.getType();
-        List<String> coach_list = gson.fromJson(json, listType);
-        return coach_list;
     }
 
     public void setTrainList(List<String> train_list){
@@ -177,8 +156,6 @@ public class SharedData {
         return trainEntity;
     }
 
-
-
     public void setDetailedReport(DetailedReport train){
         String json = gson.toJson(train);
         editor.putString("detailreport", json).commit();
@@ -208,6 +185,15 @@ public class SharedData {
     public void clear(){
         List<BogeyEntity> bogeyEntities = new ArrayList<BogeyEntity>();
         setBogieEntity(bogeyEntities);
+    }
+
+    public Boolean isFirstTime(){
+        Boolean check = pref.getBoolean("firstTime", false);
+        return check;
+    }
+
+    public void isFirstTime(Boolean check){
+        editor.putBoolean("firstTime", check).commit();
     }
 
 

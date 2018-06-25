@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,6 +32,8 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
@@ -43,7 +46,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,SearchView.OnQueryTextListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -64,6 +67,8 @@ public class MainActivity extends AppCompatActivity
     private Boolean flag = false;
     private String placeOfInspection, searchBoxValue;
     private RecyclerView details;
+    private MaterialDialog materialDialog;
+    private TapTargetSequence tapTargetSequence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +77,14 @@ public class MainActivity extends AppCompatActivity
 
         initialize();
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.creport);
 
@@ -82,16 +92,16 @@ public class MainActivity extends AppCompatActivity
         designation.setText("CRPF");
         mobile.setText("+91 9004096152");
 
+        //TODO: Get list of all trains from database
         //train_list = sharedData.getTrainList();
+        train_list.add("123456 Rajdhani");
+        train_list.add("654321 Gareebrath");
 
         allTrains = train_list;
         searchView.setOnQueryTextListener(this);
 
-        train_list.add("123456 Rajdhani");
-        train_list.add("654321 Gareebrath");
-
         details = (RecyclerView) findViewById(R.id.details);
-        trainAdapter = new TrainAdapter(train_list, MainActivity.this);
+        trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         details.setLayoutManager(mlayoutmanager);
         details.setAdapter(trainAdapter);
@@ -100,25 +110,30 @@ public class MainActivity extends AppCompatActivity
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (train_list.size() == 0) {
-                    addNewTrain();
+                if (!searchBoxValue.isEmpty()) {
+                    if (train_list.size() == 0) {
+                        addNewTrain();
+                    } else {
+                        getInputName();
+                    }
                 } else {
-                    getInputName();
+                    Toast.makeText(getApplicationContext(), "Train Name cannot be empty", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    public void addNewTrain(){
+    public void addNewTrain() {
 
         new MaterialDialog.Builder(MainActivity.this)
                 .title("New Train")
-                .content("Are you sure you want to add this train: \n"+searchBoxValue+" ?")
+                .content("Are you sure you want to add this train: \n" + searchBoxValue + " ?")
                 .positiveText("Yes")
                 .negativeText("No")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        //TODO: Add this train to database
                         getInputName();
                     }
                 })
@@ -130,6 +145,7 @@ public class MainActivity extends AppCompatActivity
                 })
                 .show();
     }
+
     public void getInputName() {
 
         new MaterialDialog.Builder(this)
@@ -140,18 +156,19 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         placeOfInspection = input.toString();
-                        if (!placeOfInspection.isEmpty()){
-                            intent =new Intent(getApplicationContext(),CoachSearch.class);
+                        if (!placeOfInspection.isEmpty()) {
+                            sharedData.setTrain(searchBoxValue);
+                            sharedData.setPlaceOfInspection(placeOfInspection);
+                            intent = new Intent(getApplicationContext(), CoachSearch.class);
                             startActivity(intent);
                         }
                     }
                 }).show();
     }
 
-    public void initialize(){
+    public void initialize() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
@@ -162,10 +179,12 @@ public class MainActivity extends AppCompatActivity
         name = (TextView) headerView.findViewById(R.id.name_text);
         designation = (TextView) headerView.findViewById(R.id.designation_text);
         mobile = (TextView) headerView.findViewById(R.id.mobile_text);
-        searchView = (SearchView)findViewById(R.id.search_bar);
+        searchView = (SearchView) findViewById(R.id.search_bar);
         train_list = new ArrayList<String>();
         nextButton = (ImageButton) findViewById(R.id.button_next);
         data1 = new ArrayList<String>();
+        searchBoxValue = "";
+        sequence();
     }
 
     @Override
@@ -220,20 +239,16 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.creport) {
             intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.add_login) {
+        } else if (id == R.id.add_login) {
             intent = new Intent(getApplicationContext(), AddUser.class);
             startActivity(intent);
-        }
-        else if (id == R.id.notifications){
+        } else if (id == R.id.notifications) {
             intent = new Intent(getApplicationContext(), Notifications.class);
             startActivity(intent);
-        }
-        else if (id == R.id.help) {
+        } else if (id == R.id.help) {
             //Create a help screen
 
-        }
-        else if (id == R.id.logout) {
+        } else if (id == R.id.logout) {
             new MaterialDialog.Builder(MainActivity.this)
                     .title("Confirm")
                     .content("Are you sure you want to Logout?")
@@ -244,7 +259,7 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                             sharedData.clearAll();
                             FirebaseAuth.getInstance().signOut();
-                            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(i);
                         }
                     })
@@ -271,32 +286,81 @@ public class MainActivity extends AppCompatActivity
     public boolean onQueryTextChange(String newText) {
 
         searchBoxValue = newText;
-        System.out.println("search: "+searchBoxValue);
+        System.out.println("search: " + searchBoxValue);
         newText = newText.toLowerCase(Locale.getDefault());
         data1.clear();
         int i;
 
-        for(i=0;i< allTrains.size();i++) {
+        for (i = 0; i < allTrains.size(); i++) {
             if (allTrains.get(i).toLowerCase().contains(newText))
                 data1.add(allTrains.get(i));
         }
 
         train_list = data1;
-        System.out.println("train_list: "+data1);
-        trainAdapter = new TrainAdapter(data1, MainActivity.this);
+        System.out.println("train_list: " + data1);
+        trainAdapter = new TrainAdapter(data1, MainActivity.this, "train");
         details.setAdapter(trainAdapter);
         trainAdapter.notifyDataSetChanged();
 
-        if(newText.length()==0)
-        {
+        if (newText.length() == 0) {
             data1.clear();
             train_list = allTrains;
-            trainAdapter = new TrainAdapter(train_list, MainActivity.this);
+            trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
             details.setAdapter(trainAdapter);
             trainAdapter.notifyDataSetChanged();
         }
 
         return false;
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedData.isFirstTime(true);
+        if (sharedData.isFirstTime()) {
+            tapTargetSequence.start();
+        }
+    }
+
+    public void onProgressStart() {
+        materialDialog = new MaterialDialog.Builder(MainActivity.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .show();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void onProgressStop() {
+        materialDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void sequence() {
+        tapTargetSequence = new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.search_bar), "Search your train by name or number",
+                                "If your train doesn't show up here, directly click next to add it on the list"),
+                        TapTarget.forView(findViewById(R.id.button_next), "Go to coach search", "Clcik here to go to the coach search screen"))
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        // Yay
+                    }
+
+                    @Override
+                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                    }
+
+                    @Override
+                    public void onSequenceCanceled(TapTarget lastTarget) {
+                    }
+                });
     }
 }

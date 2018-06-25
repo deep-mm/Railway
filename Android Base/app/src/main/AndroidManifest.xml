@@ -25,14 +25,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.ImageShow" />
-        <activity android:name=".Activity.MainActivity" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activity.CardDetails" />
         <activity android:name=".Activity.Details" />
         <activity android:name=".Activity.NotifyContacts" />
         <activity android:name=".Activity.SelectType" />
         <activity android:name=".Activity.AddUser" />
         <activity android:name=".Activity.CoachSearch" />
-        <activity android:name=".Activity.Notifications"></activity>
+        <activity android:name=".Activity.Notifications" />
+        <activity android:name=".Activity.CardsActivity"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.SplashActivity"
-    android:background="@color/colorWhite">
+    android:background="@drawable/login_background">
 
     <ImageView
         android:id="@+id/image"
@@ -19,11 +19,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textColor="@color/secondaryText"
+        android:textColor="@color/colorWhite"
         android:textStyle="italic"
         android:layout_below="@id/image"
         android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:text="Central Railways Inspection"/>
+        android:text="Coach Inspection App"/>
 
 </RelativeLayout>
