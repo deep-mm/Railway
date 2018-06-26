@@ -8,10 +8,10 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="#734D98"
-        android:paddingLeft="10dp"
+        android:textColor="@color/primaryText"
+        android:padding="10dp"
         android:textSize="20sp"
+        android:gravity="center"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:checked="true"
         android:text="Toilet"/>

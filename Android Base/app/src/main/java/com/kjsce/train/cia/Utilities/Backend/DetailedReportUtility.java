@@ -201,6 +201,6 @@ public class DetailedReportUtility {
             mDetailedReportDatabaseReference.addChildEventListener(childEventListener);
 
 
-        }
-
     }
+
+}

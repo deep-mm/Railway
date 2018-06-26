@@ -1,41 +1,24 @@
 package com.kjsce.train.cia.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckedTextView;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.CardFiles;
-import com.kjsce.train.cia.Entity.StoreCard;
+import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CheckBoxAdapter.ViewHolder>{
-    private final ArrayList<String> Mvalues;
+    private final ArrayList<UserEntity> Mvalues;
     private Boolean isChecked;
-    private List<Boolean> type_list;
-
     Context context;
-    int flag =1;
+
     public CheckBoxAdapter() {
         Mvalues = null;
 
@@ -57,14 +40,10 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
     @Override
     public void onBindViewHolder(final com.kjsce.train.cia.Adapter.CheckBoxAdapter.ViewHolder holder, final int position) {
 
-        holder.check_box.setText(Mvalues.get(position));
+        holder.check_box.setText(Mvalues.get(position).getName()+" ( "+Mvalues.get(position).getDesignation()+" )");
 
         SharedData sd = new SharedData(context);
-
-        type_list = sd.getTypeList();
-        if(type_list!=null) {
-            holder.check_box.setChecked(type_list.get(position));
-        }
+        holder.check_box.setChecked(false);
 
         holder.check_box.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,9 +55,6 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
                     holder.check_box.setChecked(true);
 
                 isChecked = holder.check_box.isChecked();
-
-                type_list.set(position, isChecked);
-                sd.setTypeList(type_list);
             }
         });
 

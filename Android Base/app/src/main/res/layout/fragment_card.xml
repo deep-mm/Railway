@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="80dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/rectangle_white"
+    android:elevation="5dp">
+
+    <!-- this view reveals when swipe left -->
+    <RelativeLayout
+        android:tag="reveal-left"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/solved_icon"/>
+    </RelativeLayout>
+
+    <!-- this is the item front view -->
+    <RelativeLayout
+        android:background="@color/colorWhite"
+        android:tag="front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/sub_type"
+            android:layout_margin="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/sub_type_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sub-type :"
+            android:textColor="@color/primaryText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/sub_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cleanliness"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/secondaryText"
+            android:textSize="16sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/last_updated"
+            android:layout_margin="8dp"
+            android:layout_below="@id/sub_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/last_updated_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Updated :"
+                android:textColor="@color/primaryText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/last_updated_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="23/06/18 23:11:18"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/secondaryText"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+

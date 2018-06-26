@@ -1,0 +1,107 @@
+package com.kjsce.train.cia.Activity;
+
+import android.content.Intent;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.dd.processbutton.iml.ActionProcessButton;
+import com.kjsce.train.cia.R;
+
+import java.util.ArrayList;
+
+public class AddUser extends AppCompatActivity {
+
+    private ImageButton backButton;
+    private SharedData sharedData;
+    private Helper helper;
+    private TextView name,mobile,designation;
+    private ImageView train;
+    private ActionProcessButton submit_button;
+    private String name_text,mobile_text,designation_text;
+    private Intent intent;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_user);
+
+        initialize();
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        submit_button.setMode(ActionProcessButton.Mode.ENDLESS);
+        submit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                name_text = name.getText().toString();
+                mobile_text = mobile.getText().toString();
+                designation_text = designation.getText().toString();
+
+                if(name_text.isEmpty() || mobile_text.isEmpty() || designation_text.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Fields cannot be left empty",Toast.LENGTH_LONG).show();
+                    submit_button.setProgress(-1);
+                }
+                else {
+                    submit_button.setProgress(1);
+                    //Update to database - Add User and on complete set progress to 0
+                }
+            }
+        });
+    }
+
+    public void initialize(){
+        sharedData = new SharedData(getApplicationContext());
+        helper = new Helper(getApplicationContext());
+        backButton = (ImageButton) findViewById(R.id.back_button);
+        name = (TextView) findViewById(R.id.user_name_text);
+        mobile = (TextView) findViewById(R.id.mobile_text);
+        designation = (TextView) findViewById(R.id.designation_text);
+        train = (ImageView) findViewById(R.id.train_gif);
+        submit_button = (ActionProcessButton) findViewById(R.id.submit_button);
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(AddUser.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .show();
+        }
+    }
+}

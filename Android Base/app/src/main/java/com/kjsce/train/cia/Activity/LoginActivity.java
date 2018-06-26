@@ -4,143 +4,106 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
-import com.kjsce.train.cia.Activity.Maintainence.TrainSearchActivity;
 import com.kjsce.train.cia.Entity.UserEntity;
-import com.kjsce.train.cia.Listeners.GetUserListener;
-import com.kjsce.train.cia.R;
-import com.kjsce.train.cia.Utilities.Backend.UserUtility;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText username,password;
-    ImageButton submit;
-    String get_username,get_password;
-    SharedData sd;
-    Boolean success;
+    private SharedData sharedData;
+    private Helper helper;
+    private Boolean success;
     private FirebaseAuth mAuth;
-    MaterialDialog materialDialog;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    private int RC_SIGN_IN = 1000;
+    private ArrayList<String> users;
+    private Intent intent;
+    private UserEntity userEntity;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         initialize();
 
-
-        submit.setOnClickListener(new View.OnClickListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onClick(View view) {
-                //TODO: Validate the username and password for null and other validations
-                get_username = username.getText().toString() + "@email.com";
-                get_password = password.getText().toString();
-
-                if (get_username.equalsIgnoreCase("") || get_password.equalsIgnoreCase("")) {
-                    Toast.makeText(getApplicationContext(), "Fields cannot be left empty", Toast.LENGTH_SHORT).show();
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
                 } else {
-                    materialDialog = new MaterialDialog.Builder(LoginActivity.this)
-                            .title("Logging In")
-                            .content("Please Wait")
-                            .progress(true, 0)
-                            .show();
-                    progressStart();
-                    signIn(get_username,get_password);
+                        startActivityForResult(
+                                AuthUI.getInstance()
+                                        .createSignInIntentBuilder()
+                                        .setIsSmartLockEnabled(false)
+                                        .setAvailableProviders(
+                                                Arrays.asList(
+                                                        new AuthUI.IdpConfig.Builder(AuthUI.PHONE_VERIFICATION_PROVIDER).build()
+                                                ))
+                                        .build(),
+                                RC_SIGN_IN);
+                    }
                 }
-            }
-        });
+        };
     }
 
-    public void initialize(){
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
-        submit = (ImageButton) findViewById(R.id.submit);
-        sd = new SharedData(getApplicationContext());
-
-        mAuth = FirebaseAuth.getInstance();
-    }
-
-    public void progressStart(){
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-
-    public void progressStop(){
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-
-    public void checkType(FirebaseUser user){
-
-        UserUtility userUtility = new UserUtility();
-        userUtility.getUser(user.getUid(), new GetUserListener() {
-            @Override
-            public void onCompleteTask(UserEntity userEntity) {
-                Intent i;
-                if(userEntity.getType().equals("inspection")){
-                    i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
+                FirebaseUser user = mAuth.getCurrentUser();
+                if(users.contains(user.getPhoneNumber())){
+                    sharedData.isLoggedIn(true);
+                    //TODO: Get user entity by mobile number and store in sharedData
+                    //sharedData.setUserEntity(userEntity);
+                    intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
                 }
                 else{
-                    i = new Intent(getApplicationContext(), TrainSearchActivity.class);
+                    logout();
                 }
-                sd.setUserEntity(userEntity);
-                startActivity(i);
+            } else if (resultCode == RESULT_CANCELED) {
+                // Sign in was canceled by the user, finish the activity
+                finishAffinity();
             }
-        });
-    }
-
-    public void checkLoggedIn(){
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            checkType(currentUser);
         }
     }
 
-    public void signIn(String username,String password){
-        System.out.println("username: " + username + " " + password);
-        mAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+    public void logout(){
+        new MaterialDialog.Builder(LoginActivity.this)
+                .title("Unverified User")
+                .content("You are not authorized to use this app\nPlease contact the customer support for help")
+                .negativeText("OK")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        System.out.println("Exception " + task.getException());
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            checkType(user);
-                        } else {
-                            new MaterialDialog.Builder(LoginActivity.this)
-                                    .title("Incorrect")
-                                    .content("Invalid Credentials")
-                                    .positiveText("OK")
-                                    .negativeText("EXIT")
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(MaterialDialog dialog, DialogAction which) {
-                                        }
-                                    })
-                                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(MaterialDialog dialog, DialogAction which) {
-                                            finishAffinity();
-                                        }
-                                    })
-                                    .show();
-                        }
-                        materialDialog.hide();
-                        progressStop();
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        finishAffinity();
                     }
-                });
+                })
+                .show();
+        sharedData.clearAll();
+        FirebaseAuth.getInstance().signOut();
+    }
+
+    public void initialize(){
+        sharedData = new SharedData(getApplicationContext());
+        mAuth = FirebaseAuth.getInstance();
+        helper = new Helper(getApplicationContext());
+        users = new ArrayList<String>();
+        users.add("+919999999999");
+        //TODO: Get list of all user mobile numbers from database
     }
 
     @Override
@@ -149,9 +112,56 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        checkLoggedIn();
+    public void onResume() {
+        super.onResume();
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(LoginActivity.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),LoginActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .show();
+        }
+        mAuth.addAuthStateListener(mAuthStateListener);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+    public void onProgressStart(){
+        materialDialog = new MaterialDialog.Builder(LoginActivity.this)
+        .title("Syncing Data")
+        .content("Please Wait")
+        .progress(true, 0)
+        .show();
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public void onProgressStop(){
+        materialDialog.hide();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
 }
+
+

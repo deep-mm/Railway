@@ -1,26 +1,26 @@
 package com.kjsce.train.cia.Activity;
 
+import android.app.KeyguardManager;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.kjsce.train.cia.Activity.Inspection.InspectionMenuActivity;
-import com.kjsce.train.cia.Activity.Maintainence.TrainSearchActivity;
-import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
 
 public class SplashActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static int SPLASH_TIME_OUT = 2000;
-    public SharedData sd;
-    public Helper helper;
-    Intent i;
+    private SharedData sharedData;
+    private Helper helper;
+    private Intent intent;
+    private KeyguardManager keyguardManager;
+    private static int CODE_AUTHENTICATION_VERIFICATION=241;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        mAuth = FirebaseAuth.getInstance();
-        sd = new SharedData(getApplicationContext());
-        helper = new Helper(getApplicationContext());
+        initialize();
 
         if(helper.isNetworkConnected()) {
 
@@ -46,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         else{
             new MaterialDialog.Builder(this)
                     .title("No Internet Connection")
-                    .content("You need active internet connection to login")
+                    .content("You need active internet connection")
                     .positiveText("Retry")
                     .negativeText("Exit")
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -59,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
                     .onNegative(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            finishAffinity();
+                            onBackPressed();
                         }
                     })
                     .show();
@@ -67,29 +65,47 @@ public class SplashActivity extends AppCompatActivity {
         
     }
 
+    public void initialize(){
+        mAuth = FirebaseAuth.getInstance();
+        sharedData = new SharedData(getApplicationContext());
+        helper = new Helper(getApplicationContext());
+        keyguardManager = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
+    }
+
     @Override
     public void onBackPressed(){
         finishAffinity();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK && requestCode==CODE_AUTHENTICATION_VERIFICATION)
+        {
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this, "Failure: Unable to verify user's identity", Toast.LENGTH_SHORT).show();
+            finishAffinity();
+        }
+    }
+
     public void checkLoggedIn(){
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            UserEntity userEntity = sd.getUserEntity();
-            if(userEntity.getType().equals("inspection")){
-                i = new Intent(getApplicationContext(), InspectionMenuActivity.class);
-                startActivity(i);
-                finish();
+        if(sharedData.isLoggedIn()){
+            if(keyguardManager.isKeyguardSecure()) {
+                intent = keyguardManager.createConfirmDeviceCredentialIntent("Authentication","Please Authenticate yourself to the app");
+                startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
             }
-                else{
-                i = new Intent(getApplicationContext(), TrainSearchActivity.class);
-                startActivity(i);
-                finish();
+            else {
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         }
         else{
-            i = new Intent(this,LoginActivity.class);
-            startActivity(i);
+            intent = new Intent(this,LoginActivity.class);
+            startActivity(intent);
         }
     }
 }
