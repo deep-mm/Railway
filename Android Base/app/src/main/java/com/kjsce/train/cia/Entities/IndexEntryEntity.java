@@ -34,6 +34,13 @@ public class IndexEntryEntity
         this.subtype = subtype;
     }
 
+    public IndexEntryEntity(String id,IdEntity idEntity){
+        this.id = id;
+        this.problemStatus = idEntity.isProblemStatus();
+        this.numberOfCards = idEntity.getNumberOfCards();
+        this.subtype = idEntity.getSubtype();
+    }
+
     public boolean isProblemStatus() {
         return problemStatus;
     }

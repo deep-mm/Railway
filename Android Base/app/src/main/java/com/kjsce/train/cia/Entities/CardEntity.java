@@ -15,19 +15,6 @@ public class CardEntity
     public CardEntity() {
     }
 
-    public CardEntity(String dateTime, String sender, String trainNumber) {
-        this.dateTime = dateTime;
-        this.sender = sender;
-        this.trainNumber = trainNumber;
-    }
-
-    public CardEntity(String dateTime, String sender, String trainNumber, String comment) {
-        this.dateTime = dateTime;
-        this.sender = sender;
-        this.trainNumber = trainNumber;
-        this.comment = comment;
-    }
-
     public CardEntity(String dateTime, String sender, String trainNumber, String placeOfInspection, List<String> image, List<String> audio, String comment) {
         this.dateTime = dateTime;
         this.sender = sender;

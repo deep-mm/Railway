@@ -35,9 +35,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
-import com.kjsce.train.cia.Entity.TrainEntity;
-import com.kjsce.train.cia.Entity.UserEntity;
+import com.kjsce.train.cia.Entities.UserEntity;
+import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.TrainListUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity
     private View headerView;
     private TextView name, designation, mobile;
     private SearchView searchView;
-    private ArrayList<String> train_list;
-    private ArrayList<String> data1;
-    private ArrayList<String> allTrains;
+    private List<String> train_list;
+    private List<String> data1;
+    private List<String> allTrains;
     private ImageButton addButton;
     private Intent intent;
     private TrainAdapter trainAdapter;
@@ -68,11 +69,17 @@ public class MainActivity extends AppCompatActivity
     private String placeOfInspection, searchBoxValue, trainNumber, trainName;
     private RecyclerView details;
     private MaterialDialog materialDialog;
+    private TrainListUtility trainListUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
+        details = (RecyclerView) findViewById(R.id.details);
+        details.setLayoutManager(mlayoutmanager);
+        details.setItemAnimator(new DefaultItemAnimator());
 
         initialize();
 
@@ -87,24 +94,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.creport);
 
-        name.setText("Deep Mehta");
-        designation.setText("CRPF");
-        mobile.setText("+91 9004096152");
+        userEntity = sharedData.getUserEntity();
+        name.setText(userEntity.getName());
+        designation.setText(userEntity.getDesignation());
+        mobile.setText(userEntity.getMobileNumber());
 
-        //TODO: Get list of all trains from database
-        //train_list = sharedData.getTrainList();
-        train_list.add("123456 Rajdhani");
-        train_list.add("654321 Gareebrath");
-
-        allTrains = train_list;
         searchView.setOnQueryTextListener(this);
 
-        details = (RecyclerView) findViewById(R.id.details);
         trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
-        RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
-        details.setLayoutManager(mlayoutmanager);
         details.setAdapter(trainAdapter);
-        details.setItemAnimator(new DefaultItemAnimator());
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +165,19 @@ public class MainActivity extends AppCompatActivity
         addButton = (ImageButton) findViewById(R.id.button_add);
         data1 = new ArrayList<String>();
         searchBoxValue = "";
+
+        onProgressStart();
+        trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
+            @Override
+            public void OnDataChenged(List<String> newTrainList) {
+                sharedData.setTrainList(newTrainList);
+                train_list = newTrainList;
+                allTrains = train_list;
+                trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
+                details.setAdapter(trainAdapter);
+                onProgressStop();
+            }
+        });
 
     }
 

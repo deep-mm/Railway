@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Adapter.NotificationsAdapter;
+import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Notifications extends AppCompatActivity {
     private SharedData sharedData;
     private Helper helper;
     private NotificationsAdapter notificationsAdapter;
-    private ArrayList<DetailedCard> detailedCards;
+    private ArrayList<CardEntity> detailedCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +35,6 @@ public class Notifications extends AppCompatActivity {
         setContentView(R.layout.activity_notifications);
 
         initialize();
-
-        DetailedCard detailedCard = new DetailedCard();
-        detailedCard.setType("Hello");
-        detailedCard.setSubmittedBy("23/11/18");
-        detailedCards.add(detailedCard);
 
         final RecyclerView details = (RecyclerView) findViewById(R.id.details);
         notificationsAdapter = new NotificationsAdapter(detailedCards, Notifications.this);
@@ -85,7 +81,7 @@ public class Notifications extends AppCompatActivity {
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         clearButton = (ImageButton) findViewById(R.id.clear_button);
-        detailedCards = new ArrayList<DetailedCard>();
+        detailedCards = new ArrayList<CardEntity>();
     }
 
     public void onProgressStart(){

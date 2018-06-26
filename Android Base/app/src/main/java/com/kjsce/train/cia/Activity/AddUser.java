@@ -49,7 +49,7 @@ public class AddUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 name_text = name.getText().toString();
-                mobile_text = mobile.getText().toString();
+                mobile_text = "+91"+mobile.getText().toString();
                 designation_text = designation.getText().toString();
 
                 if(name_text.isEmpty() || mobile_text.isEmpty() || designation_text.isEmpty()){

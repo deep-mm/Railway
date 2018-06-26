@@ -29,7 +29,6 @@ public class SplashActivity extends AppCompatActivity {
     private KeyguardManager keyguardManager;
     private static int CODE_AUTHENTICATION_VERIFICATION=241;
     public static UserUtility userUtility;
-    public static TrainListUtility trainListUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,24 +101,18 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void checkLoggedIn(){
+        userUtility = new UserUtility(new OnUserListChangeListener() {
+            @Override
+            public void OnDataChanged(List<String> newUserList) {
+                sharedData.setUserList(newUserList);
+            }
+        });
         if(sharedData.isLoggedIn()){
             if(keyguardManager.isKeyguardSecure()) {
                 intent = keyguardManager.createConfirmDeviceCredentialIntent("Authentication","Please Authenticate yourself to the app");
                 startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
             }
             else {
-                userUtility = new UserUtility(new OnUserListChangeListener() {
-                    @Override
-                    public void OnDataChanged(List<String> newUserList) {
-                        sharedData.setUserList(newUserList);
-                    }
-                });
-                trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
-                    @Override
-                    public void OnDataChenged(List<String> newTrainList) {
-                        sharedData.setTrainList(newTrainList);
-                    }
-                });
                 intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }

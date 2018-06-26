@@ -25,6 +25,7 @@ public class IdUtility
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.onIdListChanged(indexEntryEntities);
             }
 
             @Override
@@ -38,8 +39,9 @@ public class IdUtility
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
                 String id = dataSnapshot.getKey();
-                indexEntryEntities.add(new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype()));
-                listener.onIdAdded(idEntity);
+                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype());
+                indexEntryEntities.add(indexEntryEntity);
+                listener.onIdAdded(indexEntryEntity);
             }
 
             @Override
@@ -54,7 +56,7 @@ public class IdUtility
                     indexEntryEntities.get(i).setNumberOfCards(indexEntryEntity.getNumberOfCards());
                     indexEntryEntities.get(i).setProblemStatus(indexEntryEntity.isProblemStatus());
                 }
-                listener.onIdChanged(idEntity);
+                listener.onIdChanged(indexEntryEntity);
             }
 
             @Override
@@ -63,7 +65,7 @@ public class IdUtility
                 String id = dataSnapshot.getKey();
                 IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype());
                 indexEntryEntities.remove(indexEntryEntity);
-                listener.onIdRemoved(idEntity);
+                listener.onIdRemoved(indexEntryEntity);
             }
 
             @Override

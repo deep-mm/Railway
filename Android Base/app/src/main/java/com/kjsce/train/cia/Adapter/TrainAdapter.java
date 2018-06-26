@@ -16,14 +16,14 @@ import com.andexert.library.RippleView;
 import com.kjsce.train.cia.Activity.CoachSearch;
 import com.kjsce.train.cia.Activity.SelectType;
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder>{
-    private final ArrayList<String> Mvalues;
+    private final List<String> Mvalues;
     Context context;
     String placeOfInspection, type;
     Intent intent;
@@ -34,7 +34,7 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder>{
 
     }
 
-    public TrainAdapter(ArrayList mvalues, Context c, String type) {
+    public TrainAdapter(List mvalues, Context c, String type) {
         this.Mvalues = mvalues;
         this.context = c;
         this.type = type;

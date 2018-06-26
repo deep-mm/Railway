@@ -35,12 +35,12 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Entities.CardEntity;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
-import com.kjsce.train.cia.Entity.Problem.CoachExteriorProblem;
-import com.kjsce.train.cia.Entity.Problem.CoachInteriorAmenitiesProblem;
-import com.kjsce.train.cia.Entity.Problem.CoachInteriorCleanProblem;
-import com.kjsce.train.cia.Entity.Problem.ToiletProblem;
+import com.kjsce.train.cia.Entities.CardReferenceEntity;
+import com.kjsce.train.cia.Entities.IdReferenceEntity;
+import com.kjsce.train.cia.Listener.AddCardListner;
+import com.kjsce.train.cia.Listener.CardListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.CardUtility;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.io.ByteArrayOutputStream;
@@ -64,9 +64,9 @@ public class CardDetails extends AppCompatActivity {
     private Spinner subTypeSpinner;
     private Helper helper;
     private CardDetailsAdapter cardDetailsAdapter;
-    private ArrayList<CardEntity> detailedCards;
+    private ArrayList<CardEntity> cardEntities;
     private String audioFilePath, imageFilePath, text, subTypeSelected, subType, timeStamp;
-    private String userName,trainNumber,placeOfInspection;
+    private String userName,trainNumber,placeOfInspection,bogeyNumber,problem, id;
     private List<String> audio,image;
     private Uri filePath;
     private Boolean flag;
@@ -75,6 +75,7 @@ public class CardDetails extends AppCompatActivity {
     private ArrayList<String> subTypes;
     private MaterialDialog materialDialog;
     private Boolean flag_subType;
+    private CardUtility cardUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class CardDetails extends AppCompatActivity {
         }
 
         final RecyclerView details = (RecyclerView) findViewById(R.id.details);
-        cardDetailsAdapter = new CardDetailsAdapter(detailedCards, CardDetails.this);
+        cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         details.setLayoutManager(mlayoutmanager);
         details.setAdapter(cardDetailsAdapter);
@@ -134,8 +135,13 @@ public class CardDetails extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-                CardEntity cardEntity = new CardEntity(timeStamp,
-                        );
+                CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,null,null,text);
+                cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
+                    @Override
+                    public void onCompleteTask() {
+                        //TODO: Uploaded
+                    }
+                });
             }
         });
 
@@ -202,6 +208,7 @@ public class CardDetails extends AppCompatActivity {
             subTypes.clear();
             subTypes.add(subType);
             subTypeSpinner.setEnabled(false);
+            id = getIntent().getExtras().getString("id");
         }
     }
 
@@ -241,17 +248,54 @@ public class CardDetails extends AppCompatActivity {
         sendButton = (ImageView) findViewById(R.id.send_button);
         textBox = (EditText) findViewById(R.id.textBox);
         backButton = (ImageButton) findViewById(R.id.back_button);
-        detailedCards = new ArrayList<CardEntity>();
+        cardEntities = new ArrayList<CardEntity>();
         subTypes = new ArrayList<String>();
         subTypeSpinner = (Spinner) findViewById(R.id.sub_type_spinner);
         subTypeSelected = "";
 
         audio = new ArrayList<String>();
         image = new ArrayList<String>();
-        userName = sharedData.getUserEntity().getName();
+        //userName = sharedData.getUserEntity().getName();
         placeOfInspection = sharedData.getPlaceOfInspection();
-        String train[] = trainNumber.split("\\s+");
-        trainNumber = train[0];
+        trainNumber = sharedData.getTrain();
+        bogeyNumber = sharedData.getBogie();
+        problem = sharedData.getType();
+        id = "123";
+
+        if(getIntent().hasExtra("flag")){
+            flag_subType = getIntent().getExtras().getBoolean("flag");
+        }
+
+        if(!flag_subType){
+            subType = getIntent().getExtras().getString("subType");
+            subTypes.clear();
+            subTypes.add(subType);
+            subTypeSpinner.setEnabled(false);
+            id = getIntent().getExtras().getString("id");
+        }
+
+        cardUtility = new CardUtility(new IdReferenceEntity(bogeyNumber, problem, id), new CardListener() {
+            @Override
+            public void onCardAdded(CardEntity cardEntity) {
+
+            }
+
+            @Override
+            public void onCardRemoved(CardEntity cardEntity) {
+
+            }
+
+            @Override
+            public void onDataChanged(ArrayList<CardEntity> cardEntity) {
+                cardEntities = cardEntity;
+                cardDetailsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCardChanged(CardEntity cardEntity) {
+
+            }
+        });
     }
 
     public int getPosition(String type){
@@ -295,10 +339,6 @@ public class CardDetails extends AppCompatActivity {
                 getInputName();
                 System.out.println("File Path: "+audioFilePath);
                 //Create an object with audio file path in it
-                DetailedCard detailedCard = new DetailedCard();
-                detailedCard.setComment(audioFilePath);
-                detailedCards.add(detailedCard);
-                cardDetailsAdapter.notifyDataSetChanged();
 
             } else if (resultCode == RESULT_CANCELED) {
                 // Oops! User has canceled the recording
@@ -348,7 +388,7 @@ public class CardDetails extends AppCompatActivity {
         ArrayList<String> type = new ArrayList<String>();
         switch(problem){
 
-            case "Toilets":
+            /*case "Toilets":
                 return (new ToiletProblem().getTypes());
 
             case "Coach Interior Amenities":
@@ -358,7 +398,7 @@ public class CardDetails extends AppCompatActivity {
                 return (new CoachInteriorCleanProblem().getTypes());
 
             case "Coach Exterior":
-                return (new CoachExteriorProblem().getTypes());
+                return (new CoachExteriorProblem().getTypes());*/
 
             default:
                 return type;
@@ -486,5 +526,6 @@ public class CardDetails extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        cardUtility.detachListner();
     }
 }

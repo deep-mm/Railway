@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.UserEntity;
+import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;

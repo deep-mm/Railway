@@ -13,7 +13,6 @@ import com.andexert.library.RippleView;
 import com.kjsce.train.cia.Activity.CardsActivity;
 import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;

@@ -12,6 +12,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Entities.UserEntity;
+import com.kjsce.train.cia.Listener.GetUserListener;
 import com.kjsce.train.cia.Utilities.UserUtility;
 
 import java.util.ArrayList;
@@ -66,15 +67,24 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 FirebaseUser user = mAuth.getCurrentUser();
-                users = sharedData.getUserList();
+                //users = sharedData.getUserList();
+                users.add("+919167794482");
                 users.add("+919999999999");
                 if(users.contains(user.getPhoneNumber())){
                     sharedData.isLoggedIn(true);
                     //TODO: Get user entity by mobile number and store in sharedData
-                    //sharedData.setUserEntity(userEntity);
-                    startService(new Intent(this, BackgroundService.class));
-                    intent = new Intent(getApplicationContext(),MainActivity.class);
-                    startActivity(intent);
+                    onProgressStart();
+                    SplashActivity.userUtility.getUser(user.getPhoneNumber(), new GetUserListener() {
+                        @Override
+                        public void onCompleteTask(UserEntity userEntity) {
+                            System.out.println("UserEntity: "+userEntity);
+                            sharedData.setUserEntity(userEntity);
+                            onProgressStop();
+                            intent = new Intent(getApplicationContext(),MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    //startService(new Intent(this, BackgroundService.class));
                 }
                 else{
                     logout();

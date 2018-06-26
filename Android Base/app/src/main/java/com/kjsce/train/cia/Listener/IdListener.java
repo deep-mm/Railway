@@ -9,9 +9,9 @@ public interface IdListener
 {
     void onIdListChanged(ArrayList<IndexEntryEntity> idList);
 
-    void onIdAdded(IdEntity idEntity);
+    void onIdAdded(IndexEntryEntity indexEntryEntity);
 
-    void onIdRemoved(IdEntity idEntity);
+    void onIdRemoved(IndexEntryEntity indexEntryEntity);
 
-    void onIdChanged(IdEntity idEntity);
+    void onIdChanged(IndexEntryEntity indexEntryEntity);
 }

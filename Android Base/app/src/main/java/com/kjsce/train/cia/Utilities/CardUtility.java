@@ -11,6 +11,7 @@ import com.kjsce.train.cia.Entities.CardReferenceEntity;
 import com.kjsce.train.cia.Entities.IdEntity;
 import com.kjsce.train.cia.Entities.IdReferenceEntity;
 import com.kjsce.train.cia.Listener.AddAudioListener;
+import com.kjsce.train.cia.Listener.AddCardListner;
 import com.kjsce.train.cia.Listener.AddImageListener;
 import com.kjsce.train.cia.Listener.CardListener;
 
@@ -22,16 +23,18 @@ public class CardUtility
     private DatabaseReference mTrainDatabaseReference;
     private ImageUtility imageUtility = new ImageUtility();
     private AudioUtility audioUtility = new AudioUtility();
+    private ChildEventListener childEventListener;
+    private ValueEventListener valueEventListener;
 
     private ArrayList<CardEntity> cardEntities = new ArrayList<>();
 
     public CardUtility(IdReferenceEntity idReferenceEntity,final CardListener listener){
         createReference(idReferenceEntity);
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                listener.onDataChanged(cardEntities);
             }
 
             @Override
@@ -40,7 +43,7 @@ public class CardUtility
             }
         };
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 CardEntity cardEntity = dataSnapshot.getValue(CardEntity.class);
@@ -152,7 +155,7 @@ public class CardUtility
         });
     }
 
-    public void uploadCard(final CardEntity cardEntity, final CardReferenceEntity cardReferenceEntity){
+    public void uploadCard(final CardEntity cardEntity, final CardReferenceEntity cardReferenceEntity, AddCardListner listner){
         createIdIndex(cardReferenceEntity);
         createReference(cardEntity,cardReferenceEntity);
         imageUtility.uploadImage(cardEntity.getImage(), cardReferenceEntity.getBogeyNumber(), new AddImageListener() {
@@ -164,6 +167,7 @@ public class CardUtility
                     public void onCompleteTask(List<String> audioS) {
                         cardEntity.setAudio(audioS);
                         mTrainDatabaseReference.setValue(cardEntity);
+                        listner.onCompleteTask();
                     }
                 });
             }
@@ -179,5 +183,10 @@ public class CardUtility
 
     public ArrayList<CardEntity> getCardsList(){
         return cardEntities;
+    }
+
+    public void detachListner(){
+        mTrainDatabaseReference.removeEventListener(childEventListener);
+        mTrainDatabaseReference.removeEventListener(valueEventListener);
     }
 }

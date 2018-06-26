@@ -13,8 +13,12 @@ import android.widget.TextView;
 
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entities.IdEntity;
+import com.kjsce.train.cia.Entities.IndexEntryEntity;
+import com.kjsce.train.cia.Entities.ProblemReferenceEntity;
+import com.kjsce.train.cia.Listener.IdListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.IdUtility;
 
 import java.util.ArrayList;
 
@@ -29,8 +33,10 @@ public class CardsActivity extends AppCompatActivity {
     private SharedData sharedData;
     private Helper helper;
     private CardsAdapter cardsAdapter;
-    private ArrayList<DetailedCard> detailedCards;
+    private ArrayList<IndexEntryEntity> indexEntryEntities;
     private Intent intent;
+    private IdUtility idUtility;
+    private RecyclerView details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +47,8 @@ public class CardsActivity extends AppCompatActivity {
 
         bogieNumber.setText("Coach: "+sharedData.getBogie());
 
-        DetailedCard detailedCard = new DetailedCard();
-        detailedCard.setType("Cleanliness");
-        detailedCard.setSubmittedBy("11/1/18 23:19:09");
-        detailedCards.add(detailedCard);
-
-        final RecyclerView details = (RecyclerView) findViewById(R.id.details);
-        cardsAdapter = new CardsAdapter(detailedCards, CardsActivity.this);
+        details = (RecyclerView) findViewById(R.id.details);
+        cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         details.setLayoutManager(mlayoutmanager);
         details.setAdapter(cardsAdapter);
@@ -69,29 +70,28 @@ public class CardsActivity extends AppCompatActivity {
             }
         });
 
-        swipeToAction = new SwipeToAction(details, new SwipeToAction.SwipeListener<DetailedCard>() {
+        swipeToAction = new SwipeToAction(details, new SwipeToAction.SwipeListener<IndexEntryEntity>() {
             @Override
-            public boolean swipeLeft(DetailedCard itemData) {
-                //TODO: set status of card to solved and remove from recycler view list
+            public boolean swipeLeft(IndexEntryEntity itemData) {
                 return false;
             }
 
             @Override
-            public boolean swipeRight(DetailedCard itemData) {
+            public boolean swipeRight(IndexEntryEntity itemData) {
                 return false;
             }
 
             @Override
-            public void onClick(DetailedCard itemData) {
+            public void onClick(IndexEntryEntity itemData) {
                 //TODO: set itemData in sharedData to access in CardDetails
                 intent = new Intent(getApplicationContext(),CardDetails.class);
                 intent.putExtra("flag",false);
-                intent.putExtra("subType","Cleanliness");
-                startActivity(intent);
+                intent.putExtra("subType",itemData.getSubtype());
+                intent.putExtra("id",itemData.getId());
             }
 
             @Override
-            public void onLongClick(DetailedCard itemData) {
+            public void onLongClick(IndexEntryEntity itemData) {
 
             }
 
@@ -102,9 +102,36 @@ public class CardsActivity extends AppCompatActivity {
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         backButton = (ImageButton) findViewById(R.id.back_button);
-        detailedCards = new ArrayList<DetailedCard>();
+        indexEntryEntities = new ArrayList<IndexEntryEntity>();
         addButton = (ImageButton) findViewById(R.id.add_button);
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
+
+        idUtility = new IdUtility(new ProblemReferenceEntity(sharedData.getBogie(), sharedData.getType()), new IdListener() {
+            @Override
+            public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
+                indexEntryEntities = idList;
+                System.out.println("indexEntryEntities: "+indexEntryEntities.size());
+                cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
+                details.setAdapter(cardsAdapter);
+            }
+
+            @Override
+            public void onIdAdded(IndexEntryEntity indexEntryEntity) {
+
+            }
+
+            @Override
+            public void onIdRemoved(IndexEntryEntity indexEntryEntity) {
+
+            }
+
+            @Override
+            public void onIdChanged(IndexEntryEntity indexEntryEntity) {
+
+            }
+
+
+        });
     }
 
     @Override

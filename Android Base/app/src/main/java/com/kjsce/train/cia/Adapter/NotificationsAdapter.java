@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import co.dift.ui.SwipeToAction;
 
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.ViewHolder>{
-    private final ArrayList<DetailedCard> Mvalues;
+    private final ArrayList<CardEntity> Mvalues;
     Context context;
     SharedData sharedData;
 
@@ -43,8 +43,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder (final NotificationsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        holder.notificationText.setText(Mvalues.get(position).getType());
-        holder.notificationDate.setText(Mvalues.get(position).getSubmittedBy());
+        holder.notificationText.setText(Mvalues.get(position).getComment());
+        holder.notificationDate.setText(Mvalues.get(position).getDateTime());
     }
 
     @Override

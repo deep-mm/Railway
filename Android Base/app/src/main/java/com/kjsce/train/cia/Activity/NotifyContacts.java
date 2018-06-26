@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
-import com.kjsce.train.cia.Entity.UserEntity;
+import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
