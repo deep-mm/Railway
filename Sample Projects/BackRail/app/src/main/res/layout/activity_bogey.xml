@@ -72,4 +72,13 @@
         android:onClick="getIdList"
         android:text="Get IDS" />
 
+    <Button
+        android:id="@+id/changeStatusButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/addCardButton"
+        android:layout_alignTop="@+id/getIdListButton"
+        android:onClick="changeStatus"
+        android:text="Change Status" />
+
 </RelativeLayout>

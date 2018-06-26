@@ -79,7 +79,7 @@ public class IndexEntryEntity
     @Override
     public boolean equals(Object o){
         if(o instanceof IndexEntryEntity){
-            if(this.id.equals(((IndexEntryEntity) o).getId()) && this.problemStatus == ((IndexEntryEntity) o).isProblemStatus() && this.getSubtype().equals(((IndexEntryEntity) o).getSubtype()))
+            if(this.id.equals(((IndexEntryEntity) o).getId()) &&  this.getSubtype().equals(((IndexEntryEntity) o).getSubtype()))
                 return true;
             return false;
         }
@@ -87,4 +87,5 @@ public class IndexEntryEntity
             return false;
         }
     }
+
 }

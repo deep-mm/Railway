@@ -1,34 +1,24 @@
 package com.kjsce.train.cia.Activity;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.kjsce.train.cia.Entities.BogeyEntity;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Entities.CardReferenceEntity;
+import com.kjsce.train.cia.Entities.IdEntity;
 import com.kjsce.train.cia.Entities.IdReferenceEntity;
 import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.Entities.ProblemReferenceEntity;
-import com.kjsce.train.cia.Listener.AddImageListener;
-import com.kjsce.train.cia.Listener.AddSingleImageUploadListener;
 import com.kjsce.train.cia.Listener.CardListener;
-import com.kjsce.train.cia.Listener.GetImageListener;
 import com.kjsce.train.cia.Listener.IdListener;
-import com.kjsce.train.cia.Listener.OnCardListChangeListener;
 import com.kjsce.train.cia.R;
-import com.kjsce.train.cia.Utilities.BogeyUtility;
 import com.kjsce.train.cia.Utilities.CardUtility;
 import com.kjsce.train.cia.Utilities.IdUtility;
-import com.kjsce.train.cia.Utilities.ImageUtility;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
 public class BogeyActivity extends AppCompatActivity {
 
@@ -59,9 +49,22 @@ public class BogeyActivity extends AppCompatActivity {
     private IdUtility idUtility = new IdUtility(new ProblemReferenceEntity("1511092", "Toilet"), new IdListener() {
         @Override
         public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
-            System.out.println("List changed");
-            for(int i=0;i<idList.size();i++)
-                System.out.println(idList.get(i));
+
+        }
+
+        @Override
+        public void onIdAdded(IdEntity idEntity) {
+            System.out.println("Id added: " + idEntity);
+        }
+
+        @Override
+        public void onIdRemoved(IdEntity idEntity) {
+            System.out.println("Id removec: " + idEntity);
+        }
+
+        @Override
+        public void onIdChanged(IdEntity idEntity) {
+            System.out.println("Id changed: " +idEntity);
         }
     });
     /*private BogeyUtility bogeyUtility = new BogeyUtility("1511093", new OnCardListChangeListener() {
@@ -83,11 +86,11 @@ public class BogeyActivity extends AppCompatActivity {
         Date date = new Date();
         String dateTime = formatter.format(date);
 
-        cardUtility.uploadCard(new CardEntity(dateTime,"Amey","1511092t","Hello"), new CardReferenceEntity("1511092","Toilet","id1",false,"subtype1"));
+        cardUtility.uploadCard(new CardEntity(dateTime,"Amey","1511092t","Hello"), new CardReferenceEntity("1511092","Toilet","id2",false,"subtype1"));
     }
 
     public void removeCard(View view){
-        cardUtility.removeCard(new CardEntity("24062018_22:25:06","Amey","1511092t"),new CardReferenceEntity("1511092","Toilet","3",false,"subtype1"));
+        cardUtility.removeCard(new CardEntity("25062018_16:41:35","Amey","1511092t"),new CardReferenceEntity("1511092","Toilet","id2",false,"subtype1"));
     }
 
     public void getCards(View view){
@@ -104,6 +107,10 @@ public class BogeyActivity extends AppCompatActivity {
         for(int i=0;i<idList.size();i++){
             System.out.println(idList.get(i));
         }
+    }
+
+    public void changeStatus(View view){
+        idUtility.changeProblemStatus(new IdReferenceEntity("1511092","Toilet","id2"),true);
     }
 
     /*public void getCards(View view){

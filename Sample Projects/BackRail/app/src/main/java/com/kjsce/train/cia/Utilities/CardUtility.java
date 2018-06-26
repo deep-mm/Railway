@@ -8,9 +8,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Entities.CardReferenceEntity;
+import com.kjsce.train.cia.Entities.IdEntity;
 import com.kjsce.train.cia.Entities.IdReferenceEntity;
-import com.kjsce.train.cia.Entities.IndexEntity;
-import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.Listener.AddAudioListener;
 import com.kjsce.train.cia.Listener.AddImageListener;
 import com.kjsce.train.cia.Listener.CardListener;
@@ -29,12 +28,10 @@ public class CardUtility
     public CardUtility(IdReferenceEntity idReferenceEntity,final CardListener listener){
         createReference(idReferenceEntity);
 
-        //listener.onDataChanged(cardEntities);
-
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //listener.onDataChanged(cardEntities);
+
             }
 
             @Override
@@ -104,20 +101,20 @@ public class CardUtility
         final DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Bogeys")
                 .child(cardReferenceEntity.getBogeyNumber())
                 .child(cardReferenceEntity.getProblem())
-                .child("Index");
+                .child("Index")
+                .child(cardReferenceEntity.getId());
 
         temp.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                IndexEntity index = dataSnapshot.getValue(IndexEntity.class);
-                if(index == null){
-                    index = new IndexEntity(new ArrayList<IndexEntryEntity>());
+                IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
+                if(idEntity != null){
+                    idEntity.setNumberOfCards(idEntity.getNumberOfCards() + 1);
                 }
-                if(index.addIndex(new IndexEntryEntity(cardReferenceEntity.getId(),cardReferenceEntity.isProblemStatus(),cardReferenceEntity.getSubtype()))) {
-                    temp.setValue(index);
-                    System.out.println("Index: " + index);
+                else{
+                    idEntity = new IdEntity(cardReferenceEntity.getSubtype(),cardReferenceEntity.isProblemStatus(),1);
                 }
-
+                temp.setValue(idEntity);
             }
 
             @Override
@@ -125,23 +122,27 @@ public class CardUtility
 
             }
         });
+
     }
 
     private void removeIdIndex(final CardReferenceEntity cardReferenceEntity){
         final DatabaseReference temp = FirebaseDatabase.getInstance().getReference().child("Bogeys")
                 .child(cardReferenceEntity.getBogeyNumber())
                 .child(cardReferenceEntity.getProblem())
-                .child("Index");
+                .child("Index")
+                .child(cardReferenceEntity.getId());
 
         temp.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                IndexEntity index = dataSnapshot.getValue(IndexEntity.class);
-                if(index == null){
-                    index = new IndexEntity(new ArrayList<IndexEntryEntity>());
+                IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
+                if(idEntity != null){
+                    idEntity.setNumberOfCards(idEntity.getNumberOfCards() - 1);
+                    if(idEntity.getNumberOfCards() == 0)
+                        temp.setValue(null);
+                    else
+                        temp.setValue(idEntity);
                 }
-                if(index.removeIndex(new IndexEntryEntity(cardReferenceEntity.getId(),cardReferenceEntity.isProblemStatus())))
-                    temp.setValue(index);
             }
 
             @Override

@@ -6,18 +6,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.kjsce.train.cia.Entities.BogeyEntity;
 import com.kjsce.train.cia.Entities.TrainEntity;
-import com.kjsce.train.cia.Listener.AddBogeyListener;
-import com.kjsce.train.cia.Listener.AddTrainListener;
-import com.kjsce.train.cia.Listener.DeleteBogeyListener;
-import com.kjsce.train.cia.Listener.GetBogeyListListener;
-import com.kjsce.train.cia.Listener.GetTrainListListener;
 import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
-import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TrainUtility
 {

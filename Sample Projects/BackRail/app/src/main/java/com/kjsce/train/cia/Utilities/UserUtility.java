@@ -72,7 +72,6 @@ public class UserUtility {
 
         mUserListDatabaseReference.addValueEventListener(valueEventListener);
         mUserListDatabaseReference.addChildEventListener(childEventListener);
-
     }
 
     public UserUtility(OnUserListChangeListener onUserListChangeListener) {
@@ -131,7 +130,5 @@ public class UserUtility {
             }
         });
     }
-
-
 }
 

@@ -6,11 +6,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kjsce.train.cia.Entities.TrainEntity;
-import com.kjsce.train.cia.Listener.AddBogeyListener;
-import com.kjsce.train.cia.Listener.AddTrainListener;
-import com.kjsce.train.cia.Listener.DeleteBogeyListener;
-import com.kjsce.train.cia.Listener.GetBogeyListListener;
-import com.kjsce.train.cia.Listener.GetTrainListListener;
 import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
 import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
 import com.kjsce.train.cia.R;
