@@ -11,10 +11,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.kjsce.train.cia.Entity.UserEntity;
+import com.kjsce.train.cia.Entities.UserEntity;
+import com.kjsce.train.cia.Utilities.UserUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private int RC_SIGN_IN = 1000;
-    private ArrayList<String> users;
+    private List<String> users;
     private Intent intent;
     private UserEntity userEntity;
     private MaterialDialog materialDialog;
@@ -64,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 FirebaseUser user = mAuth.getCurrentUser();
+                users = sharedData.getUserList();
+                users.add("+919999999999");
                 if(users.contains(user.getPhoneNumber())){
                     sharedData.isLoggedIn(true);
                     //TODO: Get user entity by mobile number and store in sharedData
@@ -103,8 +107,6 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         helper = new Helper(getApplicationContext());
         users = new ArrayList<String>();
-        users.add("+919999999999");
-        //TODO: Get list of all user mobile numbers from database
     }
 
     @Override

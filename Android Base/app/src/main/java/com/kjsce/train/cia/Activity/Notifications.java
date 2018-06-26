@@ -15,7 +15,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Adapter.NotificationsAdapter;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;

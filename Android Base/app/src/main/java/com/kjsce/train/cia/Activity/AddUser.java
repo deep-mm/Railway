@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -57,7 +58,11 @@ public class AddUser extends AppCompatActivity {
                 }
                 else {
                     submit_button.setProgress(1);
-                    //Update to database - Add User and on complete set progress to 0
+                    UserEntity userEntity = new UserEntity(name_text,designation_text,mobile_text);
+                    SplashActivity.userUtility.addUser(userEntity);
+                    submit_button.setProgress(100);
+                    intent = new Intent(getApplicationContext(),AddUser.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -82,6 +87,10 @@ public class AddUser extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        checkInternetConnection();
+    }
+
+    public void checkInternetConnection(){
         if(!helper.isNetworkConnected()){
             new MaterialDialog.Builder(AddUser.this)
                     .title("No Internet Connection")

@@ -10,7 +10,14 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
+import com.kjsce.train.cia.Listener.OnUserListChangeListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.TrainListUtility;
+import com.kjsce.train.cia.Utilities.TrainUtility;
+import com.kjsce.train.cia.Utilities.UserUtility;
+
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,6 +28,8 @@ public class SplashActivity extends AppCompatActivity {
     private Intent intent;
     private KeyguardManager keyguardManager;
     private static int CODE_AUTHENTICATION_VERIFICATION=241;
+    public static UserUtility userUtility;
+    public static TrainListUtility trainListUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +108,18 @@ public class SplashActivity extends AppCompatActivity {
                 startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
             }
             else {
+                userUtility = new UserUtility(new OnUserListChangeListener() {
+                    @Override
+                    public void OnDataChanged(List<String> newUserList) {
+                        sharedData.setUserList(newUserList);
+                    }
+                });
+                trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
+                    @Override
+                    public void OnDataChenged(List<String> newTrainList) {
+                        sharedData.setTrainList(newTrainList);
+                    }
+                });
                 intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }

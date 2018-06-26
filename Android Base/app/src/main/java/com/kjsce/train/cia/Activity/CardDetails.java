@@ -34,6 +34,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
+import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.Problem.CoachExteriorProblem;
 import com.kjsce.train.cia.Entity.Problem.CoachInteriorAmenitiesProblem;
@@ -47,6 +48,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder;
 import cafe.adriel.androidaudiorecorder.model.AudioChannel;
@@ -62,8 +64,10 @@ public class CardDetails extends AppCompatActivity {
     private Spinner subTypeSpinner;
     private Helper helper;
     private CardDetailsAdapter cardDetailsAdapter;
-    private ArrayList<DetailedCard> detailedCards;
-    private String audioFilePath, imageFilePath, text, subTypeSelected, subType;
+    private ArrayList<CardEntity> detailedCards;
+    private String audioFilePath, imageFilePath, text, subTypeSelected, subType, timeStamp;
+    private String userName,trainNumber,placeOfInspection;
+    private List<String> audio,image;
     private Uri filePath;
     private Boolean flag;
     private final int PICK_IMAGE_REQUEST = 10;
@@ -129,7 +133,9 @@ public class CardDetails extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                CardEntity cardEntity = new CardEntity(timeStamp,
+                        );
             }
         });
 
@@ -204,7 +210,8 @@ public class CardDetails extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             // DO THE CALCULATIONS HERE AND SHOW THE RESULT AS PER YOUR CALCULATIONS
-            if (!s.toString().isEmpty()) {
+            text = s.toString();
+            if (!text.isEmpty()) {
                 micButton.setVisibility(View.GONE);
                 cameraButton.setVisibility(View.GONE);
                 sendButton.setVisibility(View.VISIBLE);
@@ -234,10 +241,17 @@ public class CardDetails extends AppCompatActivity {
         sendButton = (ImageView) findViewById(R.id.send_button);
         textBox = (EditText) findViewById(R.id.textBox);
         backButton = (ImageButton) findViewById(R.id.back_button);
-        detailedCards = new ArrayList<DetailedCard>();
+        detailedCards = new ArrayList<CardEntity>();
         subTypes = new ArrayList<String>();
         subTypeSpinner = (Spinner) findViewById(R.id.sub_type_spinner);
         subTypeSelected = "";
+
+        audio = new ArrayList<String>();
+        image = new ArrayList<String>();
+        userName = sharedData.getUserEntity().getName();
+        placeOfInspection = sharedData.getPlaceOfInspection();
+        String train[] = trainNumber.split("\\s+");
+        trainNumber = train[0];
     }
 
     public int getPosition(String type){
@@ -250,7 +264,7 @@ public class CardDetails extends AppCompatActivity {
     }
 
     public void record() {
-        String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
         audioFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         audioFilePath += "/" + timeStamp + ".3gp";
         int color = getResources().getColor(R.color.colorPrimaryDark);

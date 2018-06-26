@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.Entity.BogeyEntity;
 import com.kjsce.train.cia.Entity.Card.DetailedCard;
 import com.kjsce.train.cia.Entity.Report.DetailedReport;
@@ -77,6 +78,18 @@ public class SharedData {
     public void setTrainList(List<String> train_list){
         String train = gson.toJson(train_list);
         editor.putString("train_list",train).commit();
+    }
+
+    public List<String> getUserList(){
+        String json = pref.getString("user_list", "");
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        List<String> user_list = gson.fromJson(json, listType);
+        return user_list;
+    }
+
+    public void setUserList(List<String> user_list){
+        String user = gson.toJson(user_list);
+        editor.putString("user_list",user).commit();
     }
 
     public List<String> getTrainList(){

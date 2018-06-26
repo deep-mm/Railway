@@ -3,16 +3,14 @@ package com.kjsce.train.cia.Entities;
 public class UserEntity {
     String name;
     String designation;
-    String lastLoginTime;
     String mobileNumber;
 
     public UserEntity() {
     }
 
-    public UserEntity(String name, String designation, String lastLoginTime, String mobileNumber) {
+    public UserEntity(String name, String designation, String mobileNumber) {
         this.name = name;
         this.designation = designation;
-        this.lastLoginTime = lastLoginTime;
         this.mobileNumber = mobileNumber;
     }
 
@@ -32,14 +30,6 @@ public class UserEntity {
         this.designation = designation;
     }
 
-    public String getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(String lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
     public String getMobileNumber() {
         return mobileNumber;
     }
@@ -53,7 +43,6 @@ public class UserEntity {
         return "UserEntity{" +
                 "name='" + name + '\'' +
                 ", designation='" + designation + '\'' +
-                ", lastLoginTime='" + lastLoginTime + '\'' +
                 ", mobileNumber='" + mobileNumber + '\'' +
                 '}';
     }
