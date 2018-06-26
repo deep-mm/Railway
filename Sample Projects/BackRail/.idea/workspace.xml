@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e943cf2-3fb8-4e2f-95af-0a12ae290d63" name="Default" comment="fix">
-      <change beforePath="" afterPath="$PROJECT_DIR$/../../Android Base/app/src/main/java/com/kjsce/train/cia/Listener/UserAuthListener.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
