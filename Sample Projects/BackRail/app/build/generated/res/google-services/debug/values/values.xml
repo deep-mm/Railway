@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">214743089150-s8l18tipi0n4mh8u0jdoludma3ll4bcl.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://ciaproject-9588d.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">214743089150</string>
+    <string name="google_api_key" translatable="false">AIzaSyAghVNQy8URTnAN2fSc6sEMm-otVnI7ebg</string>
+    <string name="google_app_id" translatable="false">1:214743089150:android:3e16c606c0600d6b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAghVNQy8URTnAN2fSc6sEMm-otVnI7ebg</string>
+    <string name="google_storage_bucket" translatable="false">ciaproject-9588d.appspot.com</string>
+    <string name="project_id" translatable="false">ciaproject-9588d</string>
+</resources>
