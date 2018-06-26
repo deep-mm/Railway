@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kjsce.train.cia.Entities.TrainEntity;
 import com.kjsce.train.cia.Entities.UserEntity;
+import com.kjsce.train.cia.Entities.UserNotificationEntity;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +105,30 @@ public class SharedData {
         String json = pref.getString("type_list", "");
         Type listType = new TypeToken<List<Boolean>>() {}.getType();
         List<Boolean> type_list = gson.fromJson(json, listType);
+        return type_list;
+    }
+
+    public void setUserEntityList(List<UserEntity> userEntityList){
+        String type = gson.toJson(userEntityList);
+        editor.putString("userEntityList",type).commit();
+    }
+
+    public List<UserEntity> getUserEntityList(){
+        String json = pref.getString("userEntityList", "");
+        Type listType = new TypeToken<List<UserEntity>>() {}.getType();
+        List<UserEntity> type_list = gson.fromJson(json, listType);
+        return type_list;
+    }
+
+    public void setNotificationEntityList(List<UserNotificationEntity> userEntityNotification){
+        String type = gson.toJson(userEntityNotification);
+        editor.putString("userEntityNotification",type).commit();
+    }
+
+    public List<UserNotificationEntity> getNotificationEntityList(){
+        String json = pref.getString("userEntityNotification", "");
+        Type listType = new TypeToken<List<UserNotificationEntity>>() {}.getType();
+        List<UserNotificationEntity> type_list = gson.fromJson(json, listType);
         return type_list;
     }
 

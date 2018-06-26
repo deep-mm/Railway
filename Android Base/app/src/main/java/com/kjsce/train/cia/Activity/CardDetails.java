@@ -134,12 +134,13 @@ public class CardDetails extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                onProgressStart();
                 timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
                 CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,null,null,text);
                 cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
                     @Override
                     public void onCompleteTask() {
-                        //TODO: Uploaded
+                        onProgressStop();
                     }
                 });
             }
@@ -336,7 +337,7 @@ public class CardDetails extends AppCompatActivity {
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
                 // Great! User has recorded and saved the audio file
-                getInputName();
+                getInputName("audio");
                 System.out.println("File Path: "+audioFilePath);
                 //Create an object with audio file path in it
 
@@ -352,7 +353,7 @@ public class CardDetails extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 imageFilePath = saveImage(bitmap);
-                getInputName();
+                getInputName("image");
                 System.out.println("File Path: "+imageFilePath);
             }
             catch (IOException e)
@@ -364,12 +365,12 @@ public class CardDetails extends AppCompatActivity {
                 && data != null && data.getData() != null) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageFilePath = saveImage(thumbnail);
-            getInputName();
+            getInputName("image");
             System.out.println("File Path: "+imageFilePath);
         }
     }
 
-    public void getInputName() {
+    public void getInputName(String flag) {
 
         new MaterialDialog.Builder(this)
                 .title("Description")
@@ -379,6 +380,30 @@ public class CardDetails extends AppCompatActivity {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         text = input.toString();
+                        onProgressStart();
+                        if(flag.equalsIgnoreCase("image")){
+                            timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                            image.add(imageFilePath);
+                            CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,image,null,text);
+                            cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
+                                @Override
+                                public void onCompleteTask() {
+                                    onProgressStop();
+                                }
+                            });
+                        }
+                        else{
+                            timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                            audio.add(audioFilePath);
+                            CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,null,audio,text);
+                            cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
+                                @Override
+                                public void onCompleteTask() {
+                                    onProgressStop();
+                                }
+                            });
+                        }
+
                     }
                 }).show();
     }

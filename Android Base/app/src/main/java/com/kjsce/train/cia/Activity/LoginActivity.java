@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.Listener.GetUserListener;
+import com.kjsce.train.cia.Listener.UserAuthListener;
 import com.kjsce.train.cia.Utilities.UserUtility;
 
 import java.util.ArrayList;
@@ -67,28 +68,23 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 FirebaseUser user = mAuth.getCurrentUser();
-                //users = sharedData.getUserList();
-                users.add("+919167794482");
-                users.add("+919999999999");
-                if(users.contains(user.getPhoneNumber())){
-                    sharedData.isLoggedIn(true);
-                    //TODO: Get user entity by mobile number and store in sharedData
-                    onProgressStart();
-                    SplashActivity.userUtility.getUser(user.getPhoneNumber(), new GetUserListener() {
-                        @Override
-                        public void onCompleteTask(UserEntity userEntity) {
-                            System.out.println("UserEntity: "+userEntity);
+                onProgressStart();
+                System.out.println("Phone: "+user.getPhoneNumber());
+                SplashActivity.userUtility.getUser(user.getPhoneNumber(), new GetUserListener() {
+                    @Override
+                    public void onCompleteTask(UserEntity userEntity) {
+                        if (userEntity != null) {
+                            sharedData.isLoggedIn(true);
+                            System.out.println("UserEntity: " + userEntity);
                             sharedData.setUserEntity(userEntity);
                             onProgressStop();
-                            intent = new Intent(getApplicationContext(),MainActivity.class);
+                            intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
+                        } else {
+                            logout();
                         }
-                    });
-                    //startService(new Intent(this, BackgroundService.class));
-                }
-                else{
-                    logout();
-                }
+                    }
+                });
             } else if (resultCode == RESULT_CANCELED) {
                 // Sign in was canceled by the user, finish the activity
                 finishAffinity();

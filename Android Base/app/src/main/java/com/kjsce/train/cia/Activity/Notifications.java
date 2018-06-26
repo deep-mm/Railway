@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Adapter.NotificationsAdapter;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -26,8 +27,9 @@ public class Notifications extends AppCompatActivity {
     private ImageButton backButton, clearButton;
     private SharedData sharedData;
     private Helper helper;
-    private NotificationsAdapter notificationsAdapter;
-    private ArrayList<CardEntity> detailedCards;
+    public static NotificationsAdapter notificationsAdapter;
+    public static RecyclerView details;
+    private ArrayList<UserNotificationEntity> detailedCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class Notifications extends AppCompatActivity {
 
         initialize();
 
-        final RecyclerView details = (RecyclerView) findViewById(R.id.details);
+        details = (RecyclerView) findViewById(R.id.details);
         notificationsAdapter = new NotificationsAdapter(detailedCards, Notifications.this);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         details.setLayoutManager(mlayoutmanager);
@@ -62,7 +64,7 @@ public class Notifications extends AppCompatActivity {
                             @Override
                             public void onClick(MaterialDialog dialog, DialogAction which) {
                                 detailedCards.clear();
-                                //TODO: delete all notifications from database
+                                BackgroundService.notificationUtility.clearNotification();
                                 notificationsAdapter.notifyDataSetChanged();
                             }
                         })
@@ -81,7 +83,7 @@ public class Notifications extends AppCompatActivity {
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         clearButton = (ImageButton) findViewById(R.id.clear_button);
-        detailedCards = new ArrayList<CardEntity>();
+        detailedCards = new ArrayList<UserNotificationEntity>();
     }
 
     public void onProgressStart(){

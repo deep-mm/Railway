@@ -12,10 +12,11 @@ import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CheckBoxAdapter.ViewHolder>{
-    private final ArrayList<UserEntity> Mvalues;
+    private final List<UserEntity> Mvalues;
     private Boolean isChecked;
     Context context;
 
@@ -24,7 +25,7 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
 
     }
 
-    public CheckBoxAdapter(ArrayList mvalues,Context c) {
+    public CheckBoxAdapter(List mvalues,Context c) {
         Mvalues = mvalues;
         context = c;
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -14,9 +15,11 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Entities.UserEntity;
+import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NotifyContacts extends AppCompatActivity {
 
@@ -24,7 +27,7 @@ public class NotifyContacts extends AppCompatActivity {
     private Helper helper;
     private ImageButton sendButton, backButton;
     private CheckBoxAdapter checkBoxAdapter;
-    private ArrayList<UserEntity> userEntities;
+    private List<UserEntity> userEntities;
     private MaterialDialog materialDialog;
     private Intent intent;
 
@@ -35,10 +38,7 @@ public class NotifyContacts extends AppCompatActivity {
 
         initialize();
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setName("Deep Mehta");
-        userEntity.setDesignation("CRPF");
-        userEntities.add(userEntity);
+        userEntities = SplashActivity.userUtility.getUserList();
 
         final RecyclerView details = (RecyclerView) findViewById(R.id.details);
         checkBoxAdapter = new CheckBoxAdapter(userEntities, NotifyContacts.this);
@@ -55,9 +55,15 @@ public class NotifyContacts extends AppCompatActivity {
         });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                //TODO: Update the notifications database
+                String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                String train = sharedData.getTrain(), sender = sharedData.getUserEntity().getName();
+                for(int i=0;i<userEntities.size();i++){
+                    UserNotificationEntity userNotificationEntity = new UserNotificationEntity(train,timeStamp,sender);
+                    BackgroundService.notificationUtility.sendNotification(userEntities.get(i).getMobileNumber(),userNotificationEntity);
+                }
                 intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
             }

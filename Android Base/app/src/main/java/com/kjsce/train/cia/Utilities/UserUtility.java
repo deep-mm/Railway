@@ -109,7 +109,8 @@ public class UserUtility {
     }
 
     public void getUser(String mobileNumber, final GetUserListener getUserListener) {
-        mUserListDatabaseReference.child(mobileNumber);
+        mUserListDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mobileNumber);
+
         mUserListDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

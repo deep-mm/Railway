@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.UserUtility;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class AddUser extends AppCompatActivity {
     private ActionProcessButton submit_button;
     private String name_text,mobile_text,designation_text;
     private Intent intent;
+    private UserUtility userUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class AddUser extends AppCompatActivity {
                 else {
                     submit_button.setProgress(1);
                     UserEntity userEntity = new UserEntity(name_text,designation_text,mobile_text);
-                    SplashActivity.userUtility.addUser(userEntity);
+                    userUtility.addUser(userEntity);
                     submit_button.setProgress(100);
                     intent = new Intent(getApplicationContext(),AddUser.class);
                     startActivity(intent);
@@ -77,6 +79,7 @@ public class AddUser extends AppCompatActivity {
         designation = (TextView) findViewById(R.id.designation_text);
         train = (ImageView) findViewById(R.id.train_gif);
         submit_button = (ActionProcessButton) findViewById(R.id.submit_button);
+        userUtility = new UserUtility();
     }
 
     @Override
