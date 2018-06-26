@@ -109,15 +109,7 @@ public class MainActivity extends AppCompatActivity
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!searchBoxValue.isEmpty()) {
-                    if (train_list.size() == 0) {
-                        addNewTrain();
-                    } else {
-                        getInputName();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Train Name cannot be empty", Toast.LENGTH_LONG).show();
-                }
+                addNewTrain();
             }
         });
     }
@@ -126,12 +118,13 @@ public class MainActivity extends AppCompatActivity
 
         new MaterialDialog.Builder(this)
                 .title("Add New Train")
-                .content("Enter Train")
+                .content("Enter Train as Train Number space Train Name")
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input("Enter Text Here", "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         trainName = input.toString();
+                        sharedData.setTrain(trainName);
                         getInputName();
                     }
                 }).show();
@@ -148,7 +141,6 @@ public class MainActivity extends AppCompatActivity
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         placeOfInspection = input.toString();
                         if (!placeOfInspection.isEmpty()) {
-                            sharedData.setTrain(searchBoxValue);
                             sharedData.setPlaceOfInspection(placeOfInspection);
                             intent = new Intent(getApplicationContext(), CoachSearch.class);
                             startActivity(intent);
@@ -308,6 +300,10 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         navigationView.setCheckedItem(R.id.creport);
+        sharedData.isFirstTime(true);
+        if(sharedData.isFirstTime()){
+            sequence();
+        }
     }
 
     public void onProgressStart() {
@@ -329,7 +325,7 @@ public class MainActivity extends AppCompatActivity
     public void sequence() {
         new MaterialTapTargetPrompt.Builder(MainActivity.this)
                 .setTarget(findViewById(R.id.button_next))
-                .setPrimaryText("Move forward to select coach")
+                .setPrimaryText("Add New Train")
                 .setSecondaryText("If none of the trains appear in your search, click on this and add the train you want to inspect")
                 .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
                 {

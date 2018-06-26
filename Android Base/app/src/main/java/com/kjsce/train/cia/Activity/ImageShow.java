@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.R;
+import com.squareup.picasso.Picasso;
 
 
 import java.io.File;
