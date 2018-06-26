@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     sharedData.isLoggedIn(true);
                     //TODO: Get user entity by mobile number and store in sharedData
                     //sharedData.setUserEntity(userEntity);
+                    startService(new Intent(this, BackgroundService.class));
                     intent = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(intent);
                 }
