@@ -19,6 +19,7 @@ import com.kjsce.train.cia.R;
 import java.util.ArrayList;
 
 import co.dift.ui.SwipeToAction;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class CardsActivity extends AppCompatActivity {
 
@@ -107,7 +108,35 @@ public class CardsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        sharedData.isFirstTime(true);
+        if(sharedData.isFirstTime()){
+            sequence();
+        }
+    }
+
+    @Override
     public void onBackPressed(){
         super.onBackPressed();
+    }
+
+    public void sequence() {
+        new MaterialTapTargetPrompt.Builder(CardsActivity.this)
+                .setTarget(findViewById(R.id.add_button))
+                .setPrimaryText("Add New Card")
+                .setSecondaryText("Click this button to add a new sub-type card")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                        {
+                            // User has pressed the prompt target
+                        }
+                    }
+                })
+                .show();
     }
 }

@@ -193,7 +193,8 @@ public class CardDetails extends AppCompatActivity {
 
         if(!flag_subType){
             subType = getIntent().getExtras().getString("subType");
-            subTypeSpinner.setSelection(getPosition(subType)+1);
+            subTypes.clear();
+            subTypes.add(subType);
             subTypeSpinner.setEnabled(false);
         }
     }
@@ -418,6 +419,14 @@ public class CardDetails extends AppCompatActivity {
 
         flag = true;
         RxPermissions.getInstance(this).request(Manifest.permission.READ_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) { // Always true pre-M
+                //Granted
+            } else {
+                flag = false;
+            }
+        });
+
+        RxPermissions.getInstance(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
             if (granted) { // Always true pre-M
                 //Granted
             } else {
