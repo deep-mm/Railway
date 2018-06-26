@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<String> train_list;
     private ArrayList<String> data1;
     private ArrayList<String> allTrains;
-    private ImageButton nextButton;
+    private ImageButton addButton;
     private Intent intent;
     private TrainAdapter trainAdapter;
     private Boolean flag = false;
-    private String placeOfInspection, searchBoxValue;
+    private String placeOfInspection, searchBoxValue, trainNumber, trainName;
     private RecyclerView details;
     private MaterialDialog materialDialog;
 
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         details.setAdapter(trainAdapter);
         details.setItemAnimator(new DefaultItemAnimator());
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!searchBoxValue.isEmpty()) {
@@ -124,25 +124,17 @@ public class MainActivity extends AppCompatActivity
 
     public void addNewTrain() {
 
-        new MaterialDialog.Builder(MainActivity.this)
-                .title("New Train")
-                .content("Are you sure you want to add this train: \n" + searchBoxValue + " ?")
-                .positiveText("Yes")
-                .negativeText("No")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(this)
+                .title("Add New Train")
+                .content("Enter Train")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("Enter Text Here", "", new MaterialDialog.InputCallback() {
                     @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        //TODO: Add this train to database
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        trainName = input.toString();
                         getInputName();
                     }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-
-                    }
-                })
-                .show();
+                }).show();
     }
 
     public void getInputName() {
@@ -180,7 +172,7 @@ public class MainActivity extends AppCompatActivity
         mobile = (TextView) headerView.findViewById(R.id.mobile_text);
         searchView = (SearchView) findViewById(R.id.search_bar);
         train_list = new ArrayList<String>();
-        nextButton = (ImageButton) findViewById(R.id.button_next);
+        addButton = (ImageButton) findViewById(R.id.button_add);
         data1 = new ArrayList<String>();
         searchBoxValue = "";
     }

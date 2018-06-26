@@ -27,14 +27,14 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 public class CoachSearch extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private MaterialDialog materialDialog;
-    private ImageButton backButton, nextButton, submitButton;
+    private ImageButton backButton, addButton, submitButton;
     private RecyclerView details;
     private TrainAdapter trainAdapter;
     private ArrayList<String> coach_list, data1, allCoaches;
     private SharedData sharedData;
     private Helper helper;
     private SearchView searchView;
-    private String searchBoxValue;
+    private String searchBoxValue, coachNumber;
     private Intent intent;
 
     @Override
@@ -66,20 +66,10 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         details.setAdapter(trainAdapter);
         details.setItemAnimator(new DefaultItemAnimator());
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!searchBoxValue.isEmpty()) {
-                    if (coach_list.size() == 0) {
-                        addNewCoach();
-                    } else {
-                        sharedData.setBogie(searchBoxValue);
-                        intent = new Intent(getApplicationContext(),SelectType.class);
-                        startActivity(intent);
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "Coach Number cannot be empty", Toast.LENGTH_LONG).show();
-                }
+                addNewCoach();
             }
         });
 
@@ -129,11 +119,10 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         backButton = (ImageButton) findViewById(R.id.back_button);
-        nextButton = (ImageButton) findViewById(R.id.button_next);
+        addButton = (ImageButton) findViewById(R.id.button_add);
         submitButton = (ImageButton) findViewById(R.id.done_button);
         searchView = (SearchView) findViewById(R.id.search_bar);
         coach_list = new ArrayList<String>();
-        nextButton = (ImageButton) findViewById(R.id.button_next);
         data1 = new ArrayList<String>();
         allCoaches = new ArrayList<String>();
         searchBoxValue = "";
@@ -141,27 +130,20 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
 
     public void addNewCoach() {
 
-        new MaterialDialog.Builder(CoachSearch.this)
-                .title("New Train")
-                .content("Are you sure you want to add this coach: \n" + searchBoxValue + " ?")
-                .positiveText("Yes")
-                .negativeText("No")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(this)
+                .title("New Coach")
+                .content("Enter coach number")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("Enter Text Here", "", new MaterialDialog.InputCallback() {
                     @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-                        //TODO: Add this coach to database
-                        sharedData.setBogie(searchBoxValue);
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        coachNumber = input.toString();
+                        //TODO: Add this bogie in database
+                        sharedData.setBogie(coachNumber);
                         intent = new Intent(getApplicationContext(),SelectType.class);
                         startActivity(intent);
                     }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog dialog, DialogAction which) {
-
-                    }
-                })
-                .show();
+                }).show();
     }
 
     @Override

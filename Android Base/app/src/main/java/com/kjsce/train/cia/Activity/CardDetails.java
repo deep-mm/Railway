@@ -425,6 +425,14 @@ public class CardDetails extends AppCompatActivity {
             }
         });
 
+        RxPermissions.getInstance(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(granted -> {
+            if (granted) { // Always true pre-M
+                //Granted
+            } else {
+                flag = false;
+            }
+        });
+
         RxPermissions.getInstance(this).request(Manifest.permission.CAMERA).subscribe(granted -> {
             if (granted) { // Always true pre-M
                 //Granted
