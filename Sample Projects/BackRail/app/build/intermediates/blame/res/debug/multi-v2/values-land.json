@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/deepmehta/Deep/GITHUB/CIA/Sample Projects/BackRail/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-land/values-land.xml",
+            "outputFile": "C:\\Users\\parak\\OneDrive\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-land\\values-land.xml",
             "map": [
                 {
-                    "source": "/Users/deepmehta/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/6e607ad13e5433eb952f7bb22ce7fea0/res/values-land/values-land.xml",
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\c3bdae80a3433042ff49eeb390bfd658\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2,3,4,5",
                         "startColumns": "4,4,4,4",
