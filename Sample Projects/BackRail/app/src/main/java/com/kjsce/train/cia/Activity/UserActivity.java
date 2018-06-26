@@ -57,7 +57,7 @@ public class UserActivity extends AppCompatActivity {
 
     public void getUserList(View view)
     {
-       List<String> userList =  userUtility.getUserList();
+        List<String> userList =  userUtility.getUserList();
         Toast.makeText(getApplicationContext(), "User LIST: "+userList.toString(), Toast.LENGTH_LONG).show();
 
     }

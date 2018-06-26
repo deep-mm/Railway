@@ -46,7 +46,7 @@ public class UserUtility {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                userList.add(dataSnapshot.getKey());  //getValue(userentity.class)
+                userList.add(dataSnapshot.getKey());
             }
 
             @Override

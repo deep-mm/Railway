@@ -33,4 +33,14 @@
         android:layout_marginBottom="171dp"
         android:onClick="toBogey"
         android:text="BogeyActivity" />
+
+    <Button
+        android:id="@+id/notificationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:onClick="toNotification"
+        android:text="NotificationActivity" />
 </RelativeLayout>

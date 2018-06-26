@@ -8,6 +8,7 @@ import android.view.View;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.NotificationUtility;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void toBogey(View view){
         intent = new Intent(this,BogeyActivity.class);
+        startActivity(intent);
+    }
+
+    public void toNotification(View view)
+    {
+        intent = new Intent(this, NotificationActivity.class);
         startActivity(intent);
     }
 
