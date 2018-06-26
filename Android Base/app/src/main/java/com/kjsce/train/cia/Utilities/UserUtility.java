@@ -9,13 +9,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.Listener.GetUserListener;
 import com.kjsce.train.cia.Listener.OnUserListChangeListener;
+import com.kjsce.train.cia.Listener.UserAuthListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserUtility {
 
-    private List<String> userList;
+    private List<UserEntity> userList;
     private OnUserListChangeListener onUserListChangeListener;
     private DatabaseReference mUserListDatabaseReference;
     private ValueEventListener valueEventListener;
@@ -40,7 +41,7 @@ public class UserUtility {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                userList.add(dataSnapshot.getKey());  //getValue(userentity.class)
+                userList.add(dataSnapshot.getValue(UserEntity.class));
             }
 
             @Override
@@ -50,7 +51,7 @@ public class UserUtility {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                userList.remove(dataSnapshot.getKey());
+                userList.remove(dataSnapshot.getValue(UserEntity.class));
             }
 
             @Override
@@ -91,11 +92,11 @@ public class UserUtility {
         mUserListDatabaseReference.addChildEventListener(childEventListener);
     }
 
-    public List<String> getUserList() {
+    public List<UserEntity> getUserList() {
         return userList;
     }
 
-    public void setUserList(List<String> userList) {
+    public void setUserList(List<UserEntity> userList) {
         this.userList = userList;
     }
 
@@ -108,14 +109,35 @@ public class UserUtility {
     }
 
     public void getUser(String mobileNumber, final GetUserListener getUserListener) {
-        mUserListDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mobileNumber);
-
+        mUserListDatabaseReference.child(mobileNumber);
         mUserListDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserEntity userEntity = dataSnapshot.getValue(UserEntity.class);
                 System.out.println("User:" + userEntity);
                 getUserListener.onCompleteTask(userEntity);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void authUser(String mobileNumber, UserAuthListener userAuthListener)
+    {
+        mUserListDatabaseReference.child(mobileNumber);
+        mUserListDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    userAuthListener.Auth(true);
+                }
+                else
+                {
+                    userAuthListener.Auth(false);
+                }
             }
 
             @Override
