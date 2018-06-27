@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView details;
     private MaterialDialog materialDialog;
     private TrainListUtility trainListUtility;
+    private List<Boolean> firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,9 @@ public class MainActivity extends AppCompatActivity
                         sharedData.setTrain(trainName);
                         getInputName();
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     public void getInputName() {
@@ -144,7 +147,9 @@ public class MainActivity extends AppCompatActivity
                             startActivity(intent);
                         }
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     public void initialize() {
@@ -204,6 +209,8 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
         }
     }
@@ -263,6 +270,8 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
 
         }
@@ -313,7 +322,12 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         navigationView.setCheckedItem(R.id.creport);
-
+        firstTime = sharedData.getFirstTime();
+        if(firstTime.get(0)) {
+            sequence();
+            firstTime.set(0, false);
+            sharedData.setFirstTime(firstTime);
+        }
     }
 
     public void onProgressStart() {
@@ -325,6 +339,7 @@ public class MainActivity extends AppCompatActivity
                 .content("Please Wait")
                 .progress(true, 0)
                 .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
     }
 

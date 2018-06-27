@@ -21,6 +21,7 @@ import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.IdUtility;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import co.dift.ui.SwipeToAction;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -37,6 +38,7 @@ public class CardsActivity extends AppCompatActivity {
     private Intent intent;
     private IdUtility idUtility;
     private RecyclerView details;
+    private List<Boolean> firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +140,12 @@ public class CardsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        firstTime = sharedData.getFirstTime();
+        if(firstTime.get(2)) {
+            sequence();
+            firstTime.set(2, false);
+            sharedData.setFirstTime(firstTime);
+        }
     }
 
     @Override

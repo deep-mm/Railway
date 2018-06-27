@@ -76,6 +76,8 @@ public class Notifications extends AppCompatActivity {
                             public void onClick(MaterialDialog dialog, DialogAction which) {
                             }
                         })
+                        .canceledOnTouchOutside(false)
+                        .cancelable(false)
                         .show();
             }
         });
@@ -90,14 +92,16 @@ public class Notifications extends AppCompatActivity {
     }
 
     public void onProgressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         materialDialog = new MaterialDialog.Builder(Notifications.this)
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop(){

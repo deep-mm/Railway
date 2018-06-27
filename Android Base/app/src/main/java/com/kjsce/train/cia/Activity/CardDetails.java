@@ -540,6 +540,8 @@ public class CardDetails extends AppCompatActivity {
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
     }
 
