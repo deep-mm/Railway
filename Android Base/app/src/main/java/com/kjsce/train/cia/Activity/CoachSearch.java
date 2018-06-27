@@ -195,6 +195,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public void onResume() {
         super.onResume();
+        checkInternetConnection();
         firstTime = sharedData.getFirstTime();
         if(firstTime.get(1)) {
             sequence();
@@ -252,5 +253,31 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     }
                 })
                 .show();
+    }
+
+    public void checkInternetConnection(){
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(CoachSearch.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 }
