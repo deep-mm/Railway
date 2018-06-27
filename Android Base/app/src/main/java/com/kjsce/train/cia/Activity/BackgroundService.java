@@ -1,5 +1,6 @@
 package com.kjsce.train.cia.Activity;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -19,6 +20,9 @@ import com.kjsce.train.cia.Listener.OnNotificationListChangeListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.NotificationUtility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class BackgroundService extends Service {
@@ -46,7 +50,11 @@ public class BackgroundService extends Service {
                 mBuilder.setSmallIcon(R.mipmap.ic_launcher);
                 mBuilder.setContentTitle("New Report Generated!");
                 mBuilder.setContentText(newUserNotification.getSender()+" has generated a report of train: "+newUserNotification.getTrainNumber()+" on "+
-                        newUserNotification.getDateTime());
+                        newUserNotification.getDateTime())
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(newUserNotification.getSender()+" has generated a report of train: "+newUserNotification.getTrainNumber()+" on "+
+                                getDate(newUserNotification.getDateTime())))
+                .setPriority(Notification.PRIORITY_MAX);
 
                 Intent resultIntent = new Intent(context, Notifications.class);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
@@ -84,5 +92,18 @@ public class BackgroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return Service.START_STICKY;
+    }
+
+    public String getDate(String date){
+        SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        date = spf.format(newDate);
+        return date;
     }
 }
