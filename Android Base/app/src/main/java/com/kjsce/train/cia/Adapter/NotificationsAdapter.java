@@ -8,16 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import co.dift.ui.SwipeToAction;
 
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.ViewHolder>{
-    private final ArrayList<DetailedCard> Mvalues;
+    private final List<UserNotificationEntity> Mvalues;
     Context context;
     SharedData sharedData;
 
@@ -26,7 +28,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
     }
 
-    public NotificationsAdapter(ArrayList mvalues, Context c) {
+    public NotificationsAdapter(List mvalues, Context c) {
         Mvalues = mvalues;
         context = c;
 
@@ -43,8 +45,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder (final NotificationsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        holder.notificationText.setText(Mvalues.get(position).getType());
-        holder.notificationDate.setText(Mvalues.get(position).getSubmittedBy());
+        holder.notificationText.setText(Mvalues.get(position).getTrainNumber());
+        //TODO: Create proper sentence for above
+        holder.notificationDate.setText(Mvalues.get(position).getDateTime());
     }
 
     @Override

@@ -1,6 +1,7 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "C:\\Users\\bp\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-el\\values-el.xml",
             "map": [
                 {
@@ -22,6 +23,12 @@
                 },
                 {
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.8.0.aar\\f361987467e3d59c5685f99d140ea326\\res\\values-el\\values.xml",
+=======
+            "outputFile": "C:\\Users\\parak\\OneDrive\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-el\\values-el.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.8.0.aar\\b8211604ff92ec6b28fb9d54714d950c\\res\\values-el\\values.xml",
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -38,7 +45,11 @@
                     }
                 },
                 {
+<<<<<<< HEAD
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-11.8.0.aar\\4f08f6bb9bafd19cca6256d526f39375\\res\\values-el\\values.xml",
+=======
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-11.8.0.aar\\18dce43d5984808f7688d6561d12f2c6\\res\\values-el\\values.xml",
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -55,7 +66,28 @@
                     }
                 },
                 {
+<<<<<<< HEAD
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\4483c9c5073e7616960c1a9f558842ea\\res\\values-el\\values-el.xml",
+=======
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\c3bdae80a3433042ff49eeb390bfd658\\res\\values-el\\values-el.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,223,334,451,536,641,767,855,941,1026,1137,1247,1349,1460,1569,1677,1837,1937",
+                        "endColumns": "117,110,116,84,104,125,87,85,84,110,109,101,110,108,107,159,99,84",
+                        "endOffsets": "218,329,446,531,636,762,850,936,1021,1132,1242,1344,1455,1564,1672,1832,1932,2017"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,37",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,223,334,451,536,641,767,855,941,1026,1137,1247,1349,1460,1569,1677,1837,4792",
+                        "endColumns": "117,110,116,84,104,125,87,85,84,110,109,101,110,108,107,159,99,84",
+                        "endOffsets": "218,329,446,531,636,762,850,936,1021,1132,1242,1344,1455,1564,1672,1832,1932,4872"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\773e392d0bce65cb79c1437b1f3edcba\\res\\values-el\\values-el.xml",
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

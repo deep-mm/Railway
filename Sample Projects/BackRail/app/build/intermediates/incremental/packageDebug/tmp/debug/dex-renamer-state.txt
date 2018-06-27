@@ -1,0 +1,4 @@
+#Tue Jun 26 15:21:31 IST 2018
+base.0=C\:\\Users\\parak\\OneDrive\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+path.0=classes.dex
+renamed.0=classes.dex

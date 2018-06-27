@@ -1,10 +1,17 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "C:\\Users\\bp\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
             "map": [
                 {
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\a6348b6479bff277baa56e9d678672a1\\res\\values-watch-v20\\values-watch-v20.xml",
+=======
+            "outputFile": "C:\\Users\\parak\\OneDrive\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v20\\values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\c3bdae80a3433042ff49eeb390bfd658\\res\\values-watch-v20\\values-watch-v20.xml",
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",

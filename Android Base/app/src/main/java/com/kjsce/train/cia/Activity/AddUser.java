@@ -14,7 +14,9 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.UserUtility;
 
 import java.util.ArrayList;
 
@@ -28,6 +30,7 @@ public class AddUser extends AppCompatActivity {
     private ActionProcessButton submit_button;
     private String name_text,mobile_text,designation_text;
     private Intent intent;
+    private UserUtility userUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class AddUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 name_text = name.getText().toString();
-                mobile_text = mobile.getText().toString();
+                mobile_text = "+91"+mobile.getText().toString();
                 designation_text = designation.getText().toString();
 
                 if(name_text.isEmpty() || mobile_text.isEmpty() || designation_text.isEmpty()){
@@ -57,7 +60,11 @@ public class AddUser extends AppCompatActivity {
                 }
                 else {
                     submit_button.setProgress(1);
-                    //Update to database - Add User and on complete set progress to 0
+                    UserEntity userEntity = new UserEntity(name_text,designation_text,mobile_text);
+                    userUtility.addUser(userEntity);
+                    submit_button.setProgress(100);
+                    intent = new Intent(getApplicationContext(),AddUser.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -72,6 +79,7 @@ public class AddUser extends AppCompatActivity {
         designation = (TextView) findViewById(R.id.designation_text);
         train = (ImageView) findViewById(R.id.train_gif);
         submit_button = (ActionProcessButton) findViewById(R.id.submit_button);
+        userUtility = new UserUtility();
     }
 
     @Override
@@ -82,6 +90,10 @@ public class AddUser extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        checkInternetConnection();
+    }
+
+    public void checkInternetConnection(){
         if(!helper.isNetworkConnected()){
             new MaterialDialog.Builder(AddUser.this)
                     .title("No Internet Connection")

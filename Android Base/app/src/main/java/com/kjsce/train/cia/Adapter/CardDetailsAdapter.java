@@ -13,14 +13,14 @@ import android.widget.TextView;
 import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
 
 
 public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder>{
-    private final ArrayList<DetailedCard> Mvalues;
+    private final ArrayList<CardEntity> Mvalues;
     private String type,side;
     Context context;
     private SharedData sharedData;

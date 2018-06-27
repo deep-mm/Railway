@@ -17,9 +17,13 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
+import com.kjsce.train.cia.Entities.TrainEntity;
+import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.TrainUtility;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -30,17 +34,23 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     private ImageButton backButton, addButton, submitButton;
     private RecyclerView details;
     private TrainAdapter trainAdapter;
-    private ArrayList<String> coach_list, data1, allCoaches;
+    private List<String> coach_list, data1, allCoaches;
     private SharedData sharedData;
     private Helper helper;
     private SearchView searchView;
     private String searchBoxValue, coachNumber;
     private Intent intent;
+    private TrainUtility trainUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bogie_search);
+
+        details = (RecyclerView) findViewById(R.id.details);
+        RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
+        details.setLayoutManager(mlayoutmanager);
+        details.setItemAnimator(new DefaultItemAnimator());
 
         initialize();
 
@@ -51,21 +61,11 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             }
         });
 
-        //TODO: Get list of all coaches from database
-        //train_list = sharedData.getTrainList();
-        coach_list.add("C54321/D");
-        coach_list.add("123672/E");
-
         allCoaches = coach_list;
         searchView.setOnQueryTextListener(this);
 
-        details = (RecyclerView) findViewById(R.id.details);
         trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
-        RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
-        details.setLayoutManager(mlayoutmanager);
         details.setAdapter(trainAdapter);
-        details.setItemAnimator(new DefaultItemAnimator());
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +126,15 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         data1 = new ArrayList<String>();
         allCoaches = new ArrayList<String>();
         searchBoxValue = "";
+
+        trainUtility = new TrainUtility(sharedData.getTrain(), new OnBogeyListChangeListener() {
+            @Override
+            public void onDataChanged(TrainEntity newTrainEntity) {
+                coach_list = newTrainEntity.getBogeyList();
+                trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+                details.setAdapter(trainAdapter);
+            }
+        });
     }
 
     public void addNewCoach() {
@@ -138,7 +147,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         coachNumber = input.toString();
-                        //TODO: Add this bogie in database
+                        trainUtility.addBogey(coachNumber);
                         sharedData.setBogie(coachNumber);
                         intent = new Intent(getApplicationContext(),SelectType.class);
                         startActivity(intent);

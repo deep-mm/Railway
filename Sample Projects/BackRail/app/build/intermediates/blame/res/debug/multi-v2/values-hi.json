@@ -1,10 +1,51 @@
 {
     "logs": [
         {
+<<<<<<< HEAD
             "outputFile": "C:\\Users\\bp\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hi\\values-hi.xml",
             "map": [
                 {
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\a6348b6479bff277baa56e9d678672a1\\res\\values-hi\\values-hi.xml",
+=======
+            "outputFile": "C:\\Users\\parak\\OneDrive\\Documents\\GitHub\\Railway\\Sample Projects\\BackRail\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hi\\values-hi.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-11.8.0.aar\\18dce43d5984808f7688d6561d12f2c6\\res\\values-hi\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "283",
+                        "endColumns": "205",
+                        "endOffsets": "488"
+                    },
+                    "to": {
+                        "startLines": "27",
+                        "startColumns": "4",
+                        "startOffsets": "3048",
+                        "endColumns": "205",
+                        "endOffsets": "3249"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\773e392d0bce65cb79c1437b1f3edcba\\res\\values-hi\\values-hi.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "38",
+                        "startColumns": "4",
+                        "startOffsets": "4690",
+                        "endColumns": "100",
+                        "endOffsets": "4786"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-27.1.1.aar\\c3bdae80a3433042ff49eeb390bfd658\\res\\values-hi\\values-hi.xml",
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -21,7 +62,11 @@
                     }
                 },
                 {
+<<<<<<< HEAD
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.8.0.aar\\f361987467e3d59c5685f99d140ea326\\res\\values-hi\\values.xml",
+=======
+                    "source": "C:\\Users\\parak\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-base-11.8.0.aar\\b8211604ff92ec6b28fb9d54714d950c\\res\\values-hi\\values.xml",
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -36,6 +81,7 @@
                         "endColumns": "109,202,128,113,209,131,141,131,218,110,196,131,207,183,92,96,114",
                         "endOffsets": "1981,2184,2313,2427,2637,2769,2911,3043,3468,3579,3776,3908,4116,4300,4393,4490,4605"
                     }
+<<<<<<< HEAD
                 },
                 {
                     "source": "C:\\Users\\bp\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-27.1.1.aar\\4483c9c5073e7616960c1a9f558842ea\\res\\values-hi\\values-hi.xml",
@@ -70,6 +116,8 @@
                         "endColumns": "205",
                         "endOffsets": "3249"
                     }
+=======
+>>>>>>> 788dbb518c14bb75d26401e46ced2e6d8b1d3591
                 }
             ]
         }

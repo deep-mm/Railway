@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.SharedData;
-import com.kjsce.train.cia.Entity.Card.DetailedCard;
+import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import co.dift.ui.SwipeToAction;
 
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
-    private final ArrayList<DetailedCard> Mvalues;
+    private final ArrayList<IndexEntryEntity> Mvalues;
     Context context;
     SharedData sharedData;
 
@@ -44,8 +44,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
     public void onBindViewHolder (final CardsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        holder.subType.setText(Mvalues.get(position).getType());
-        holder.lastUpdated.setText(Mvalues.get(position).getSubmittedBy());
+        holder.subType.setText(Mvalues.get(position).getSubtype());
+        holder.lastUpdated.setText(Mvalues.get(position).getId());
+        //TODO: Replace with lastUpdated once done
     }
 
     @Override

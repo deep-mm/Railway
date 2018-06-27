@@ -10,7 +10,19 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.kjsce.train.cia.Entities.UserEntity;
+import com.kjsce.train.cia.Entities.UserNotificationEntity;
+import com.kjsce.train.cia.Listener.OnNewNotificationAddedListener;
+import com.kjsce.train.cia.Listener.OnNotificationListChangeListener;
+import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
+import com.kjsce.train.cia.Listener.OnUserListChangeListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.NotificationUtility;
+import com.kjsce.train.cia.Utilities.TrainListUtility;
+import com.kjsce.train.cia.Utilities.TrainUtility;
+import com.kjsce.train.cia.Utilities.UserUtility;
+
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,6 +33,8 @@ public class SplashActivity extends AppCompatActivity {
     private Intent intent;
     private KeyguardManager keyguardManager;
     private static int CODE_AUTHENTICATION_VERIFICATION=241;
+    public static NotificationUtility notificationUtility;
+    public static UserUtility userUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +84,7 @@ public class SplashActivity extends AppCompatActivity {
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         keyguardManager = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
+        userUtility = new UserUtility();
     }
 
     @Override
