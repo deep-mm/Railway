@@ -63,7 +63,8 @@ public class AudioUtility {
                 }
             }
         }
-        addAudioListener.onCompleteTask(null);
+        else
+            addAudioListener.onCompleteTask(null);
     }
 
     public void retrieveSingleAudio(final String audioS, final GetSingleAudioListener getSingleAudioListener) throws IOException {
@@ -98,18 +99,23 @@ public class AudioUtility {
         counter = 0;
         if (audioS != null) {
             for (int i = 0; i < audioS.size(); i++) {
-                retrieveSingleAudio(audioS.get(i), new GetSingleAudioListener() {
-                    @Override
-                    public void onCompleteTask(String audio) {
-                        counter++;
-                        audioL.add(audio);
-                        if (counter == audioS.size()) {
-                            getAudioListener.onCompleteTask(audioL);
+                try {
+                    retrieveSingleAudio(audioS.get(i), new GetSingleAudioListener() {
+                        @Override
+                        public void onCompleteTask(String audio) {
+                            counter++;
+                            audioL.add(audio);
+                            if (counter == audioS.size()) {
+                                getAudioListener.onCompleteTask(audioL);
+                            }
                         }
-                    }
-                });
+                    });
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-        getAudioListener.onCompleteTask(null);
+        else
+            getAudioListener.onCompleteTask(null);
     }
 }

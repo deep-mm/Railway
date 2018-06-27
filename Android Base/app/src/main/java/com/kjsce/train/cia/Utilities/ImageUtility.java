@@ -65,7 +65,8 @@ public class ImageUtility
                 }
             }
         }
-        listener.onCompleteTask(null);
+        else
+            listener.onCompleteTask(null);
     }
 
     public void retrieveSingleImage(final String imageS, final GetSingleImageListener listener) throws IOException {
@@ -101,19 +102,24 @@ public class ImageUtility
             final ArrayList<String> imageL = new ArrayList<String>();
             counter = 0;
             for (int i = 0; i < imageS.size(); i++) {
-                retrieveSingleImage(imageS.get(i), new GetSingleImageListener() {
-                    @Override
-                    public void onCompleteTask(String image) {
-                        counter++;
-                        imageL.add(image);
-                        if (counter == imageS.size()) {
-                            listener.onCompleteTask(imageL);
+                try {
+                    retrieveSingleImage(imageS.get(i), new GetSingleImageListener() {
+                        @Override
+                        public void onCompleteTask(String image) {
+                            counter++;
+                            imageL.add(image);
+                            if (counter == imageS.size()) {
+                                listener.onCompleteTask(imageL);
+                            }
                         }
-                    }
-                });
+                    });
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-        listener.onCompleteTask(null);
+        else
+            listener.onCompleteTask(null);
     }
 
     /*public void removeSingleImage(final String imageS,final String bogeyNumber,final RemoveSingleImageListener listener){
