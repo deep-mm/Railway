@@ -2,6 +2,7 @@ package com.kjsce.train.cia.Activity;
 
 import android.app.KeyguardManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -97,6 +98,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK && requestCode==CODE_AUTHENTICATION_VERIFICATION)
         {
+            Intent intent1 = new Intent(getApplicationContext(),BackgroundService.class);
+            startService(intent1);
             intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
         }
@@ -114,6 +117,8 @@ public class SplashActivity extends AppCompatActivity {
                 startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
             }
             else {
+                Intent intent1 = new Intent(getApplicationContext(),BackgroundService.class);
+                startService(intent1);
                 intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }

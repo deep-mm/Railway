@@ -12,7 +12,6 @@ import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
 
-
 public class DetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.DetailsAdapter.ViewHolder>{
     private final ArrayList<String> Mvalues;
     Context context;
@@ -39,7 +38,9 @@ public class DetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ada
     public void onBindViewHolder(final com.kjsce.train.cia.Adapter.DetailsAdapter.ViewHolder holder, final int position) {
 
         SharedData sd = new SharedData(context);
-
+        String content[] = Mvalues.get(position).split("\\s+");
+        holder.title.setText(content[0]);
+        holder.content_text.setText(content[1]);
     }
 
     @Override

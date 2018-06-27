@@ -88,6 +88,7 @@ public class CardsActivity extends AppCompatActivity {
                 intent.putExtra("flag",false);
                 intent.putExtra("subType",itemData.getSubtype());
                 intent.putExtra("id",itemData.getId());
+                startActivity(intent);
             }
 
             @Override
@@ -137,10 +138,6 @@ public class CardsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        sharedData.isFirstTime(true);
-        if(sharedData.isFirstTime()){
-            sequence();
-        }
     }
 
     @Override

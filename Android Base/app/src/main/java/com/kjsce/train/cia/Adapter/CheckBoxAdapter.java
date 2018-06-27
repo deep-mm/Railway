@@ -18,6 +18,7 @@ import java.util.List;
 public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CheckBoxAdapter.ViewHolder>{
     private final List<UserEntity> Mvalues;
     private Boolean isChecked;
+    private List<Boolean> checkedList;
     Context context;
 
     public CheckBoxAdapter() {
@@ -43,7 +44,8 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
 
         holder.check_box.setText(Mvalues.get(position).getName()+" ( "+Mvalues.get(position).getDesignation()+" )");
 
-        SharedData sd = new SharedData(context);
+        SharedData sharedData = new SharedData(context);
+        checkedList = sharedData.getCheckedList();
         holder.check_box.setChecked(false);
 
         holder.check_box.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +58,8 @@ public class CheckBoxAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Ad
                     holder.check_box.setChecked(true);
 
                 isChecked = holder.check_box.isChecked();
+                checkedList.set(position,isChecked);
+                sharedData.setCheckedList(checkedList);
             }
         });
 

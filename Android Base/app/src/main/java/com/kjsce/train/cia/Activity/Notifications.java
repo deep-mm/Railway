@@ -20,6 +20,7 @@ import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Notifications extends AppCompatActivity {
 
@@ -27,9 +28,9 @@ public class Notifications extends AppCompatActivity {
     private ImageButton backButton, clearButton;
     private SharedData sharedData;
     private Helper helper;
-    public static NotificationsAdapter notificationsAdapter;
-    public static RecyclerView details;
-    private ArrayList<UserNotificationEntity> detailedCards;
+    public NotificationsAdapter notificationsAdapter;
+    public RecyclerView details;
+    private List<UserNotificationEntity> detailedCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class Notifications extends AppCompatActivity {
         setContentView(R.layout.activity_notifications);
 
         initialize();
+
+        detailedCards = sharedData.getNotificationEntityList();
 
         details = (RecyclerView) findViewById(R.id.details);
         notificationsAdapter = new NotificationsAdapter(detailedCards, Notifications.this);

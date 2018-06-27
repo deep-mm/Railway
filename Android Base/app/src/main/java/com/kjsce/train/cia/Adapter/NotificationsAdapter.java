@@ -45,9 +45,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder (final NotificationsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        holder.notificationText.setText(Mvalues.get(position).getTrainNumber());
-        //TODO: Create proper sentence for above
+        UserNotificationEntity userNotificationEntity = Mvalues.get(position);
+        holder.notificationText.setText(userNotificationEntity.getSender()+" has generated a report of train: "+Mvalues.get(position).getTrainNumber());
         holder.notificationDate.setText(Mvalues.get(position).getDateTime());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Not decided the functionality
+            }
+        });
     }
 
     @Override

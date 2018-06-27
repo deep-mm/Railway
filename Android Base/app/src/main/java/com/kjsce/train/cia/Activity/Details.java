@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
+import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Details extends AppCompatActivity {
     private SharedData sharedData;
     private Helper helper;
     private MaterialDialog materialDialog;
+    private CardEntity cardEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,12 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         initialize();
+
+        cardEntity = sharedData.getCardEntity();
+        detailedCards.add("Train-Number: "+cardEntity.getTrainNumber());
+        detailedCards.add("Date: "+cardEntity.getDateTime());
+        detailedCards.add("Place: "+cardEntity.getPlaceOfInspection());
+        detailedCards.add("Sender: "+cardEntity.getSender());
 
         final RecyclerView details = (RecyclerView) findViewById(R.id.details);
         detailsAdapter = new DetailsAdapter(detailedCards, Details.this);

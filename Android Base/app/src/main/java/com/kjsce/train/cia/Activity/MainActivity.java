@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity
         mobile = (TextView) headerView.findViewById(R.id.mobile_text);
         searchView = (SearchView) findViewById(R.id.search_bar);
         train_list = new ArrayList<String>();
+        allTrains = train_list;
         addButton = (ImageButton) findViewById(R.id.button_add);
         data1 = new ArrayList<String>();
         searchBoxValue = "";
@@ -312,26 +313,24 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         navigationView.setCheckedItem(R.id.creport);
-        sharedData.isFirstTime(true);
-        if(sharedData.isFirstTime()){
-            sequence();
-        }
+
     }
 
     public void onProgressStart() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         materialDialog = new MaterialDialog.Builder(MainActivity.this)
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop() {
-        materialDialog.hide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        materialDialog.hide();
     }
 
     public void sequence() {

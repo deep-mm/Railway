@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Entities.TrainEntity;
 import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.Entities.UserNotificationEntity;
@@ -29,6 +30,15 @@ public class SharedData {
 
     public Boolean isLoggedIn(){
         Boolean check = pref.getBoolean("login", false);
+        return check;
+    }
+
+    public void isUserVerified(Boolean check){
+        editor.putBoolean("user_verified", check).commit();
+    }
+
+    public Boolean isUserVerified(){
+        Boolean check = pref.getBoolean("user_verified", false);
         return check;
     }
 
@@ -143,6 +153,17 @@ public class SharedData {
         return userEntity;
     }
 
+    public void setCardEntity(CardEntity cardEntity){
+        String json = gson.toJson(cardEntity);
+        editor.putString("cardEntity",json).commit();
+    }
+
+    public CardEntity getCardEntity(){
+        String json = pref.getString("cardEntity", "");
+        CardEntity cardEntity = gson.fromJson(json, CardEntity.class);
+        return cardEntity;
+    }
+
     public void setTrainEntity(TrainEntity trainEntity){
         String json = gson.toJson(trainEntity);
         editor.putString("trainEntity",json).commit();
@@ -159,13 +180,28 @@ public class SharedData {
         editor.commit();
     }
 
-    public Boolean isFirstTime(){
-        Boolean check = pref.getBoolean("firstTime", false);
-        return check;
+    public void setCheckedList(List<Boolean> checked_list){
+        String type = gson.toJson(checked_list);
+        editor.putString("checked_list",type).commit();
     }
 
-    public void isFirstTime(Boolean check){
-        editor.putBoolean("firstTime", check).commit();
+    public List<Boolean> getCheckedList(){
+        String json = pref.getString("checked_list", "");
+        Type listType = new TypeToken<List<Boolean>>() {}.getType();
+        List<Boolean> checked_list = gson.fromJson(json, listType);
+        return checked_list;
+    }
+
+    public void setFirstTime(List<Boolean> firstTime){
+        String type = gson.toJson(firstTime);
+        editor.putString("firstTime",type).commit();
+    }
+
+    public List<Boolean> getFirstTime(){
+        String json = pref.getString("firstTime", "");
+        Type listType = new TypeToken<List<Boolean>>() {}.getType();
+        List<Boolean> firstTime = gson.fromJson(json, listType);
+        return firstTime;
     }
 
 
