@@ -28,6 +28,7 @@ public class NotifyContacts extends AppCompatActivity {
     private ImageButton sendButton, backButton;
     private CheckBoxAdapter checkBoxAdapter;
     private List<UserEntity> userEntities;
+    private List<Boolean> checkedList;
     private MaterialDialog materialDialog;
     private Intent intent;
 
@@ -39,6 +40,11 @@ public class NotifyContacts extends AppCompatActivity {
         initialize();
 
         userEntities = SplashActivity.userUtility.getUserList();
+
+        for(int i=0;i<userEntities.size();i++){
+            checkedList.add(false);
+        }
+        sharedData.setCheckedList(checkedList);
 
         final RecyclerView details = (RecyclerView) findViewById(R.id.details);
         checkBoxAdapter = new CheckBoxAdapter(userEntities, NotifyContacts.this);
@@ -58,11 +64,15 @@ public class NotifyContacts extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                checkedList = sharedData.getCheckedList();
                 String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
                 String train = sharedData.getTrain(), sender = sharedData.getUserEntity().getName();
                 for(int i=0;i<userEntities.size();i++){
-                    UserNotificationEntity userNotificationEntity = new UserNotificationEntity(train,timeStamp,sender);
-                    BackgroundService.notificationUtility.sendNotification(userEntities.get(i).getMobileNumber(),userNotificationEntity);
+                    if(checkedList.get(i)) {
+                        System.out.println("UserEntity: "+train);
+                        UserNotificationEntity userNotificationEntity = new UserNotificationEntity(train, timeStamp, sender);
+                        BackgroundService.notificationUtility.sendNotification(userEntities.get(i).getMobileNumber(), userNotificationEntity);
+                    }
                 }
                 intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
@@ -76,22 +86,23 @@ public class NotifyContacts extends AppCompatActivity {
         sendButton = (ImageButton) findViewById(R.id.send_button);
         backButton = (ImageButton) findViewById(R.id.back_button);
         userEntities = new ArrayList<UserEntity>();
+        checkedList = new ArrayList<Boolean>();
     }
 
     public void onProgressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         materialDialog = new MaterialDialog.Builder(NotifyContacts.this)
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop(){
-        materialDialog.hide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        materialDialog.hide();
     }
 
     @Override

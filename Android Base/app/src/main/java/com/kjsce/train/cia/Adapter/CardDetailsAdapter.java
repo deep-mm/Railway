@@ -2,21 +2,29 @@ package com.kjsce.train.cia.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.ImageShow;
+import com.kjsce.train.cia.Activity.MainActivity;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.R;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
 public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder>{
@@ -24,6 +32,9 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     private String type,side;
     Context context;
     private SharedData sharedData;
+    MaterialDialog materialDialog;
+    MediaPlayer mp;
+    CardEntity cardEntity;
 
     public CardDetailsAdapter() {
         Mvalues = null;
@@ -45,9 +56,22 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     public void onBindViewHolder(final com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        side = "left";
-        type = "audio";
-        //TODO: Determine type and side of the card
+        cardEntity = Mvalues.get(position);
+        if(cardEntity.getSender().equalsIgnoreCase(sharedData.getUserEntity().getName())){
+            side = "right";
+        }
+        else{
+            side = "left";
+        }
+
+        if(cardEntity.getAudio()!=null)
+            type = "audio";
+
+        else if(cardEntity.getImage()!=null)
+            type = "image";
+
+        else
+            type = "comment";
 
         if(side.equalsIgnoreCase("left")) {
             holder.left.setVisibility(View.VISIBLE);
@@ -57,24 +81,26 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.audio_left.setVisibility(View.VISIBLE);
                 holder.image_left.setVisibility(View.GONE);
                 holder.text_left.setVisibility(View.GONE);
-
-                holder.audio_text_left.setText(Mvalues.get(position).getComment());
+                holder.audio_text_left.setText(cardEntity.getComment());
             }
 
             else if(type.equalsIgnoreCase("image")){
                 holder.audio_left.setVisibility(View.GONE);
                 holder.image_left.setVisibility(View.VISIBLE);
                 holder.text_left.setVisibility(View.GONE);
+
+                Picasso.with(context).load(cardEntity.getAudio().get(0)).into(holder.image_left);
             }
 
             else{
                 holder.audio_left.setVisibility(View.GONE);
                 holder.image_left.setVisibility(View.GONE);
                 holder.text_left.setVisibility(View.VISIBLE);
+                holder.text_left.setText(cardEntity.getComment());
             }
 
-            holder.name_text_left.setText("");
-            holder.time_text_left.setText("");
+            holder.name_text_left.setText(cardEntity.getSender());
+            holder.time_text_left.setText(cardEntity.getDateTime());
         }
 
         else {
@@ -85,7 +111,6 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.audio_right.setVisibility(View.VISIBLE);
                 holder.image_right.setVisibility(View.GONE);
                 holder.text_right.setVisibility(View.GONE);
-
                 holder.audio_text_right.setText(Mvalues.get(position).getComment());
             }
 
@@ -93,16 +118,19 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.audio_right.setVisibility(View.GONE);
                 holder.image_right.setVisibility(View.VISIBLE);
                 holder.text_right.setVisibility(View.GONE);
+
+                Picasso.with(context).load(cardEntity.getAudio().get(0)).into(holder.image_left);
             }
 
             else{
                 holder.audio_right.setVisibility(View.GONE);
                 holder.image_right.setVisibility(View.GONE);
                 holder.text_right.setVisibility(View.VISIBLE);
+                holder.text_right.setText(cardEntity.getComment());
             }
 
-            holder.name_text_right.setText("");
-            holder.time_text_right.setText("");
+            holder.name_text_left.setText(cardEntity.getSender());
+            holder.time_text_left.setText(cardEntity.getDateTime());
         }
 
         holder.image_left.setOnClickListener(new View.OnClickListener() {
@@ -170,14 +198,22 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.audio_button_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                audioClicked();
+                try {
+                    audioClicked();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         holder.audio_button_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                audioClicked();
+                try {
+                    audioClicked();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -185,21 +221,21 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
 
     public void imageClicked(){
         Intent intent = new Intent(context, ImageShow.class);
-        String url = "";
-        String title = "";
+        String url = cardEntity.getImage().get(0);
+        String title = cardEntity.getComment();
         intent.putExtra("url",url);
         intent.putExtra("title",title);
         context.startActivity(intent);
     }
 
-    public void audioClicked(){
+    public void audioClicked() throws IOException {
 
-        /*materialDialog = new MaterialDialog.Builder(context)
+        materialDialog = new MaterialDialog.Builder(context)
                 .title("Audio")
                 .content("Playing Audio")
                 .progress(true, 0)
                 .show();
-        mp.setDataSource(Mvalues.get(position));
+        mp.setDataSource(cardEntity.getAudio().get(0));
         mp.prepare();
         mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -207,13 +243,13 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             public void onCompletion(MediaPlayer mediaPlayer) {
                 materialDialog.hide();
             }
-        });*/
+        });
 
     }
 
     public void longClicked(){
         Intent intent = new Intent(context, Details.class);
-        //Put object into sharedData
+        sharedData.setCardEntity(cardEntity);
         context.startActivity(intent);
     }
 

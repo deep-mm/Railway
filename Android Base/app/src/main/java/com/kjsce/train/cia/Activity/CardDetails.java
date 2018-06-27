@@ -533,14 +533,14 @@ public class CardDetails extends AppCompatActivity {
     }
 
     public void onProgressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         materialDialog = new MaterialDialog.Builder(CardDetails.this)
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop(){

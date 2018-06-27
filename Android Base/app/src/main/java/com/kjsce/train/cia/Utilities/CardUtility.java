@@ -54,12 +54,14 @@ public class CardUtility
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 CardEntity cardEntity = dataSnapshot.getValue(CardEntity.class);
-                for(int i=cardEntities.size() - 1;i>=0;i--){
-                    if(cardEntity.equals(cardEntities.get(i))){
-                        cardEntities.get(i).copy(cardEntity);
+                if(cardEntity!=null) {
+                    for (int i = cardEntities.size() - 1; i >= 0; i--) {
+                        if (cardEntity.equals(cardEntities.get(i))) {
+                            cardEntities.get(i).copy(cardEntity);
+                        }
                     }
+                    listener.onCardChanged(cardEntity);
                 }
-                listener.onCardChanged(cardEntity);
             }
 
             @Override

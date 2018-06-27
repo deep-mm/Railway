@@ -63,8 +63,26 @@ public class AddUser extends AppCompatActivity {
                     UserEntity userEntity = new UserEntity(name_text,designation_text,mobile_text);
                     userUtility.addUser(userEntity);
                     submit_button.setProgress(100);
-                    intent = new Intent(getApplicationContext(),AddUser.class);
-                    startActivity(intent);
+                    new MaterialDialog.Builder(AddUser.this)
+                            .title("Add New User")
+                            .content("Do you want to add another user?")
+                            .positiveText("Yes")
+                            .negativeText("No")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    intent = new Intent(getApplicationContext(),AddUser.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    intent = new Intent(getApplicationContext(),MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
                 }
             }
         });
@@ -84,7 +102,8 @@ public class AddUser extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
+        intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -186,10 +186,6 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public void onResume() {
         super.onResume();
-        sharedData.isFirstTime(true);
-        if(sharedData.isFirstTime()){
-            sequence();
-        }
     }
 
     @Override
