@@ -83,6 +83,7 @@ public class SelectType extends AppCompatActivity {
                     public void onClick(MaterialDialog dialog, DialogAction which) {
                     }
                 })
+                .canceledOnTouchOutside(false)
                 .show();
     }
 }

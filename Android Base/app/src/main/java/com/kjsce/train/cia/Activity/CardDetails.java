@@ -76,6 +76,7 @@ public class CardDetails extends AppCompatActivity {
     private MaterialDialog materialDialog;
     private Boolean flag_subType;
     private CardUtility cardUtility;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -540,6 +541,8 @@ public class CardDetails extends AppCompatActivity {
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
     }
 
@@ -552,5 +555,37 @@ public class CardDetails extends AppCompatActivity {
     public void onBackPressed(){
         super.onBackPressed();
         cardUtility.detachListner();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkInternetConnection();
+    }
+
+    public void checkInternetConnection(){
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(CardDetails.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 }

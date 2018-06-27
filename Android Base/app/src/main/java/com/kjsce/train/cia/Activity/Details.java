@@ -72,6 +72,8 @@ public class Details extends AppCompatActivity {
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

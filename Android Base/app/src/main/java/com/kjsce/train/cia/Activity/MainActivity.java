@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView details;
     private MaterialDialog materialDialog;
     private TrainListUtility trainListUtility;
+    private List<Boolean> firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +126,9 @@ public class MainActivity extends AppCompatActivity
                         sharedData.setTrain(trainName);
                         getInputName();
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     public void getInputName() {
@@ -144,7 +147,9 @@ public class MainActivity extends AppCompatActivity
                             startActivity(intent);
                         }
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     public void initialize() {
@@ -204,6 +209,8 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
         }
     }
@@ -263,6 +270,8 @@ public class MainActivity extends AppCompatActivity
                         public void onClick(MaterialDialog dialog, DialogAction which) {
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
 
         }
@@ -312,8 +321,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        if(!sharedData.isUserVerified()){
+            sharedData.clearAll();
+            FirebaseAuth.getInstance().signOut();
+            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(i);
+        }
+        checkInternetConnection();
         navigationView.setCheckedItem(R.id.creport);
-
+        firstTime = sharedData.getFirstTime();
+        if(firstTime.get(0)) {
+            sequence();
+            firstTime.set(0, false);
+            sharedData.setFirstTime(firstTime);
+        }
     }
 
     public void onProgressStart() {
@@ -325,6 +346,7 @@ public class MainActivity extends AppCompatActivity
                 .content("Please Wait")
                 .progress(true, 0)
                 .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
     }
 
@@ -350,5 +372,31 @@ public class MainActivity extends AppCompatActivity
                     }
                 })
                 .show();
+    }
+
+    public void checkInternetConnection(){
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(MainActivity.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 }

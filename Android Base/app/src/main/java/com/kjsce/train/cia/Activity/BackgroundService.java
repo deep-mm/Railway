@@ -1,7 +1,10 @@
 package com.kjsce.train.cia.Activity;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -17,6 +20,9 @@ import com.kjsce.train.cia.Listener.OnNotificationListChangeListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.NotificationUtility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class BackgroundService extends Service {
@@ -26,6 +32,7 @@ public class BackgroundService extends Service {
     public static NotificationUtility notificationUtility;
     public SharedData sharedData;
     private List<UserNotificationEntity> detailedCards;
+    public static int id = 0;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -34,23 +41,33 @@ public class BackgroundService extends Service {
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Service created!", Toast.LENGTH_LONG).show();
 
         sharedData = new SharedData(getApplicationContext());
         notificationUtility = new NotificationUtility(sharedData.getUserEntity().getMobileNumber(), new OnNewNotificationAddedListener() {
             @Override
             public void onNotificationAdded(UserNotificationEntity newUserNotification) {
-                System.out.println("notificationEntity: "+newUserNotification);
-                //TODO: Display Notification
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-                mBuilder.setSmallIcon(R.drawable.notifications_icon);
+                mBuilder.setSmallIcon(R.mipmap.ic_launcher);
                 mBuilder.setContentTitle("New Report Generated!");
                 mBuilder.setContentText(newUserNotification.getSender()+" has generated a report of train: "+newUserNotification.getTrainNumber()+" on "+
-                        newUserNotification.getDateTime());
+                        newUserNotification.getDateTime())
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(newUserNotification.getSender()+" has generated a report of train: "+newUserNotification.getTrainNumber()+" on "+
+                                getDate(newUserNotification.getDateTime())))
+                .setPriority(Notification.PRIORITY_MAX);
+
+                Intent resultIntent = new Intent(context, Notifications.class);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                stackBuilder.addParentStack(Notifications.class);
+
+// Adds the Intent that starts the Activity to the top of the stack
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(resultPendingIntent);
 
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// notificationID allows you to update the notification later on.
-                mNotificationManager.notify(1, mBuilder.build());
+                mNotificationManager.notify(id, mBuilder.build());
+                id++;
             }
         },
                 new OnNotificationListChangeListener() {
@@ -60,40 +77,33 @@ public class BackgroundService extends Service {
                         sharedData.setNotificationEntityList(newNotificationList);
                     }
                 });
-
-        handler = new Handler();
-        runnable = new Runnable() {
-            public void run() {
-                Toast.makeText(context, "Service is still running", Toast.LENGTH_LONG).show();
-                handler.postDelayed(runnable, 10000);
-            }
-        };
-
-        handler.postDelayed(runnable, 15000);
     }
 
     @Override
     public void onDestroy() {
-        /* IF YOU WANT THIS SERVICE KILLED WITH THE APP THEN UNCOMMENT THE FOLLOWING LINE */
-        //handler.removeCallbacks(runnable);
-        Toast.makeText(this, "Service stopped", Toast.LENGTH_LONG).show();
+       //
     }
 
     @Override
     public void onStart(Intent intent, int startid) {
-        Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
+        //
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
-        handler = new Handler();
-        runnable = new Runnable() {
-            public void run() {
-                Toast.makeText(context, "Service is still running", Toast.LENGTH_LONG).show();
-                handler.postDelayed(runnable, 10000);
-            }
-        };
         return Service.START_STICKY;
+    }
+
+    public String getDate(String date){
+        SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        date = spf.format(newDate);
+        return date;
     }
 }

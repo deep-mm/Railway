@@ -31,6 +31,7 @@ public class Notifications extends AppCompatActivity {
     public NotificationsAdapter notificationsAdapter;
     public RecyclerView details;
     private List<UserNotificationEntity> detailedCards;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class Notifications extends AppCompatActivity {
                             public void onClick(MaterialDialog dialog, DialogAction which) {
                             }
                         })
+                        .canceledOnTouchOutside(false)
+                        .cancelable(false)
                         .show();
             }
         });
@@ -90,18 +93,54 @@ public class Notifications extends AppCompatActivity {
     }
 
     public void onProgressStart(){
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
         materialDialog = new MaterialDialog.Builder(Notifications.this)
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop(){
         materialDialog.hide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkInternetConnection();
+    }
+
+    public void checkInternetConnection(){
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(Notifications.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
+    }
+
+
 }

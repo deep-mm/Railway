@@ -18,11 +18,13 @@ public class IdUtility
 {
     private DatabaseReference mTrainDatabaseReference;
     private ArrayList<IndexEntryEntity> indexEntryEntities = new ArrayList<IndexEntryEntity>();
+    private ValueEventListener valueEventListener;
+    private ChildEventListener childEventListener;
 
     public IdUtility(ProblemReferenceEntity problemReferenceEntity, final IdListener listener){
         createReference(problemReferenceEntity);
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listener.onIdListChanged(indexEntryEntities);
@@ -34,7 +36,7 @@ public class IdUtility
             }
         };
 
-        ChildEventListener childEventListener = new ChildEventListener() {
+        childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
@@ -105,5 +107,10 @@ public class IdUtility
     public void changeProblemStatus(IdReferenceEntity idReferenceEntity,boolean problemStatus){
         createReference(idReferenceEntity);
         mTrainDatabaseReference.child("problemStatus").setValue(problemStatus);
+    }
+
+    public void detachListner(){
+        mTrainDatabaseReference.removeEventListener(childEventListener);
+        mTrainDatabaseReference.removeEventListener(valueEventListener);
     }
 }

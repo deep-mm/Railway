@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Entities.IdEntity;
@@ -21,6 +23,7 @@ import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.IdUtility;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import co.dift.ui.SwipeToAction;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -37,6 +40,7 @@ public class CardsActivity extends AppCompatActivity {
     private Intent intent;
     private IdUtility idUtility;
     private RecyclerView details;
+    private List<Boolean> firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,11 +142,19 @@ public class CardsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        checkInternetConnection();
+        firstTime = sharedData.getFirstTime();
+        if(firstTime.get(2)) {
+            sequence();
+            firstTime.set(2, false);
+            sharedData.setFirstTime(firstTime);
+        }
     }
 
     @Override
     public void onBackPressed(){
         super.onBackPressed();
+        idUtility.detachListner();
     }
 
     public void sequence() {
@@ -162,5 +174,31 @@ public class CardsActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    public void checkInternetConnection(){
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(CardsActivity.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 }

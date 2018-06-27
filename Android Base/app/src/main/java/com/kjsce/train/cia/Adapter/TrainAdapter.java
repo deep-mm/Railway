@@ -87,7 +87,9 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder>{
                             Toast.makeText(context,"Place of Inspection cannot be left empty",Toast.LENGTH_LONG).show();
                         }
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     @Override

@@ -97,16 +97,18 @@ public class LoginActivity extends AppCompatActivity {
         new MaterialDialog.Builder(LoginActivity.this)
                 .title("Unverified User")
                 .content("You are not authorized to use this app\nPlease contact the customer support for help")
-                .negativeText("OK")
+                .positiveText("OK")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        sharedData.clearAll();
+                        FirebaseAuth.getInstance().signOut();
                         finishAffinity();
                     }
                 })
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
-        sharedData.clearAll();
-        FirebaseAuth.getInstance().signOut();
     }
 
     public void initialize(){
@@ -114,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         helper = new Helper(getApplicationContext());
         users = new ArrayList<String>();
-        firstTime = Arrays.asList(false,false,false);
+        firstTime = Arrays.asList(true,true,true);
     }
 
     @Override
@@ -144,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                             finishAffinity();
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
         }
         mAuth.addAuthStateListener(mAuthStateListener);
@@ -161,11 +165,13 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-        materialDialog = new MaterialDialog.Builder(LoginActivity.this)
-        .title("Syncing Data")
-        .content("Please Wait")
-        .progress(true, 0)
-        .show();
+            materialDialog = new MaterialDialog.Builder(LoginActivity.this)
+            .title("Syncing Data")
+            .content("Please Wait")
+            .progress(true, 0)
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+            .show();
     }
 
     public void onProgressStop(){

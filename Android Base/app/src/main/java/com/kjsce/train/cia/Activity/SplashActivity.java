@@ -75,6 +75,8 @@ public class SplashActivity extends AppCompatActivity {
                             onBackPressed();
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
         }
         

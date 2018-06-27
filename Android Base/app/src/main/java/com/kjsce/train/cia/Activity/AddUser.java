@@ -82,6 +82,8 @@ public class AddUser extends AppCompatActivity {
                                     startActivity(intent);
                                 }
                             })
+                            .canceledOnTouchOutside(false)
+                            .cancelable(false)
                             .show();
                 }
             }
@@ -132,6 +134,8 @@ public class AddUser extends AppCompatActivity {
                             finishAffinity();
                         }
                     })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
                     .show();
         }
     }

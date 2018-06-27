@@ -41,6 +41,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     private String searchBoxValue, coachNumber;
     private Intent intent;
     private TrainUtility trainUtility;
+    private List<Boolean> firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,8 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
 
                             }
                         })
+                        .canceledOnTouchOutside(false)
+                        .cancelable(false)
                         .show();
             }
         });
@@ -104,6 +107,8 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
@@ -152,7 +157,9 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                         intent = new Intent(getApplicationContext(),SelectType.class);
                         startActivity(intent);
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
     @Override
@@ -174,6 +181,8 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     public void onClick(MaterialDialog dialog, DialogAction which) {
                     }
                 })
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
 
     }
@@ -186,6 +195,13 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public void onResume() {
         super.onResume();
+        checkInternetConnection();
+        firstTime = sharedData.getFirstTime();
+        if(firstTime.get(1)) {
+            sequence();
+            firstTime.set(1, false);
+            sharedData.setFirstTime(firstTime);
+        }
     }
 
     @Override
@@ -237,5 +253,31 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     }
                 })
                 .show();
+    }
+
+    public void checkInternetConnection(){
+        if(!helper.isNetworkConnected()){
+            new MaterialDialog.Builder(CoachSearch.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            finishAffinity();
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
     }
 }
