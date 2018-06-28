@@ -34,7 +34,6 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     private SharedData sharedData;
     MaterialDialog materialDialog;
     MediaPlayer mp;
-    CardEntity cardEntity;
 
     public CardDetailsAdapter() {
         Mvalues = null;
@@ -56,7 +55,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     public void onBindViewHolder(final com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        cardEntity = Mvalues.get(position);
+        CardEntity cardEntity = Mvalues.get(position);
+        System.out.println("CardEntity: "+cardEntity);
         if(cardEntity.getSender().equalsIgnoreCase(sharedData.getUserEntity().getName())){
             side = "right";
         }
@@ -89,7 +89,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.image_left.setVisibility(View.VISIBLE);
                 holder.text_left.setVisibility(View.GONE);
 
-                Picasso.with(context).load(cardEntity.getAudio().get(0)).into(holder.image_left);
+                Picasso.with(context).load(cardEntity.getImage().get(0)).into(holder.image_left);
             }
 
             else{
@@ -119,7 +119,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.image_right.setVisibility(View.VISIBLE);
                 holder.text_right.setVisibility(View.GONE);
 
-                Picasso.with(context).load(cardEntity.getAudio().get(0)).into(holder.image_left);
+                Picasso.with(context).load(cardEntity.getImage().get(0)).into(holder.image_right);
             }
 
             else{
@@ -136,21 +136,24 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.image_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                imageClicked(cardEntity1);
             }
         });
 
         holder.image_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                imageClicked(cardEntity1);
             }
         });
 
         holder.image_left.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                longClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                longClicked(cardEntity1);
                 return true;
             }
         });
@@ -158,7 +161,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.image_right.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                longClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                longClicked(cardEntity1);
                 return true;
             }
         });
@@ -166,7 +170,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.text_left.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                longClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                longClicked(cardEntity1);
                 return true;
             }
         });
@@ -174,7 +179,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.text_right.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                longClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                longClicked(cardEntity1);
                 return true;
             }
         });
@@ -182,7 +188,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.audio_left.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                longClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                longClicked(cardEntity1);
                 return true;
             }
         });
@@ -190,7 +197,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         holder.audio_right.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                longClicked();
+                CardEntity cardEntity1 = Mvalues.get(position);
+                longClicked(cardEntity1);
                 return true;
             }
         });
@@ -199,7 +207,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             @Override
             public void onClick(View view) {
                 try {
-                    audioClicked();
+                    CardEntity cardEntity1 = Mvalues.get(position);
+                    audioClicked(cardEntity1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -210,7 +219,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             @Override
             public void onClick(View view) {
                 try {
-                    audioClicked();
+                    CardEntity cardEntity1 = Mvalues.get(position);
+                    audioClicked(cardEntity1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -219,7 +229,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
 
     }
 
-    public void imageClicked(){
+    public void imageClicked(CardEntity cardEntity){
         Intent intent = new Intent(context, ImageShow.class);
         String url = cardEntity.getImage().get(0);
         String title = cardEntity.getComment();
@@ -228,13 +238,16 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         context.startActivity(intent);
     }
 
-    public void audioClicked() throws IOException {
+    public void audioClicked(CardEntity cardEntity) throws IOException {
 
         materialDialog = new MaterialDialog.Builder(context)
                 .title("Audio")
                 .content("Playing Audio")
                 .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
                 .show();
+        System.out.println("CardEntityInside: "+cardEntity);
         mp.setDataSource(cardEntity.getAudio().get(0));
         mp.prepare();
         mp.start();
@@ -247,7 +260,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
 
     }
 
-    public void longClicked(){
+    public void longClicked(CardEntity cardEntity){
         Intent intent = new Intent(context, Details.class);
         sharedData.setCardEntity(cardEntity);
         context.startActivity(intent);

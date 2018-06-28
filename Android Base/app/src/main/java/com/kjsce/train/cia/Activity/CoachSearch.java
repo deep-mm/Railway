@@ -152,7 +152,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         coachNumber = input.toString();
-                        trainUtility.addBogey(coachNumber);
+                        trainUtility.addBogey(helper.encodeStringToURLSafe(coachNumber));
                         sharedData.setBogie(coachNumber);
                         intent = new Intent(getApplicationContext(),SelectType.class);
                         startActivity(intent);

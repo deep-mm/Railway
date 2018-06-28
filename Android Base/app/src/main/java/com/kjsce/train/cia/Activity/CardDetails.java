@@ -30,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,6 +38,10 @@ import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Entities.CardReferenceEntity;
 import com.kjsce.train.cia.Entities.IdReferenceEntity;
+import com.kjsce.train.cia.Entities.Problem.CoachExteriorProblem;
+import com.kjsce.train.cia.Entities.Problem.CoachInteriorAmenitiesProblem;
+import com.kjsce.train.cia.Entities.Problem.CoachInteriorCleanProblem;
+import com.kjsce.train.cia.Entities.Problem.ToiletProblem;
 import com.kjsce.train.cia.Listener.AddCardListner;
 import com.kjsce.train.cia.Listener.CardListener;
 import com.kjsce.train.cia.R;
@@ -72,11 +77,12 @@ public class CardDetails extends AppCompatActivity {
     private Boolean flag;
     private final int PICK_IMAGE_REQUEST = 10;
     private final int CAMERA = 100;
-    private ArrayList<String> subTypes;
+    private List<String> subTypes;
     private MaterialDialog materialDialog;
     private Boolean flag_subType;
     private CardUtility cardUtility;
     private Intent intent;
+    private RecyclerView details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +110,7 @@ public class CardDetails extends AppCompatActivity {
                     .show();
         }
 
-        final RecyclerView details = (RecyclerView) findViewById(R.id.details);
+        details = (RecyclerView) findViewById(R.id.details);
         cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         details.setLayoutManager(mlayoutmanager);
@@ -135,22 +141,29 @@ public class CardDetails extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onProgressStart();
-                timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-                CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,null,null,text);
-                cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
-                    @Override
-                    public void onCompleteTask() {
-                        onProgressStop();
-                    }
-                });
+                if(subTypeSelected.equalsIgnoreCase("")){
+                    Toast.makeText(getApplicationContext(),"Select a subtype",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    subTypeSpinner.setEnabled(false);
+                    onProgressStart();
+                    timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                    CardEntity cardEntity = new CardEntity(timeStamp, userName, trainNumber, placeOfInspection, null, null, text);
+                    cardUtility.uploadCard(cardEntity, new CardReferenceEntity(bogeyNumber, problem, id, false, subTypeSelected), new AddCardListner() {
+                        @Override
+                        public void onCompleteTask() {
+                            onProgressStop();
+                            textBox.setText("");
+                        }
+                    });
+                }
             }
         });
 
         textBox.addTextChangedListener(filterTextWatcher);
 
-        subTypes = getTypes(sharedData.getType());
         subTypes.add(0,"Select a subtype");
+        subTypes.addAll(getTypes(sharedData.getType()));
         subTypes.add("Other");
         final ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(
                 this,R.layout.support_simple_spinner_dropdown_item,subTypes){
@@ -207,6 +220,7 @@ public class CardDetails extends AppCompatActivity {
 
         if(!flag_subType){
             subType = getIntent().getExtras().getString("subType");
+            subTypeSelected = subType;
             subTypes.clear();
             subTypes.add(subType);
             subTypeSpinner.setEnabled(false);
@@ -257,7 +271,7 @@ public class CardDetails extends AppCompatActivity {
 
         audio = new ArrayList<String>();
         image = new ArrayList<String>();
-        //userName = sharedData.getUserEntity().getName();
+        userName = sharedData.getUserEntity().getName();
         placeOfInspection = sharedData.getPlaceOfInspection();
         trainNumber = sharedData.getTrain();
         bogeyNumber = sharedData.getBogie();
@@ -290,7 +304,8 @@ public class CardDetails extends AppCompatActivity {
             @Override
             public void onDataChanged(ArrayList<CardEntity> cardEntity) {
                 cardEntities = cardEntity;
-                cardDetailsAdapter.notifyDataSetChanged();
+                cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                details.setAdapter(cardDetailsAdapter);
             }
 
             @Override
@@ -310,26 +325,32 @@ public class CardDetails extends AppCompatActivity {
     }
 
     public void record() {
-        timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-        audioFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        audioFilePath += "/" + timeStamp + ".3gp";
-        int color = getResources().getColor(R.color.colorPrimaryDark);
-        int requestCode = 0;
-        AndroidAudioRecorder.with(this)
-                // Required
-                .setFilePath(audioFilePath)
-                .setColor(color)
-                .setRequestCode(requestCode)
+        if(subTypeSelected.equalsIgnoreCase("")){
+            Toast.makeText(getApplicationContext(),"Select a subtype",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            subTypeSpinner.setEnabled(false);
+            timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+            audioFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+            audioFilePath += "/" + timeStamp + ".3gp";
+            int color = getResources().getColor(R.color.colorPrimaryDark);
+            int requestCode = 0;
+            AndroidAudioRecorder.with(this)
+                    // Required
+                    .setFilePath(audioFilePath)
+                    .setColor(color)
+                    .setRequestCode(requestCode)
 
-                // Optional
-                .setSource(AudioSource.MIC)
-                .setChannel(AudioChannel.STEREO)
-                .setSampleRate(AudioSampleRate.HZ_48000)
-                .setAutoStart(true)
-                .setKeepDisplayOn(true)
+                    // Optional
+                    .setSource(AudioSource.MIC)
+                    .setChannel(AudioChannel.STEREO)
+                    .setSampleRate(AudioSampleRate.HZ_48000)
+                    .setAutoStart(true)
+                    .setKeepDisplayOn(true)
 
-                // Start recording
-                .record();
+                    // Start recording
+                    .record();
+        }
     }
 
     @Override
@@ -364,10 +385,15 @@ public class CardDetails extends AppCompatActivity {
         }
         else if (requestCode == CAMERA && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
+            System.out.println("Where: In ELse if");
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageFilePath = saveImage(thumbnail);
             getInputName("image");
             System.out.println("File Path: "+imageFilePath);
+        }
+
+        else{
+            System.out.println("Where: In ELse");
         }
     }
 
@@ -409,12 +435,12 @@ public class CardDetails extends AppCompatActivity {
                 }).show();
     }
 
-    public ArrayList<String> getTypes(String problem){
+    public List<String> getTypes(String problem){
 
-        ArrayList<String> type = new ArrayList<String>();
+        List<String> type = new ArrayList<String>();
         switch(problem){
 
-            /*case "Toilets":
+            case "Toilets":
                 return (new ToiletProblem().getTypes());
 
             case "Coach Interior Amenities":
@@ -424,7 +450,7 @@ public class CardDetails extends AppCompatActivity {
                 return (new CoachInteriorCleanProblem().getTypes());
 
             case "Coach Exterior":
-                return (new CoachExteriorProblem().getTypes());*/
+                return (new CoachExteriorProblem().getTypes());
 
             default:
                 return type;
@@ -433,26 +459,32 @@ public class CardDetails extends AppCompatActivity {
     }
 
     public void camera(){
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera" };
-        pictureDialog.setItems(pictureDialogItems,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                chooseImage();
-                                break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
+        if(subTypeSelected.equalsIgnoreCase("")){
+            Toast.makeText(getApplicationContext(),"Select a subtype",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            subTypeSpinner.setEnabled(false);
+            AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+            pictureDialog.setTitle("Select Action");
+            String[] pictureDialogItems = {
+                    "Select photo from gallery",
+                    "Capture photo from camera"};
+            pictureDialog.setItems(pictureDialogItems,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    chooseImage();
+                                    break;
+                                case 1:
+                                    takePhotoFromCamera();
+                                    break;
+                            }
                         }
-                    }
-                });
-        pictureDialog.show();
+                    });
+            pictureDialog.show();
+        }
     }
 
     private void chooseImage() {
@@ -466,7 +498,6 @@ public class CardDetails extends AppCompatActivity {
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
-
     }
 
     public String saveImage(Bitmap thumbnail) {
@@ -538,7 +569,7 @@ public class CardDetails extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         materialDialog = new MaterialDialog.Builder(CardDetails.this)
-                .title("Syncing Data")
+                .title("Uploading Data")
                 .content("Please Wait")
                 .progress(true, 0)
                 .canceledOnTouchOutside(false)
@@ -573,7 +604,7 @@ public class CardDetails extends AppCompatActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            intent = new Intent(getApplicationContext(),CardDetails.class);
                             startActivity(intent);
                         }
                     })

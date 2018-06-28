@@ -1,6 +1,7 @@
 package com.kjsce.train.cia.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.kjsce.train.cia.Activity.CardDetails;
 import com.kjsce.train.cia.Activity.SharedData;
 import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.R;
@@ -46,6 +48,19 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
         sharedData = new SharedData(context);
         holder.subType.setText(Mvalues.get(position).getSubtype());
         holder.lastUpdated.setText(Mvalues.get(position).getId());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                IndexEntryEntity indexEntryEntity = Mvalues.get(position);
+                System.out.println("itemData: "+indexEntryEntity);
+                Intent intent = new Intent(context,CardDetails.class);
+                intent.putExtra("flag",false);
+                intent.putExtra("subType",indexEntryEntity.getSubtype());
+                intent.putExtra("id",indexEntryEntity.getId());
+                context.startActivity(intent);
+            }
+        });
         //TODO: Replace with lastUpdated once done
     }
 

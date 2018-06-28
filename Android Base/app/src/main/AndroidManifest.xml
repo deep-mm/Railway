@@ -20,26 +20,51 @@
         android:theme="@style/AppTheme">
         <service   android:enabled="true"
             android:name=".Activity.BackgroundService"/>
-        <activity android:name=".Activity.LoginActivity" />
-        <activity android:name=".Activity.SplashActivity">
+        <activity android:name=".Activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.SplashActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.ImageShow" />
+        <activity android:name=".Activity.ImageShow"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".Activity.MainActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Activity.CardDetails" />
-        <activity android:name=".Activity.Details" />
-        <activity android:name=".Activity.NotifyContacts" />
-        <activity android:name=".Activity.SelectType" />
-        <activity android:name=".Activity.AddUser" />
-        <activity android:name=".Activity.CoachSearch" />
-        <activity android:name=".Activity.Notifications" />
-        <activity android:name=".Activity.CardsActivity"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.CardDetails"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.Details"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.NotifyContacts"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.SelectType"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.AddUser"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.CoachSearch"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".Activity.Notifications"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.CardsActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
     </application>
 
 </manifest>

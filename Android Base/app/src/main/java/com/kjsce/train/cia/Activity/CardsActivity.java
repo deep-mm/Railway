@@ -88,11 +88,12 @@ public class CardsActivity extends AppCompatActivity {
             @Override
             public void onClick(IndexEntryEntity itemData) {
                 //TODO: set itemData in sharedData to access in CardDetails
-                intent = new Intent(getApplicationContext(),CardDetails.class);
+                System.out.println("itemData: "+itemData);
+                /*intent = new Intent(getApplicationContext(),CardDetails.class);
                 intent.putExtra("flag",false);
-                intent.putExtra("subType",itemData.getSubtype());
-                intent.putExtra("id",itemData.getId());
-                startActivity(intent);
+                intent.putExtra("subType","Other");
+                intent.putExtra("id",123);
+                startActivity(intent);*/
             }
 
             @Override
