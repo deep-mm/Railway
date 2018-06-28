@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Adapter.NotificationsAdapter;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.R;
 
@@ -114,6 +115,12 @@ public class Notifications extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         checkInternetConnection();
+    }
+
+    @Override
+    public void onBackPressed(){
+        intent = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
     }
 
     public void checkInternetConnection(){

@@ -2,6 +2,7 @@ package com.kjsce.train.cia.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -254,6 +255,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 .show();
         System.out.println("CardEntityInside: "+cardEntity);
         mp = new MediaPlayer();
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mp.setDataSource(cardEntity.getAudio().get(0));
         mp.prepare();
         mp.start();
@@ -262,6 +264,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             public void onCompletion(MediaPlayer mediaPlayer) {
                 materialDialog.hide();
                 mp.stop();
+                mp.release();
             }
         });
 
