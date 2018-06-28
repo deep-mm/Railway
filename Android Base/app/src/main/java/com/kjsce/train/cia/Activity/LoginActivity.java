@@ -164,9 +164,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onProgressStart(){
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
             materialDialog = new MaterialDialog.Builder(LoginActivity.this)
             .title("Syncing Data")
             .content("Please Wait")
@@ -177,7 +174,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onProgressStop(){
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         materialDialog.hide();
     }
 

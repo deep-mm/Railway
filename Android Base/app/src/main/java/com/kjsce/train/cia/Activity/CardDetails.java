@@ -373,8 +373,7 @@ public class CardDetails extends AppCompatActivity {
             }
         }
 
-        else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null)
+        else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK)
         {
             filePath = data.getData();
             try {

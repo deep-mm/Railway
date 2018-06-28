@@ -78,14 +78,10 @@ public class Details extends AppCompatActivity {
                 .canceledOnTouchOutside(false)
                 .cancelable(false)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop(){
         materialDialog.hide();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public String getDate(String date){

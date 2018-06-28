@@ -94,9 +94,6 @@ public class Notifications extends AppCompatActivity {
     }
 
     public void onProgressStart(){
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
         materialDialog = new MaterialDialog.Builder(Notifications.this)
                 .title("Syncing Data")
                 .content("Please Wait")
@@ -108,7 +105,6 @@ public class Notifications extends AppCompatActivity {
 
     public void onProgressStop(){
         materialDialog.hide();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     @Override

@@ -110,14 +110,10 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 .canceledOnTouchOutside(false)
                 .cancelable(false)
                 .show();
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void onProgressStop(){
         materialDialog.hide();
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     public void initialize(){
