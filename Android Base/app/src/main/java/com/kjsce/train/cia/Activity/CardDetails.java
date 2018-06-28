@@ -332,8 +332,12 @@ public class CardDetails extends AppCompatActivity {
         else {
             subTypeSpinner.setEnabled(false);
             timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-            audioFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-            audioFilePath += "/" + timeStamp + ".3gp";
+            ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+            File myDir=contextWrapper.getFilesDir();
+            audioFilePath = myDir.getAbsolutePath();
+
+            audioFilePath = audioFilePath + "/"+timeStamp+".3gp";
+
             int color = getResources().getColor(R.color.colorPrimaryDark);
             int requestCode = 0;
             AndroidAudioRecorder.with(this)
@@ -503,11 +507,12 @@ public class CardDetails extends AppCompatActivity {
 
     public String saveImage(Bitmap thumbnail) {
         String timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
-        imageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+        File myDir=contextWrapper.getFilesDir();
+        imageFilePath = myDir.getAbsolutePath();
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-        ContextWrapper c = new ContextWrapper(getApplicationContext());
 
         try {
             File f = new File(imageFilePath, timeStamp + ".jpg");

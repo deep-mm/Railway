@@ -79,6 +79,8 @@ public class LoginActivity extends AppCompatActivity {
                             sharedData.setUserEntity(userEntity);
                             sharedData.setFirstTime(firstTime);
                             onProgressStop();
+                            Intent intent1 = new Intent(getApplicationContext(),BackgroundService.class);
+                            startService(intent1);
                             intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                         } else {
