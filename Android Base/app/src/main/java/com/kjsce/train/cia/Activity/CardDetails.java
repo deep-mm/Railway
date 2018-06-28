@@ -1,9 +1,11 @@
 package com.kjsce.train.cia.Activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaScannerConnection;
@@ -391,6 +393,11 @@ public class CardDetails extends AppCompatActivity {
             System.out.println("Where: In ELse if");
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageFilePath = saveImage(thumbnail);
+            Uri tempUri = getImageUri(getApplicationContext(), thumbnail);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));
+            finalFile.delete();
             getInputName("image");
             System.out.println("File Path: "+imageFilePath);
         }
@@ -587,6 +594,20 @@ public class CardDetails extends AppCompatActivity {
     public void onProgressStop(){
         materialDialog.hide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 
     @Override

@@ -29,17 +29,13 @@ public class URLMediaPlayerActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        // remove title and go full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_media_player);
 
 
         // get data from main activity intent
         Intent intent = getIntent();
-        final String audioFile = intent.getStringExtra(MainActivity.AUDIO_URL);
+        final String audioFile = intent.getExtras().getString("uri");
+        final String title = intent.getExtras().getString("title");
       //  final String coverImage = intent.getStringExtra(MainActivity.IMG_URL);
 
 
@@ -74,7 +70,7 @@ public class URLMediaPlayerActivity extends Activity {
             setContentView(R.layout.activity_media_player);
 
             // display title
-            ((TextView)findViewById(R.id.now_playing_text)).setText(audioFile);
+            ((TextView)findViewById(R.id.now_playing_text)).setText(title);
 
 
             /// Load cover image (we use Picasso Library)

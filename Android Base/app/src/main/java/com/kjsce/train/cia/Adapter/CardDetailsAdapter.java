@@ -18,7 +18,9 @@ import com.kjsce.train.cia.Activity.Details;
 import com.kjsce.train.cia.Activity.ImageShow;
 import com.kjsce.train.cia.Activity.MainActivity;
 import com.kjsce.train.cia.Activity.SharedData;
+import com.kjsce.train.cia.Activity.URLMediaPlayerActivity;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.R;
 import com.squareup.picasso.Picasso;
 
@@ -246,7 +248,11 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     public void audioClicked(CardEntity cardEntity) throws IOException {
 
         System.out.println("CardEntityInside: "+cardEntity);
-        materialDialog = new MaterialDialog.Builder(context)
+        Intent intent = new Intent(context, URLMediaPlayerActivity.class);
+        intent.putExtra("uri",cardEntity.getAudio().get(0));
+        intent.putExtra("title",cardEntity.getComment());
+        context.startActivity(intent);
+        /*materialDialog = new MaterialDialog.Builder(context)
                 .title("Audio")
                 .content("Playing Audio")
                 .progress(true, 0)
@@ -266,7 +272,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 mp.stop();
                 mp.release();
             }
-        });
+        });*/
 
     }
 

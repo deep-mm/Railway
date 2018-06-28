@@ -63,6 +63,9 @@
         <activity android:name=".Activity.Notifications"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Activity.URLMediaPlayerActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".Activity.CardsActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"></activity>
