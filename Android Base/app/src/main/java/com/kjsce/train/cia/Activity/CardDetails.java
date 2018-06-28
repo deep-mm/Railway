@@ -435,7 +435,10 @@ public class CardDetails extends AppCompatActivity {
                         }
 
                     }
-                }).show();
+                })
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
+                .show();
     }
 
     public List<String> getTypes(String problem){

@@ -176,12 +176,12 @@ public class MainActivity extends AppCompatActivity
         trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
             @Override
             public void OnDataChenged(List<String> newTrainList) {
+                onProgressStop();
                 sharedData.setTrainList(newTrainList);
                 train_list = newTrainList;
                 allTrains = train_list;
                 trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
                 details.setAdapter(trainAdapter);
-                onProgressStop();
             }
         });
 
