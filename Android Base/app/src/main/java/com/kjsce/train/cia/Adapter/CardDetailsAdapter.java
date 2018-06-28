@@ -22,7 +22,10 @@ import com.kjsce.train.cia.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
@@ -100,7 +103,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             }
 
             holder.name_text_left.setText(cardEntity.getSender());
-            holder.time_text_left.setText(cardEntity.getDateTime());
+            holder.time_text_left.setText(getDate(cardEntity.getDateTime()));
         }
 
         else {
@@ -129,8 +132,8 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.text_right.setText(cardEntity.getComment());
             }
 
-            holder.name_text_left.setText(cardEntity.getSender());
-            holder.time_text_left.setText(cardEntity.getDateTime());
+            holder.name_text_right.setText(cardEntity.getSender());
+            holder.time_text_right.setText(getDate(cardEntity.getDateTime()));
         }
 
         holder.image_left.setOnClickListener(new View.OnClickListener() {
@@ -301,5 +304,18 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             audio_text_left = (TextView) itemView.findViewById(R.id.audio_text_left);
             audio_text_right = (TextView) itemView.findViewById(R.id.audio_text_right);
         }
+    }
+
+    public String getDate(String date){
+        SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        date = spf.format(newDate);
+        return date;
     }
 }
