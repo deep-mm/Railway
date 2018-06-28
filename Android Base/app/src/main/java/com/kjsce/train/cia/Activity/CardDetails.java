@@ -388,8 +388,7 @@ public class CardDetails extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        else if (requestCode == CAMERA && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
+        else if (requestCode == CAMERA && resultCode == RESULT_OK) {
             System.out.println("Where: In ELse if");
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageFilePath = saveImage(thumbnail);
