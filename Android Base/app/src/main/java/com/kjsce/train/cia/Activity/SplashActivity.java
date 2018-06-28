@@ -88,6 +88,7 @@ public class SplashActivity extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         keyguardManager = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         userUtility = new UserUtility();
+        helper.clearData();
     }
 
     @Override

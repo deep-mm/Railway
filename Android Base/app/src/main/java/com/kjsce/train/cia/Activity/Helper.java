@@ -1,6 +1,7 @@
 package com.kjsce.train.cia.Activity;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
@@ -13,6 +14,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Locale;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 /**
  * Created by deepmehta on 17/02/18.
@@ -33,8 +36,9 @@ public class Helper {
     }
 
     public void clearData(){
-        File mainDirectory=new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-        deleteRecursive(mainDirectory);
+        ContextWrapper contextWrapper = new ContextWrapper(c);
+        File myDir=contextWrapper.getFilesDir();
+        deleteRecursive(myDir);
     }
 
     void deleteRecursive(File fileOrDirectory) {
