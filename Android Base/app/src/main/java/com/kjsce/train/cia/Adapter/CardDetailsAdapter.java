@@ -58,6 +58,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
     public void onBindViewHolder(final com.kjsce.train.cia.Adapter.CardDetailsAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
+        mp = new MediaPlayer();
         CardEntity cardEntity = Mvalues.get(position);
         System.out.println("CardEntity: "+cardEntity);
         if(cardEntity.getSender().equalsIgnoreCase(sharedData.getUserEntity().getName())){
@@ -243,6 +244,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
 
     public void audioClicked(CardEntity cardEntity) throws IOException {
 
+        System.out.println("CardEntityInside: "+cardEntity);
         materialDialog = new MaterialDialog.Builder(context)
                 .title("Audio")
                 .content("Playing Audio")
@@ -251,6 +253,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 .cancelable(false)
                 .show();
         System.out.println("CardEntityInside: "+cardEntity);
+        mp = new MediaPlayer();
         mp.setDataSource(cardEntity.getAudio().get(0));
         mp.prepare();
         mp.start();
@@ -258,6 +261,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 materialDialog.hide();
+                mp.stop();
             }
         });
 
