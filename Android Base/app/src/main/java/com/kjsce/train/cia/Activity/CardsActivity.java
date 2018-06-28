@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Entities.IdEntity;
+import com.kjsce.train.cia.Entities.IdReferenceEntity;
 import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.Entities.ProblemReferenceEntity;
 import com.kjsce.train.cia.Listener.IdListener;
@@ -77,6 +78,25 @@ public class CardsActivity extends AppCompatActivity {
         swipeToAction = new SwipeToAction(details, new SwipeToAction.SwipeListener<IndexEntryEntity>() {
             @Override
             public boolean swipeLeft(IndexEntryEntity itemData) {
+                new MaterialDialog.Builder(CardsActivity.this)
+                        .title("Confirm")
+                        .content("Are you sure, issue resolved?")
+                        .positiveText("Yes")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                idUtility.changeProblemStatus(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),true);
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                            }
+                        })
+                        .canceledOnTouchOutside(false)
+                        .cancelable(false)
+                        .show();
                 return false;
             }
 
@@ -89,11 +109,11 @@ public class CardsActivity extends AppCompatActivity {
             public void onClick(IndexEntryEntity itemData) {
                 //TODO: set itemData in sharedData to access in CardDetails
                 System.out.println("itemData: "+itemData);
-                /*intent = new Intent(getApplicationContext(),CardDetails.class);
+                intent = new Intent(getApplicationContext(),CardDetails.class);
                 intent.putExtra("flag",false);
-                intent.putExtra("subType","Other");
-                intent.putExtra("id",123);
-                startActivity(intent);*/
+                intent.putExtra("subType",itemData.getSubtype());
+                intent.putExtra("id",itemData.getId());
+                startActivity(intent);
             }
 
             @Override
@@ -117,6 +137,12 @@ public class CardsActivity extends AppCompatActivity {
             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
                 indexEntryEntities = idList;
                 System.out.println("indexEntryEntities: "+indexEntryEntities.size());
+                for(int i=0;i<indexEntryEntities.size();i++){
+                    if(indexEntryEntities.get(i).isProblemStatus()==true) {
+                        indexEntryEntities.remove(i);
+                        i--;
+                    }
+                }
                 cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
                 details.setAdapter(cardsAdapter);
             }

@@ -15,7 +15,10 @@ import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Details extends AppCompatActivity {
 
@@ -36,7 +39,7 @@ public class Details extends AppCompatActivity {
 
         cardEntity = sharedData.getCardEntity();
         detailedCards.add("Train-Number: "+cardEntity.getTrainNumber());
-        detailedCards.add("Date: "+cardEntity.getDateTime());
+        detailedCards.add("Date: "+getDate(cardEntity.getDateTime()));
         detailedCards.add("Place: "+cardEntity.getPlaceOfInspection());
         detailedCards.add("Sender: "+cardEntity.getSender());
 
@@ -83,5 +86,18 @@ public class Details extends AppCompatActivity {
     public void onProgressStop(){
         materialDialog.hide();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    public String getDate(String date){
+        SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        date = spf.format(newDate);
+        return date;
     }
 }

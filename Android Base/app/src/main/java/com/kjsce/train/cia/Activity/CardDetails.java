@@ -276,7 +276,8 @@ public class CardDetails extends AppCompatActivity {
         trainNumber = sharedData.getTrain();
         bogeyNumber = sharedData.getBogie();
         problem = sharedData.getType();
-        id = "123";
+        timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+        id = timeStamp+userName;
 
         if(getIntent().hasExtra("flag")){
             flag_subType = getIntent().getExtras().getBoolean("flag");

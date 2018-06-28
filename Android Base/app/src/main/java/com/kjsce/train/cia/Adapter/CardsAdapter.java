@@ -48,19 +48,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
         sharedData = new SharedData(context);
         holder.subType.setText(Mvalues.get(position).getSubtype());
         holder.lastUpdated.setText(Mvalues.get(position).getId());
+        IndexEntryEntity indexEntryEntity = Mvalues.get(position);
+        ViewHolder vh = (ViewHolder) holder;
+        vh.data = indexEntryEntity;
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                IndexEntryEntity indexEntryEntity = Mvalues.get(position);
-                System.out.println("itemData: "+indexEntryEntity);
-                Intent intent = new Intent(context,CardDetails.class);
-                intent.putExtra("flag",false);
-                intent.putExtra("subType",indexEntryEntity.getSubtype());
-                intent.putExtra("id",indexEntryEntity.getId());
-                context.startActivity(intent);
-            }
-        });
         //TODO: Replace with lastUpdated once done
     }
 
@@ -69,7 +60,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
         return Mvalues.size();
     }
 
-    public class ViewHolder extends SwipeToAction.ViewHolder<DetailsAdapter>
+    public class ViewHolder extends SwipeToAction.ViewHolder<IndexEntryEntity>
     {
         TextView subType, lastUpdated;
 
