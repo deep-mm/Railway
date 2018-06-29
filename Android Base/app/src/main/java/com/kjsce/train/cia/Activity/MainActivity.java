@@ -254,6 +254,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.help) {
             Toast.makeText(getApplicationContext(),"Feature unavailable in beta",Toast.LENGTH_SHORT).show();
+            navigationView.setCheckedItem(R.id.creport);
 
         } else if (id == R.id.logout) {
             new MaterialDialog.Builder(MainActivity.this)

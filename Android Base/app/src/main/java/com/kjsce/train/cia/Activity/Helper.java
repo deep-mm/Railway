@@ -39,6 +39,9 @@ public class Helper {
         ContextWrapper contextWrapper = new ContextWrapper(c);
         File myDir=contextWrapper.getFilesDir();
         deleteRecursive(myDir);
+        File mainDir = Environment.getExternalStorageDirectory();
+        File mainFile = new File(mainDir, "/CIA/Inspection/");
+        deleteRecursive(mainFile);
     }
 
     void deleteRecursive(File fileOrDirectory) {
