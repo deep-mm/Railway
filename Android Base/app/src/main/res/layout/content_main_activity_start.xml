@@ -50,7 +50,8 @@
         android:layout_alignParentRight="true"
         android:background="@mipmap/add_button"
         android:textAllCaps="false"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        android:elevation="5dp"/>
 
 </RelativeLayout>
 

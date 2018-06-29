@@ -172,11 +172,16 @@ public class MainActivity extends AppCompatActivity
         data1 = new ArrayList<String>();
         searchBoxValue = "";
 
-        onProgressStart();
+        if(getIntent().hasExtra("from")){
+            onProgressStart();
+        }
+
         trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
             @Override
             public void OnDataChenged(List<String> newTrainList) {
-                onProgressStop();
+                if(getIntent().hasExtra("from")){
+                    onProgressStop();
+                }
                 sharedData.setTrainList(newTrainList);
                 train_list = newTrainList;
                 allTrains = train_list;
@@ -248,7 +253,7 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(getApplicationContext(), Notifications.class);
             startActivity(intent);
         } else if (id == R.id.help) {
-            //Create a help screen
+            Toast.makeText(getApplicationContext(),"Feature unavailable in beta",Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.logout) {
             new MaterialDialog.Builder(MainActivity.this)

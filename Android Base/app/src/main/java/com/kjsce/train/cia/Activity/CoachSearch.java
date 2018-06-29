@@ -77,27 +77,33 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(CoachSearch.this)
-                        .title("Confirm")
-                        .content("Are you sure you want to submit?")
-                        .positiveText("Yes")
-                        .negativeText("No")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
-                                intent = new Intent(getApplicationContext(),NotifyContacts.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
-
-                            }
-                        })
-                        .canceledOnTouchOutside(false)
-                        .cancelable(false)
-                        .show();
+                if(allCoaches.size()==0){
+                    Toast.makeText(getApplicationContext(),"Atleast one coach needed to generate the report",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    new MaterialDialog.Builder(CoachSearch.this)
+                            .title("Confirm")
+                            .content("Do you want to notify users of the train report?")
+                            .positiveText("Yes")
+                            .negativeText("No")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    intent = new Intent(getApplicationContext(), NotifyContacts.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .canceledOnTouchOutside(false)
+                            .cancelable(false)
+                            .show();
+                }
             }
         });
     }
@@ -132,6 +138,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             @Override
             public void onDataChanged(TrainEntity newTrainEntity) {
                 coach_list = newTrainEntity.getBogeyList();
+                allCoaches = coach_list;
                 trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
                 details.setAdapter(trainAdapter);
             }
@@ -168,7 +175,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
-                        intent = new Intent(getApplicationContext(),NotifyContacts.class);
+                        intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                     }
                 })

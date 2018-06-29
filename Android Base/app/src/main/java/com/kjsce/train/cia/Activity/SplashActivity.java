@@ -1,6 +1,8 @@
 package com.kjsce.train.cia.Activity;
 
+import android.app.ActivityManager;
 import android.app.KeyguardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -101,14 +103,17 @@ public class SplashActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK && requestCode==CODE_AUTHENTICATION_VERIFICATION)
         {
-            Intent intent1 = new Intent(getApplicationContext(),BackgroundService.class);
-            startService(intent1);
+            if(!isMyServiceRunning(BackgroundService.class)) {
+                Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
+                startService(intent1);
+            }
             intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("from","mainActivity");
             startActivity(intent);
         }
         else
         {
-            Toast.makeText(this, "Failure: Unable to verify user's identity", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Failure: Unable to verify user's identity", Toast.LENGTH_SHORT).show();
             finishAffinity();
         }
     }
@@ -120,9 +125,12 @@ public class SplashActivity extends AppCompatActivity {
                 startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
             }
             else {
-                Intent intent1 = new Intent(getApplicationContext(),BackgroundService.class);
-                startService(intent1);
+                if(!isMyServiceRunning(BackgroundService.class)) {
+                    Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
+                    startService(intent1);
+                }
                 intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("from","mainActivity");
                 startActivity(intent);
             }
         }
@@ -130,5 +138,15 @@ public class SplashActivity extends AppCompatActivity {
             intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
         }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
