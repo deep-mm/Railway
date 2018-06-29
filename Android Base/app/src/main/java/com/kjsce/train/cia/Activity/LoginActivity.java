@@ -105,7 +105,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onClick(MaterialDialog dialog, DialogAction which) {
                         sharedData.clearAll();
                         FirebaseAuth.getInstance().signOut();
-                        finishAffinity();
+                        intent = new Intent(getApplicationContext(),LoginActivity.class);
+                        startActivity(intent);
                     }
                 })
                 .canceledOnTouchOutside(false)
