@@ -86,7 +86,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        spf= new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         date = spf.format(newDate);
         return date;
     }

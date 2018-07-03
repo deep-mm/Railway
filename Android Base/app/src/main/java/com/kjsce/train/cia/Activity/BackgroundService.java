@@ -14,11 +14,15 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.kjsce.train.cia.Adapter.NotificationsAdapter;
+import com.kjsce.train.cia.Adapter.TrainAdapter;
 import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.Listener.OnNewNotificationAddedListener;
 import com.kjsce.train.cia.Listener.OnNotificationListChangeListener;
+import com.kjsce.train.cia.Listener.OnTrainListChangeListener;
+import com.kjsce.train.cia.Listener.OnTrainUpdated;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.NotificationUtility;
+import com.kjsce.train.cia.Utilities.TrainListUtility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +37,7 @@ public class BackgroundService extends Service {
     public SharedData sharedData;
     private List<UserNotificationEntity> detailedCards;
     public static int id = 0;
+    public static TrainListUtility trainListUtility;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -43,6 +48,15 @@ public class BackgroundService extends Service {
     public void onCreate() {
 
         sharedData = new SharedData(getApplicationContext());
+
+        trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
+            @Override
+            public void OnDataChenged(List<String> newTrainList) {
+                sharedData.setTrainList(newTrainList);
+            }
+        });
+
+
         notificationUtility = new NotificationUtility(sharedData.getUserEntity().getMobileNumber(), new OnNewNotificationAddedListener() {
             @Override
             public void onNotificationAdded(UserNotificationEntity newUserNotification) {
@@ -102,7 +116,7 @@ public class BackgroundService extends Service {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        spf= new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         date = spf.format(newDate);
         return date;
     }

@@ -92,7 +92,7 @@ public class Details extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        spf= new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         date = spf.format(newDate);
         return date;
     }

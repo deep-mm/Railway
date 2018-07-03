@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.baoyz.widget.PullRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="66dp">
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -14,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/app_bar"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="66dp"
         android:elevation="5dp"
         android:fadingEdge="horizontal|vertical"
         android:filterTouchesWhenObscured="false"
@@ -55,4 +61,4 @@
 
 </RelativeLayout>
 
-
+</com.baoyz.widget.PullRefreshLayout>

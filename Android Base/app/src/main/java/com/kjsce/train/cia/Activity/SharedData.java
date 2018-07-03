@@ -204,5 +204,17 @@ public class SharedData {
         return firstTime;
     }
 
+    public void setCardEntityToUpload(List<CardEntity> cardEntity){
+        String type = gson.toJson(cardEntity);
+        editor.putString("cardEntity_upload",type).commit();
+    }
+
+    public List<CardEntity> getCardEntityToUpload(){
+        String json = pref.getString("cardEntity_upload", "");
+        Type listType = new TypeToken<List<CardEntity>>() {}.getType();
+        List<CardEntity> cardEntities = gson.fromJson(json, listType);
+        return cardEntities;
+    }
+
 
 }

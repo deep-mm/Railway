@@ -327,7 +327,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        spf= new SimpleDateFormat("dd/MM/yyyy | hh:mm");
+        spf= new SimpleDateFormat("dd/MM/yyyy | HH:mm");
         date = spf.format(newDate);
         return date;
     }

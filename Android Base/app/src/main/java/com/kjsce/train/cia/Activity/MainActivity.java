@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.baoyz.widget.PullRefreshLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
@@ -69,8 +70,8 @@ public class MainActivity extends AppCompatActivity
     private String placeOfInspection, searchBoxValue, trainNumber, trainName;
     private RecyclerView details;
     private MaterialDialog materialDialog;
-    private TrainListUtility trainListUtility;
     private List<Boolean> firstTime;
+    private PullRefreshLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity
         details.setItemAnimator(new DefaultItemAnimator());
 
         initialize();
+
+        train_list = sharedData.getTrainList();
+        allTrains = train_list;
+        trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
+        details.setAdapter(trainAdapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,6 +115,17 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 addNewTrain();
+            }
+        });
+
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                train_list = sharedData.getTrainList();
+                allTrains = train_list;
+                trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
+                details.setAdapter(trainAdapter);
+                layout.setRefreshing(false);
             }
         });
     }
@@ -171,25 +188,7 @@ public class MainActivity extends AppCompatActivity
         addButton = (ImageButton) findViewById(R.id.button_add);
         data1 = new ArrayList<String>();
         searchBoxValue = "";
-
-        if(getIntent().hasExtra("from")){
-            onProgressStart();
-        }
-
-        trainListUtility = new TrainListUtility(new OnTrainListChangeListener() {
-            @Override
-            public void OnDataChenged(List<String> newTrainList) {
-                if(getIntent().hasExtra("from")){
-                    onProgressStop();
-                }
-                sharedData.setTrainList(newTrainList);
-                train_list = newTrainList;
-                allTrains = train_list;
-                trainAdapter = new TrainAdapter(train_list, MainActivity.this, "train");
-                details.setAdapter(trainAdapter);
-            }
-        });
-
+        layout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
     }
 
     @Override

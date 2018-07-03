@@ -1,6 +1,7 @@
 package com.kjsce.train.cia.Activity;
 
 import android.content.Intent;
+import android.icu.text.UnicodeSetSpanner;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -42,6 +44,7 @@ public class CardsActivity extends AppCompatActivity {
     private IdUtility idUtility;
     private RecyclerView details;
     private List<Boolean> firstTime;
+    private MaterialDialog materialDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,9 @@ public class CardsActivity extends AppCompatActivity {
         addButton = (ImageButton) findViewById(R.id.add_button);
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
 
+        if(helper.isNetworkConnected()){
+            onProgressStart();
+        }
         idUtility = new IdUtility(new ProblemReferenceEntity(sharedData.getBogie(), sharedData.getType()), new IdListener() {
             @Override
             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
@@ -145,6 +151,9 @@ public class CardsActivity extends AppCompatActivity {
                 }
                 cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
                 details.setAdapter(cardsAdapter);
+                if(helper.isNetworkConnected()){
+                    onProgressStop();
+                }
             }
 
             @Override
@@ -227,5 +236,19 @@ public class CardsActivity extends AppCompatActivity {
                     .cancelable(false)
                     .show();
         }
+    }
+
+    public void onProgressStart() {
+        materialDialog = new MaterialDialog.Builder(CardsActivity.this)
+                .title("Syncing Data")
+                .content("Please Wait")
+                .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
+                .show();
+    }
+
+    public void onProgressStop() {
+        materialDialog.hide();
     }
 }

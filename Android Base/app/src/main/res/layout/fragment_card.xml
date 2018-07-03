@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="80dp"
+        android:layout_width="match_parent" android:layout_height="95dp"
     android:layout_marginBottom="4dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
@@ -56,7 +56,8 @@
 
         <LinearLayout
             android:id="@+id/last_updated"
-            android:layout_margin="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_below="@id/sub_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -64,7 +65,7 @@
                 android:id="@+id/last_updated_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last Updated :"
+                android:text="Created by :"
                 android:textColor="@color/primaryText"
                 android:textSize="16sp" />
 
@@ -78,6 +79,19 @@
                 android:textSize="16sp"/>
 
         </LinearLayout>
+
+        <TextView
+            android:layout_below="@id/last_updated"
+            android:id="@+id/notification_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/secondaryText"
+            android:textSize="16sp"
+            android:text="23/06/18 23:11:18"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"/>
 
     </RelativeLayout>
 
