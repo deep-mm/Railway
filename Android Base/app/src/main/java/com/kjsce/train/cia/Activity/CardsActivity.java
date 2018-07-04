@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class CardsActivity extends AppCompatActivity {
     private RecyclerView details;
     private List<Boolean> firstTime;
     private MaterialDialog materialDialog;
+    private RelativeLayout empty_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +136,8 @@ public class CardsActivity extends AppCompatActivity {
         indexEntryEntities = new ArrayList<IndexEntryEntity>();
         addButton = (ImageButton) findViewById(R.id.add_button);
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
+        empty_list = (RelativeLayout) findViewById(R.id.empty_page);
+        empty_list.setVisibility(View.GONE);
 
         if(helper.isNetworkConnected()){
             onProgressStart();
@@ -154,6 +158,8 @@ public class CardsActivity extends AppCompatActivity {
                 if(helper.isNetworkConnected()){
                     onProgressStop();
                 }
+                if(indexEntryEntities.size()==0)
+                    empty_list.setVisibility(View.VISIBLE);
             }
 
             @Override

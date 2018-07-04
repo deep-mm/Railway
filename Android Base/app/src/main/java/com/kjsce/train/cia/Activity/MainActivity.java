@@ -251,7 +251,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.notifications) {
             intent = new Intent(getApplicationContext(), Notifications.class);
             startActivity(intent);
-        } else if (id == R.id.help) {
+        }
+        else if (id == R.id.analysis) {
+            Toast.makeText(getApplicationContext(),"Feature unavailable in beta",Toast.LENGTH_SHORT).show();
+            navigationView.setCheckedItem(R.id.creport);
+
+        }
+        else if (id == R.id.help) {
             Toast.makeText(getApplicationContext(),"Feature unavailable in beta",Toast.LENGTH_SHORT).show();
             navigationView.setCheckedItem(R.id.creport);
 
@@ -264,6 +270,8 @@ public class MainActivity extends AppCompatActivity
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
+                            Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
+                            stopService(intent1);
                             sharedData.clearAll();
                             FirebaseAuth.getInstance().signOut();
                             Intent i = new Intent(getApplicationContext(), LoginActivity.class);

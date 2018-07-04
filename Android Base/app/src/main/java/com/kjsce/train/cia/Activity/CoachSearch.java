@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -40,8 +41,9 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     private SearchView searchView;
     private String searchBoxValue, coachNumber;
     private Intent intent;
-    private TrainUtility trainUtility;
+    public static TrainUtility trainUtility;
     private List<Boolean> firstTime;
+    private RelativeLayout empty_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +66,9 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
 
         allCoaches = coach_list;
         searchView.setOnQueryTextListener(this);
-
         trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
         details.setAdapter(trainAdapter);
+        
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +98,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                             .onNegative(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    trainUtility.detachListner();
                                     intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                 }
@@ -133,7 +136,10 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         data1 = new ArrayList<String>();
         allCoaches = new ArrayList<String>();
         searchBoxValue = "";
+        empty_list = (RelativeLayout) findViewById(R.id.empty_page);
+        empty_list.setVisibility(View.GONE);
 
+        onProgressStart();
         trainUtility = new TrainUtility(sharedData.getTrain(), new OnBogeyListChangeListener() {
             @Override
             public void onDataChanged(TrainEntity newTrainEntity) {
@@ -141,6 +147,8 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 allCoaches = coach_list;
                 trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
                 details.setAdapter(trainAdapter);
+                //empty_coaches();
+                onProgressStop();
             }
         });
     }
@@ -175,6 +183,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        trainUtility.detachListner();
                         intent = new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                     }
@@ -235,8 +244,17 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             trainAdapter.notifyDataSetChanged();
         }
 
+        empty_coaches();
+
         return false;
 
+    }
+
+    public void empty_coaches(){
+        if(coach_list.size()==0)
+            empty_list.setVisibility(View.VISIBLE);
+        else
+            empty_list.setVisibility(View.GONE);
     }
 
     public void sequence() {

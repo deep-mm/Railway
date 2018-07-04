@@ -393,11 +393,12 @@ public class CardDetails extends AppCompatActivity {
             System.out.println("Where: In ELse if");
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageFilePath = saveImage(thumbnail);
-            Uri tempUri = getImageUri(getApplicationContext(), thumbnail);
+            /*Uri tempUri = getImageUri(getApplicationContext(), thumbnail);
 
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(tempUri));
-            finalFile.delete();
+            finalFile.delete();*/
+            getApplicationContext().getContentResolver().delete(data.getData(), null, null);
             getInputName("image");
             System.out.println("File Path: "+imageFilePath);
         }

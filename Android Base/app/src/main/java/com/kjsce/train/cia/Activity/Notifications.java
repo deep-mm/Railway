@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -33,6 +34,7 @@ public class Notifications extends AppCompatActivity {
     public RecyclerView details;
     private List<UserNotificationEntity> detailedCards;
     private Intent intent;
+    private RelativeLayout empty_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class Notifications extends AppCompatActivity {
         initialize();
 
         detailedCards = sharedData.getNotificationEntityList();
+        if(detailedCards.size()==0)
+            empty_list.setVisibility(View.VISIBLE);
 
         details = (RecyclerView) findViewById(R.id.details);
         notificationsAdapter = new NotificationsAdapter(detailedCards, Notifications.this);
@@ -91,6 +95,8 @@ public class Notifications extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         clearButton = (ImageButton) findViewById(R.id.clear_button);
         detailedCards = new ArrayList<UserNotificationEntity>();
+        empty_list = (RelativeLayout) findViewById(R.id.empty_page);
+        empty_list.setVisibility(View.GONE);
     }
 
     public void onProgressStart(){

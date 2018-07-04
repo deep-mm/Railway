@@ -103,11 +103,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK && requestCode==CODE_AUTHENTICATION_VERIFICATION)
         {
-            Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
-            startService(intent1);
-            intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.putExtra("from","mainActivity");
-            startActivity(intent);
+            if(sharedData.isLoggedIn()) {
+                Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
+                startService(intent1);
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("from", "mainActivity");
+                startActivity(intent);
+            }
         }
         else
         {
@@ -123,11 +125,13 @@ public class SplashActivity extends AppCompatActivity {
                 startActivityForResult(intent, CODE_AUTHENTICATION_VERIFICATION);
             }
             else {
-                Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
-                startService(intent1);
-                intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("from","mainActivity");
-                startActivity(intent);
+                if(sharedData.isLoggedIn()) {
+                    Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
+                    startService(intent1);
+                    intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("from", "mainActivity");
+                    startActivity(intent);
+                }
             }
         }
         else{

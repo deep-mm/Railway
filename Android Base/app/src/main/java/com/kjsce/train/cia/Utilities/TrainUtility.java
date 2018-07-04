@@ -121,7 +121,9 @@ public class TrainUtility
         mTrainDatabaseReference.child(bogeyNo).setValue(null);
     }
 
-
-
+    public void detachListner(){
+        mTrainDatabaseReference.removeEventListener(childEventListener);
+        mTrainDatabaseReference.removeEventListener(valueEventListener);
+    }
 
 }

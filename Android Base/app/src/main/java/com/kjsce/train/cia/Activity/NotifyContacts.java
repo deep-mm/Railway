@@ -75,6 +75,7 @@ public class NotifyContacts extends AppCompatActivity {
                         BackgroundService.notificationUtility.sendNotification(userEntities.get(i).getMobileNumber(), userNotificationEntity);
                     }
                 }
+                CoachSearch.trainUtility.detachListner();
                 intent = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent);
             }

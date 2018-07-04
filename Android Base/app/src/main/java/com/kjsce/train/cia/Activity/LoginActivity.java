@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private int RC_SIGN_IN = 1000;
     private List<String> users;
     private List<Boolean> firstTime;
+    private List<String> train_list;
     private Intent intent;
     private UserEntity userEntity;
     private MaterialDialog materialDialog;
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                             sharedData.setUserEntity(userEntity);
                             sharedData.setFirstTime(firstTime);
                             onProgressStop();
+                            sharedData.setTrainList(train_list);
                             Intent intent1 = new Intent(getApplicationContext(),BackgroundService.class);
                             startService(intent1);
                             intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -103,6 +105,8 @@ public class LoginActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
+                        Intent intent1 = new Intent(getApplicationContext(), BackgroundService.class);
+                        stopService(intent1);
                         sharedData.clearAll();
                         FirebaseAuth.getInstance().signOut();
                         intent = new Intent(getApplicationContext(),LoginActivity.class);
@@ -120,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         users = new ArrayList<String>();
         firstTime = Arrays.asList(true,true,true);
+        train_list = new ArrayList<String>();
     }
 
     @Override

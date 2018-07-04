@@ -72,4 +72,6 @@
 
     </ScrollView>
 
+    <include layout="@layout/activity_empty_data" />
+
 </RelativeLayout>

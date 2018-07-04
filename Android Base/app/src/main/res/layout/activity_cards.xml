@@ -102,4 +102,6 @@
         android:elevation="5dp"
         android:background="@mipmap/add_button"/>
 
+    <include layout="@layout/activity_empty_data" />
+
 </RelativeLayout>
