@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.baoyz.widget.PullRefreshLayout;
+import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kjsce.train.cia.Adapter.DetailsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     private List<String> train_list;
     private List<String> data1;
     private List<String> allTrains;
+    private List<UserEntity> userEntities;
     private ImageButton addButton;
     private Intent intent;
     private TrainAdapter trainAdapter;
@@ -187,6 +189,8 @@ public class MainActivity extends AppCompatActivity
         allTrains = train_list;
         addButton = (ImageButton) findViewById(R.id.button_add);
         data1 = new ArrayList<String>();
+        userEntities = new ArrayList<UserEntity>();
+        sharedData.setUserEntityList(userEntities);
         searchBoxValue = "";
         layout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
     }
@@ -245,8 +249,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.creport) {
             intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-        } else if (id == R.id.add_login) {
-            intent = new Intent(getApplicationContext(), AddUser.class);
+        } else if (id == R.id.user_icon) {
+            intent = new Intent(getApplicationContext(), NotifyContacts.class);
+            intent.putExtra("from","manageUsers");
             startActivity(intent);
         } else if (id == R.id.notifications) {
             intent = new Intent(getApplicationContext(), Notifications.class);
@@ -348,6 +353,8 @@ public class MainActivity extends AppCompatActivity
             firstTime.set(0, false);
             sharedData.setFirstTime(firstTime);
         }
+
+        sharedData.setUserEntityList(userEntities);
     }
 
     public void onProgressStart() {
@@ -393,7 +400,7 @@ public class MainActivity extends AppCompatActivity
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            intent = new Intent(getApplicationContext(),MainActivity.class);
                             startActivity(intent);
                         }
                     })

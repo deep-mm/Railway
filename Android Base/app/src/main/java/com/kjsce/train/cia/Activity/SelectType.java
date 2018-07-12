@@ -16,6 +16,8 @@ import com.kjsce.train.cia.Adapter.TypeCardAdapter;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SelectType extends AppCompatActivity {
 
@@ -25,6 +27,8 @@ public class SelectType extends AppCompatActivity {
     private ArrayList<String> type_list;
     private TypeCardAdapter typeCardAdapter;
     private Intent intent;
+    private List<Boolean> statusList, typeList;
+    private List<String> dateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,14 @@ public class SelectType extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         backButton = (ImageButton) findViewById(R.id.back_button);
         type_list = new ArrayList<String>();
+
+        statusList = Arrays.asList(false,true);
+        typeList = Arrays.asList(false,false,false,false,false,false,false,false);
+        dateList = Arrays.asList("dd/MM/yyyy","dd/MM/yyyy");
+
+        sharedData.setDateList(dateList);
+        sharedData.setTypeCheckedList(typeList);
+        sharedData.setStatusCheckedList(statusList);
     }
 
     @Override

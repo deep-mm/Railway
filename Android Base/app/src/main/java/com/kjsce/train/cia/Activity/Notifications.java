@@ -22,6 +22,7 @@ import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Notifications extends AppCompatActivity {
@@ -46,7 +47,10 @@ public class Notifications extends AppCompatActivity {
         detailedCards = sharedData.getNotificationEntityList();
         if(detailedCards.size()==0)
             empty_list.setVisibility(View.VISIBLE);
+        else
+            empty_list.setVisibility(View.INVISIBLE);
 
+        Collections.reverse(detailedCards);
         details = (RecyclerView) findViewById(R.id.details);
         notificationsAdapter = new NotificationsAdapter(detailedCards, Notifications.this);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
@@ -75,6 +79,10 @@ public class Notifications extends AppCompatActivity {
                                 detailedCards.clear();
                                 BackgroundService.notificationUtility.clearNotification();
                                 notificationsAdapter.notifyDataSetChanged();
+                                if(detailedCards.size()==0)
+                                    empty_list.setVisibility(View.VISIBLE);
+                                else
+                                    empty_list.setVisibility(View.INVISIBLE);
                             }
                         })
                         .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -135,7 +143,7 @@ public class Notifications extends AppCompatActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            intent = new Intent(getApplicationContext(),Notifications.class);
                             startActivity(intent);
                         }
                     })

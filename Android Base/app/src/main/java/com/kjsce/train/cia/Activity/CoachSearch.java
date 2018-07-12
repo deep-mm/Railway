@@ -92,6 +92,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                                 @Override
                                 public void onClick(MaterialDialog dialog, DialogAction which) {
                                     intent = new Intent(getApplicationContext(), NotifyContacts.class);
+                                    intent.putExtra("from","notification");
                                     startActivity(intent);
                                 }
                             })
@@ -116,8 +117,6 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 .title("Syncing Data")
                 .content("Please Wait")
                 .progress(true, 0)
-                .canceledOnTouchOutside(false)
-                .cancelable(false)
                 .show();
     }
 
@@ -158,6 +157,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         new MaterialDialog.Builder(this)
                 .title("New Coach")
                 .content("Enter coach number")
+                .inputRangeRes(2, 40, R.color.red_error)
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input("Enter Text Here", "", new MaterialDialog.InputCallback() {
                     @Override
@@ -286,7 +286,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            intent = new Intent(getApplicationContext(),CoachSearch.class);
                             startActivity(intent);
                         }
                     })

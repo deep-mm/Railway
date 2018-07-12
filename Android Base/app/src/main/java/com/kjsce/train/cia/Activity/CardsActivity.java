@@ -35,16 +35,17 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 public class CardsActivity extends AppCompatActivity {
 
     private SwipeToAction swipeToAction;
-    private ImageButton backButton, addButton;
+    private ImageButton backButton, addButton, filterButton;
     private TextView bogieNumber;
     private SharedData sharedData;
     private Helper helper;
     private CardsAdapter cardsAdapter;
-    private ArrayList<IndexEntryEntity> indexEntryEntities;
+    private ArrayList<IndexEntryEntity> indexEntryEntities, allIndexEntryEntitities;
     private Intent intent;
     private IdUtility idUtility;
     private RecyclerView details;
-    private List<Boolean> firstTime;
+    private List<Boolean> firstTime, statusList;
+    private List<String> dateList;
     private MaterialDialog materialDialog;
     private RelativeLayout empty_list;
 
@@ -80,29 +81,42 @@ public class CardsActivity extends AppCompatActivity {
             }
         });
 
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),FilterActivity.class);
+                intent.putExtra("from","CardsActivity");
+                startActivity(intent);
+            }
+        });
+
         swipeToAction = new SwipeToAction(details, new SwipeToAction.SwipeListener<IndexEntryEntity>() {
             @Override
             public boolean swipeLeft(IndexEntryEntity itemData) {
-                new MaterialDialog.Builder(CardsActivity.this)
-                        .title("Confirm")
-                        .content("Are you sure, issue resolved?")
-                        .positiveText("Yes")
-                        .negativeText("No")
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
-                                idUtility.changeProblemStatus(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),true);
-                            }
-                        })
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
-                            }
-                        })
-                        .canceledOnTouchOutside(false)
-                        .cancelable(false)
-                        .show();
-                return false;
+                if(!itemData.isProblemStatus()) {
+                    new MaterialDialog.Builder(CardsActivity.this)
+                            .title("Confirm")
+                            .content("Are you sure, issue resolved?")
+                            .positiveText("Yes")
+                            .negativeText("No")
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                    idUtility.changeProblemStatus(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(), itemData.getId()), true);
+                                }
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(MaterialDialog dialog, DialogAction which) {
+                                }
+                            })
+                            .canceledOnTouchOutside(false)
+                            .cancelable(false)
+                            .show();
+
+                    return true;
+                }
+                return true;
             }
 
             @Override
@@ -134,7 +148,9 @@ public class CardsActivity extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         backButton = (ImageButton) findViewById(R.id.back_button);
         indexEntryEntities = new ArrayList<IndexEntryEntity>();
+        allIndexEntryEntitities = new ArrayList<IndexEntryEntity>();
         addButton = (ImageButton) findViewById(R.id.add_button);
+        filterButton = (ImageButton) findViewById(R.id.filter_button);
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
         empty_list = (RelativeLayout) findViewById(R.id.empty_page);
         empty_list.setVisibility(View.GONE);
@@ -146,12 +162,28 @@ public class CardsActivity extends AppCompatActivity {
             @Override
             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
                 indexEntryEntities = idList;
+                allIndexEntryEntitities = indexEntryEntities;
                 System.out.println("indexEntryEntities: "+indexEntryEntities.size());
                 for(int i=0;i<indexEntryEntities.size();i++){
-                    if(indexEntryEntities.get(i).isProblemStatus()==true) {
-                        indexEntryEntities.remove(i);
-                        i--;
+                    if(statusList.get(0) && statusList.get(1)){
+                        //Remove nothing
                     }
+                    else if(statusList.get(0)){
+                        if(indexEntryEntities.get(i).isProblemStatus()==false) {
+                            indexEntryEntities.remove(i);
+                            i--;
+                        }
+                    }
+                    else if(statusList.get(1)){
+                        if(indexEntryEntities.get(i).isProblemStatus()==true) {
+                            indexEntryEntities.remove(i);
+                            i--;
+                        }
+                    }
+                    else{
+                        //Remove nothing
+                    }
+
                 }
                 cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
                 details.setAdapter(cardsAdapter);
@@ -160,6 +192,8 @@ public class CardsActivity extends AppCompatActivity {
                 }
                 if(indexEntryEntities.size()==0)
                     empty_list.setVisibility(View.VISIBLE);
+                else
+                    empty_list.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -191,12 +225,51 @@ public class CardsActivity extends AppCompatActivity {
             firstTime.set(2, false);
             sharedData.setFirstTime(firstTime);
         }
+
+        statusList = sharedData.getStatusCheckedList();
+        dateList = sharedData.getDateList();
+
+        indexEntryEntities = allIndexEntryEntitities;
+        for(int i=0;i<allIndexEntryEntitities.size();i++){
+            if(statusList.get(0) && statusList.get(1)){
+                //Remove nothing
+            }
+            else if(statusList.get(0)){
+                if(indexEntryEntities.get(i).isProblemStatus()==false) {
+                    indexEntryEntities.remove(i);
+                    i--;
+                }
+            }
+            else if(statusList.get(1)){
+                if(indexEntryEntities.get(i).isProblemStatus()==true) {
+                    indexEntryEntities.remove(i);
+                    i--;
+                }
+            }
+            else{
+                //Remove nothing
+            }
+
+        }
+        cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
+        details.setAdapter(cardsAdapter);
+        if(indexEntryEntities.size()==0)
+            empty_list.setVisibility(View.VISIBLE);
+        else
+            empty_list.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        idUtility.detachListner();
     }
 
     @Override
     public void onBackPressed(){
-        super.onBackPressed();
         idUtility.detachListner();
+        intent = new Intent(getApplicationContext(),SelectType.class);
+        startActivity(intent);
     }
 
     public void sequence() {
@@ -228,7 +301,7 @@ public class CardsActivity extends AppCompatActivity {
                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(MaterialDialog dialog, DialogAction which) {
-                            intent = new Intent(getApplicationContext(),AddUser.class);
+                            intent = new Intent(getApplicationContext(),CardsActivity.class);
                             startActivity(intent);
                         }
                     })

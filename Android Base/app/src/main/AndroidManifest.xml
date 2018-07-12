@@ -69,6 +69,9 @@
         <activity android:name=".Activity.CardsActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"></activity>
+        <activity android:name=".Activity.FilterActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
     </application>
 
 </manifest>

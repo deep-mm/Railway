@@ -216,5 +216,41 @@ public class SharedData {
         return cardEntities;
     }
 
+    public void setTypeCheckedList(List<Boolean> checked_list){
+        String type = gson.toJson(checked_list);
+        editor.putString("checked_list_type",type).commit();
+    }
+
+    public List<Boolean> getTypeCheckedList(){
+        String json = pref.getString("checked_list_type", "");
+        Type listType = new TypeToken<List<Boolean>>() {}.getType();
+        List<Boolean> checked_list = gson.fromJson(json, listType);
+        return checked_list;
+    }
+
+    public void setStatusCheckedList(List<Boolean> checked_list){
+        String type = gson.toJson(checked_list);
+        editor.putString("checked_list_status",type).commit();
+    }
+
+    public List<Boolean> getStatusCheckedList(){
+        String json = pref.getString("checked_list_status", "");
+        Type listType = new TypeToken<List<Boolean>>() {}.getType();
+        List<Boolean> checked_list = gson.fromJson(json, listType);
+        return checked_list;
+    }
+
+    public List<String> getDateList(){
+        String json = pref.getString("date_list", "");
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        List<String> date_list = gson.fromJson(json, listType);
+        return date_list;
+    }
+
+    public void setDateList(List<String> date_list){
+        String date = gson.toJson(date_list);
+        editor.putString("date_list",date).commit();
+    }
+
 
 }

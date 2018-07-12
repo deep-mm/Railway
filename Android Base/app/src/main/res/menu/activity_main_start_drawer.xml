@@ -9,9 +9,9 @@
             android:icon="@drawable/report"
             android:title="Create Report" />
         <item
-            android:id="@+id/add_login"
-            android:icon="@drawable/add_login"
-            android:title="Add User" />
+            android:id="@+id/user_icon"
+            android:icon="@drawable/user_icon"
+            android:title="Manage Users" />
         <item
             android:id="@+id/notifications"
             android:icon="@drawable/notifications_icon"

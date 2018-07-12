@@ -51,7 +51,7 @@ public class UserUtility {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                userList.remove(dataSnapshot.getValue(UserEntity.class));
+                userList.remove(getPosition(dataSnapshot.getValue(UserEntity.class).getMobileNumber()));
             }
 
             @Override
@@ -69,6 +69,13 @@ public class UserUtility {
         mUserListDatabaseReference.addChildEventListener(childEventListener);
     }
 
+    public int getPosition(String mobile){
+        for(int i=0;i<userList.size();i++){
+            if(userList.get(i).getMobileNumber().equalsIgnoreCase(mobile))
+                return i;
+        }
+        return 0;
+    }
     public UserUtility(OnUserListChangeListener onUserListChangeListener) {
         this();
         this.onUserListChangeListener = onUserListChangeListener;

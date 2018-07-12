@@ -413,7 +413,7 @@ public class CardDetails extends AppCompatActivity {
         new MaterialDialog.Builder(this)
                 .title("Description")
                 .content("Enter description for the Audio/Image")
-                .inputRangeRes(2, 20, R.color.red_error)
+                .inputRangeRes(2, 30, R.color.red_error)
                 .inputType(InputType.TYPE_CLASS_TEXT)
                 .input("Enter Text Here", "", new MaterialDialog.InputCallback() {
                     @Override

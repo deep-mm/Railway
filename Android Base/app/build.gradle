@@ -58,7 +58,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.0.0'
     implementation 'co.dift.ui.swipetoaction:library:1.1'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
-    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    implementation 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

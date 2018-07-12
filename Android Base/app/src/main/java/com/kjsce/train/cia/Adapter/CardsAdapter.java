@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kjsce.train.cia.Activity.CardDetails;
@@ -58,7 +59,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
         IndexEntryEntity indexEntryEntity = Mvalues.get(position);
         ViewHolder vh = (ViewHolder) holder;
         vh.data = indexEntryEntity;
-
+        if(indexEntryEntity.isProblemStatus()){
+            holder.frontView.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryLight));
+        }
         //TODO: Replace with lastUpdated once done
     }
 
@@ -70,12 +73,14 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
     public class ViewHolder extends SwipeToAction.ViewHolder<IndexEntryEntity>
     {
         TextView subType, lastUpdated, date;
+        RelativeLayout frontView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             subType = (TextView) itemView.findViewById(R.id.sub_type_text);
             lastUpdated = (TextView) itemView.findViewById(R.id.last_updated_text);
             date = (TextView) itemView.findViewById(R.id.notification_date);
+            frontView = (RelativeLayout) itemView.findViewById(R.id.frontView);
         }
     }
 
