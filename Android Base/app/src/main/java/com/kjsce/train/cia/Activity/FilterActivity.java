@@ -26,7 +26,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.R;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,6 +46,7 @@ public class FilterActivity extends AppCompatActivity {
     private List<String> date_list;
     private List<Boolean> status_list,type_list;
     private Intent intent;
+    private Date startDate,endDate;
 
     public static final String DATES = "dates";
     public static final String OPTIONS = "options";
@@ -277,8 +280,22 @@ public class FilterActivity extends AppCompatActivity {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        edittext2.setText(sdf.format(myCalendar2.getTime()));
-        date_list.set(1,edittext2.getText().toString());
+        endDate = myCalendar2.getTime();
+        if (startDate == null) {
+            edittext2.setText(sdf.format(myCalendar2.getTime()));
+            date_list = Arrays.asList("dd/MM/yyyy","dd/MM/yyyy");
+        }
+        else if(endDate.before(startDate)){
+            endDate = null;
+            Toast.makeText(getApplicationContext(),"End date cannot be before Start date",Toast.LENGTH_LONG).show();
+            edittext2.setText("");
+        }
+        else{
+            edittext2.setText(sdf.format(myCalendar2.getTime()));
+            date_list.set(1,edittext2.getText().toString());
+            date_list.set(0,sdf.format(startDate));
+        }
+
     }
 
     private void updateLabel1(Calendar myCalendar1) {
@@ -286,8 +303,21 @@ public class FilterActivity extends AppCompatActivity {
         String myFormat = "dd/MM/yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-        edittext1.setText(sdf.format(myCalendar1.getTime()));
-        date_list.set(0,edittext1.getText().toString());
+        startDate = myCalendar1.getTime();
+        if(endDate==null) {
+            edittext1.setText(sdf.format(myCalendar1.getTime()));
+            date_list = Arrays.asList("dd/MM/yyyy","dd/MM/yyyy");
+        }
+        else if(startDate.after(endDate)){
+            startDate = null;
+            Toast.makeText(getApplicationContext(),"Start date cannot be after End date",Toast.LENGTH_LONG).show();
+            edittext1.setText("");
+        }
+        else{
+            edittext1.setText(sdf.format(myCalendar1.getTime()));
+            date_list.set(0,edittext1.getText().toString());
+            date_list.set(1,sdf.format(endDate));
+        }
     }
 
     private void initialize() {

@@ -26,8 +26,12 @@ import com.kjsce.train.cia.Listener.IdListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.IdUtility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import co.dift.ui.SwipeToAction;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -48,6 +52,7 @@ public class CardsActivity extends AppCompatActivity {
     private List<String> dateList;
     private MaterialDialog materialDialog;
     private RelativeLayout empty_list;
+    private Date startDate=null,endDate=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,10 +159,12 @@ public class CardsActivity extends AppCompatActivity {
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
         empty_list = (RelativeLayout) findViewById(R.id.empty_page);
         empty_list.setVisibility(View.GONE);
+        dateList = new ArrayList<String>();
 
         if(helper.isNetworkConnected()){
             onProgressStart();
         }
+
         idUtility = new IdUtility(new ProblemReferenceEntity(sharedData.getBogie(), sharedData.getType()), new IdListener() {
             @Override
             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
@@ -165,6 +172,11 @@ public class CardsActivity extends AppCompatActivity {
                 allIndexEntryEntitities = indexEntryEntities;
                 System.out.println("indexEntryEntities: "+indexEntryEntities.size());
                 for(int i=0;i<indexEntryEntities.size();i++){
+                    StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
+                    String date = stringBuffer.substring(0,15);
+                    Date d = getDate(date);
+                    System.out.println("xxxxx d ="+d+" start= "+startDate+" end = "+endDate);
+
                     if(statusList.get(0) && statusList.get(1)){
                         //Remove nothing
                     }
@@ -179,6 +191,10 @@ public class CardsActivity extends AppCompatActivity {
                             indexEntryEntities.remove(i);
                             i--;
                         }
+                    }
+                    else if(d.after(startDate) && d.before(endDate)){
+                        indexEntryEntities.remove(i);
+                        i--;
                     }
                     else{
                         //Remove nothing
@@ -229,8 +245,30 @@ public class CardsActivity extends AppCompatActivity {
         statusList = sharedData.getStatusCheckedList();
         dateList = sharedData.getDateList();
 
+        if(dateList.get(0).equalsIgnoreCase("dd/MM/yyyy") || dateList.get(1).equalsIgnoreCase("dd/MM/yyyy")){
+            startDate = null;
+            endDate = null;
+        }
+        else{
+            String myFormat = "dd/MM/yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+            try {
+                startDate = sdf.parse(dateList.get(0));
+                endDate = sdf.parse(dateList.get(1));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         indexEntryEntities = allIndexEntryEntitities;
         for(int i=0;i<allIndexEntryEntitities.size();i++){
+            StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
+            String date = stringBuffer.substring(0,15);
+            Date d = getDate(date);
+            System.out.println("xxxxx d ="+d+" start= "+startDate+" end = "+endDate);
+            System.out.println(d.after(startDate) && d.before(endDate));
+
             if(statusList.get(0) && statusList.get(1)){
                 //Remove nothing
             }
@@ -246,6 +284,10 @@ public class CardsActivity extends AppCompatActivity {
                     i--;
                 }
             }
+            else if(!(d.after(startDate) && d.before(endDate))){
+                indexEntryEntities.remove(i);
+                i--;
+            }
             else{
                 //Remove nothing
             }
@@ -257,6 +299,25 @@ public class CardsActivity extends AppCompatActivity {
             empty_list.setVisibility(View.VISIBLE);
         else
             empty_list.setVisibility(View.INVISIBLE);
+    }
+
+    public Date getDate(String date) {
+        SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd/MM/yyyy");
+        date = spf.format(newDate);
+        try {
+            return spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
