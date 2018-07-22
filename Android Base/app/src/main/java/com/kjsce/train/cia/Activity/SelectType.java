@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.TypeCardAdapter;
+import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.R;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class SelectType extends AppCompatActivity {
     private Intent intent;
     private List<Boolean> statusList, typeList;
     private List<String> dateList;
+    private ArrayList<IndexEntryEntity> indexEntryEntities;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +72,12 @@ public class SelectType extends AppCompatActivity {
         statusList = Arrays.asList(false,true);
         typeList = Arrays.asList(false,false,false,false,false,false,false,false);
         dateList = Arrays.asList("dd/MM/yyyy","dd/MM/yyyy");
+        indexEntryEntities = new ArrayList<IndexEntryEntity>();
 
         sharedData.setDateList(dateList);
         sharedData.setTypeCheckedList(typeList);
         sharedData.setStatusCheckedList(statusList);
+        sharedData.setIndexEntryEntities(indexEntryEntities);
     }
 
     @Override

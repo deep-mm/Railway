@@ -98,7 +98,7 @@
     </ScrollView>
 
     <EditText
-        android:inputType="textMultiLine"
+        android:inputType="textCapSentences"
         android:id="@+id/textBox"
         android:layout_width="match_parent"
         android:layout_toLeftOf="@id/send_button"

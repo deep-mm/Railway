@@ -24,6 +24,7 @@ import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.TrainUtility;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,7 +33,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 public class CoachSearch extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private MaterialDialog materialDialog;
-    private ImageButton backButton, addButton, submitButton;
+    private ImageButton backButton, addButton, submitButton, analysisButton;
     private RecyclerView details;
     private TrainAdapter trainAdapter;
     private List<String> coach_list, data1, allCoaches;
@@ -44,6 +45,8 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     public static TrainUtility trainUtility;
     private List<Boolean> firstTime;
     private RelativeLayout empty_list;
+    private List<Boolean> statusList,typeList;
+    private List<String> dateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,15 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             @Override
             public void onClick(View v) {
                 addNewCoach();
+            }
+        });
+
+        analysisButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),FilterActivity.class);
+                intent.putExtra("from","Analysis");
+                startActivity(intent);
             }
         });
 
@@ -131,6 +143,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         addButton = (ImageButton) findViewById(R.id.button_add);
         submitButton = (ImageButton) findViewById(R.id.done_button);
         searchView = (SearchView) findViewById(R.id.search_bar);
+        analysisButton = (ImageButton) findViewById(R.id.button_analysis);
         coach_list = new ArrayList<String>();
         data1 = new ArrayList<String>();
         allCoaches = new ArrayList<String>();
@@ -150,6 +163,14 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 onProgressStop();
             }
         });
+
+        statusList = Arrays.asList(false,true);
+        typeList = Arrays.asList(false,false,false,false,false,false,false,false);
+        dateList = Arrays.asList("dd/MM/yyyy","dd/MM/yyyy");
+
+        sharedData.setDateList(dateList);
+        sharedData.setTypeCheckedList(typeList);
+        sharedData.setStatusCheckedList(statusList);
     }
 
     public void addNewCoach() {

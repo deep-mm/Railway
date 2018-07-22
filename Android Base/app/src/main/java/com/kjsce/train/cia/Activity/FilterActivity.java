@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -125,8 +126,14 @@ public class FilterActivity extends AppCompatActivity {
                 sharedData.setTypeCheckedList(type_list);
                 sharedData.setDateList(date_list);
 
-                intent = new Intent(getApplicationContext(),CardsActivity.class);
-                startActivity(intent);
+                if(getIntent().getExtras().getString("from").equals("CardsActivity")){
+                    FilterActivity.super.onBackPressed();
+                }
+                else{
+                    intent = new Intent(getApplicationContext(),AnalysisActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
     }
@@ -337,6 +344,22 @@ public class FilterActivity extends AppCompatActivity {
         date_list = sharedData.getDateList();
         status_list = sharedData.getStatusCheckedList();
         type_list = sharedData.getTypeCheckedList();
+
+        if(date_list.get(0).equalsIgnoreCase("dd/MM/yyyy") || date_list.get(1).equalsIgnoreCase("dd/MM/yyyy")){
+            startDate = null;
+            endDate = null;
+        }
+        else{
+            String myFormat = "dd/MM/yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+            try {
+                startDate = sdf.parse(date_list.get(0));
+                endDate = sdf.parse(date_list.get(1));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

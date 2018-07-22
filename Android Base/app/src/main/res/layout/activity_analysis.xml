@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.AnalysisActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/back_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/back_button" />
+
+                <TextView
+                    android:id="@+id/title_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="Analysis"
+                    android:textAlignment="center"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/filter_button"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/filter_button"
+                    android:layout_marginRight="8dp"/>
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/app_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:id="@+id/all_problems">
+
+                <TextView
+                    android:id="@+id/all_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="All Problems"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText"/>
+
+                <org.eazegraph.lib.charts.StackedBarChart
+                    android:layout_below="@id/all_title"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/stackedbarchart"
+                    android:layout_width="match_parent"
+                    android:layout_height="256dp"
+                    android:padding="10dp"
+                    app:egFixedBarWidth="true"
+                    app:egBarWidth="20dp"
+                    app:egLegendHeight="40dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:id="@+id/solved_problems">
+
+                <TextView
+                    android:id="@+id/solved_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Solved Problems"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText"/>
+
+                <org.eazegraph.lib.charts.StackedBarChart
+                    android:layout_below="@id/solved_title"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/stackedbarchartSolved"
+                    android:layout_width="match_parent"
+                    android:layout_height="256dp"
+                    android:padding="10dp"
+                    app:egFixedBarWidth="true"
+                    app:egBarWidth="20dp"
+                    app:egLegendHeight="40dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:id="@+id/unsolved_problems">
+
+                <TextView
+                    android:id="@+id/unsolved_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Unsolved Problems"
+                    android:textSize="16sp"
+                    android:textColor="@color/primaryText"/>
+
+                <org.eazegraph.lib.charts.StackedBarChart
+                    android:layout_below="@id/unsolved_title"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/stackedbarchartUnsolved"
+                    android:layout_width="match_parent"
+                    android:layout_height="256dp"
+                    android:padding="10dp"
+                    app:egFixedBarWidth="true"
+                    app:egBarWidth="20dp"
+                    app:egLegendHeight="40dp"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/button_export"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@mipmap/button_export"
+        android:textAllCaps="false"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="5dp"/>
+
+</RelativeLayout>

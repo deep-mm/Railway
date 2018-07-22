@@ -78,8 +78,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="960c15" />
-                                                <entry key="paddingPercent" value="25" />
+                                                <entry key="color" value="ffffff" />
+                                                <entry key="paddingPercent" value="20" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -90,7 +90,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_delete_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_insert_drive_file_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -100,9 +100,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="backgroundColor" value="009688" />
                                       <entry key="iconShape" value="CIRCLE" />
                                       <entry key="imageAsset" value="$USER_HOME$/Downloads/maintenance 2.png" />
-                                      <entry key="outputName" value="remove_button" />
+                                      <entry key="outputName" value="button_export" />
                                     </map>
                                   </option>
                                 </PersistentState>

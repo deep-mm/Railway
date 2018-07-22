@@ -62,7 +62,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
         if(indexEntryEntity.isProblemStatus()){
             holder.frontView.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryLight));
         }
-        //TODO: Replace with lastUpdated once done
+
+        //TODO: Using else if see priority and assign colors accordingly
     }
 
     @Override

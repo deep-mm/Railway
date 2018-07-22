@@ -70,14 +70,14 @@ public class BackgroundService extends Service {
                                 getDate(newUserNotification.getDateTime())))
                 .setPriority(Notification.PRIORITY_MAX);
 
-                Intent resultIntent = new Intent(context, Notifications.class);
+                //Intent resultIntent = new Intent(context, Notifications.class);
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                 stackBuilder.addParentStack(Notifications.class);
 
 // Adds the Intent that starts the Activity to the top of the stack
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-                mBuilder.setContentIntent(resultPendingIntent);
+                //stackBuilder.addNextIntent(resultIntent);
+                /*PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(resultPendingIntent);*/
 
                 NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(id, mBuilder.build());
