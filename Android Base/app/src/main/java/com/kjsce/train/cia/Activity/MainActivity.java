@@ -257,11 +257,6 @@ public class MainActivity extends AppCompatActivity
             intent = new Intent(getApplicationContext(), Notifications.class);
             startActivity(intent);
         }
-        else if (id == R.id.analysis) {
-            Toast.makeText(getApplicationContext(),"Feature unavailable in beta",Toast.LENGTH_SHORT).show();
-            navigationView.setCheckedItem(R.id.creport);
-
-        }
         else if (id == R.id.help) {
             Toast.makeText(getApplicationContext(),"Feature unavailable in beta",Toast.LENGTH_SHORT).show();
             navigationView.setCheckedItem(R.id.creport);

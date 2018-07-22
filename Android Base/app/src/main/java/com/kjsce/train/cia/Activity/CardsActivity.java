@@ -26,8 +26,12 @@ import com.kjsce.train.cia.Listener.IdListener;
 import com.kjsce.train.cia.R;
 import com.kjsce.train.cia.Utilities.IdUtility;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import co.dift.ui.SwipeToAction;
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
@@ -48,6 +52,8 @@ public class CardsActivity extends AppCompatActivity {
     private List<String> dateList;
     private MaterialDialog materialDialog;
     private RelativeLayout empty_list;
+    private Date startDate=null,endDate=null;
+    private String[] priority;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +109,8 @@ public class CardsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(MaterialDialog dialog, DialogAction which) {
                                     idUtility.changeProblemStatus(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(), itemData.getId()), true);
+                                    intent = new Intent(getApplicationContext(),CardsActivity.class);
+                                    startActivity(intent);
                                 }
                             })
                             .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -121,7 +129,23 @@ public class CardsActivity extends AppCompatActivity {
 
             @Override
             public boolean swipeRight(IndexEntryEntity itemData) {
-                return false;
+                new MaterialDialog.Builder(CardsActivity.this)
+                        .title("Priority")
+                        .items(priority)
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                /**
+                                 * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                                 * returning false here won't allow the newly selected radio button to actually be selected.
+                                 **/
+                                Toast.makeText(getApplicationContext(),text,Toast.LENGTH_SHORT).show();
+                                return true;
+                            }
+                        })
+                        .positiveText("Choose")
+                        .show();
+                return true;
             }
 
             @Override
@@ -155,18 +179,36 @@ public class CardsActivity extends AppCompatActivity {
         empty_list = (RelativeLayout) findViewById(R.id.empty_page);
         empty_list.setVisibility(View.GONE);
 
+        priority = new String[3];
+        priority[0] = "High";
+        priority[1] = "Medium";
+        priority[2] = "Low";
+
         if(helper.isNetworkConnected()){
             onProgressStart();
         }
+
         idUtility = new IdUtility(new ProblemReferenceEntity(sharedData.getBogie(), sharedData.getType()), new IdListener() {
             @Override
             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
                 indexEntryEntities = idList;
                 allIndexEntryEntitities = indexEntryEntities;
+                sharedData.setIndexEntryEntities(idList);
                 System.out.println("indexEntryEntities: "+indexEntryEntities.size());
                 for(int i=0;i<indexEntryEntities.size();i++){
-                    if(statusList.get(0) && statusList.get(1)){
-                        //Remove nothing
+                    StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
+                    String date = stringBuffer.substring(0,15);
+                    Date d = getDate(date);
+                    System.out.println("xxxxx d ="+d+" start= "+startDate+" end = "+endDate);
+
+                    if(startDate!=null && endDate!=null) {
+                        if (!(d.after(startDate) && d.before(endDate))) {
+                            indexEntryEntities.remove(i);
+                            i--;
+                        }
+                    }
+                    else if(statusList.get(0) && statusList.get(1)){
+                        //
                     }
                     else if(statusList.get(0)){
                         if(indexEntryEntities.get(i).isProblemStatus()==false) {
@@ -229,10 +271,39 @@ public class CardsActivity extends AppCompatActivity {
         statusList = sharedData.getStatusCheckedList();
         dateList = sharedData.getDateList();
 
-        indexEntryEntities = allIndexEntryEntitities;
-        for(int i=0;i<allIndexEntryEntitities.size();i++){
-            if(statusList.get(0) && statusList.get(1)){
-                //Remove nothing
+        if(dateList.get(0).equalsIgnoreCase("dd/MM/yyyy") || dateList.get(1).equalsIgnoreCase("dd/MM/yyyy")){
+            startDate = null;
+            endDate = null;
+        }
+        else{
+            String myFormat = "dd/MM/yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+            try {
+                startDate = sdf.parse(dateList.get(0));
+                endDate = sdf.parse(dateList.get(1));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        indexEntryEntities = sharedData.getIndexEntryEntities();
+        System.out.println("yyyy "+indexEntryEntities);
+        allIndexEntryEntitities = indexEntryEntities;
+        for(int i=0;i<indexEntryEntities.size();i++){
+            StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
+            String date = stringBuffer.substring(0,15);
+            Date d = getDate(date);
+            System.out.println("xxxxx d ="+d+" start= "+startDate+" end = "+endDate);
+
+            if(startDate!=null && endDate!=null) {
+                if (!(d.after(startDate) && d.before(endDate))) {
+                    indexEntryEntities.remove(i);
+                    i--;
+                }
+            }
+            else if(statusList.get(0) && statusList.get(1)){
+                //
             }
             else if(statusList.get(0)){
                 if(indexEntryEntities.get(i).isProblemStatus()==false) {
@@ -247,7 +318,7 @@ public class CardsActivity extends AppCompatActivity {
                 }
             }
             else{
-                //Remove nothing
+                //
             }
 
         }
@@ -259,15 +330,35 @@ public class CardsActivity extends AppCompatActivity {
             empty_list.setVisibility(View.INVISIBLE);
     }
 
+    public Date getDate(String date) {
+        SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date newDate= null;
+        try {
+            newDate = spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        spf= new SimpleDateFormat("dd/MM/yyyy");
+        date = spf.format(newDate);
+        try {
+            return spf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @Override
     public void onPause(){
         super.onPause();
-        idUtility.detachListner();
     }
 
     @Override
     public void onBackPressed(){
         idUtility.detachListner();
+        indexEntryEntities = new ArrayList<IndexEntryEntity>();
+        sharedData.setIndexEntryEntities(indexEntryEntities);
         intent = new Intent(getApplicationContext(),SelectType.class);
         startActivity(intent);
     }

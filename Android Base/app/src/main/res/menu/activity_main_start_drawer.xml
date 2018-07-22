@@ -17,10 +17,6 @@
             android:icon="@drawable/notifications_icon"
             android:title="Notifications" />
         <item
-            android:id="@+id/analysis"
-            android:icon="@drawable/analysis_icon"
-            android:title="Analytics" />
-        <item
             android:id="@+id/help"
             android:icon="@drawable/help"
             android:title="Help" />

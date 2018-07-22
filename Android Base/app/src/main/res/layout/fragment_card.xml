@@ -7,6 +7,14 @@
     android:background="@drawable/rectangle_white"
     android:elevation="5dp">
 
+    <RelativeLayout
+        android:tag="reveal-right"
+        android:background="@color/red_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </RelativeLayout>
+
     <!-- this view reveals when swipe left -->
     <RelativeLayout
         android:tag="reveal-left"
