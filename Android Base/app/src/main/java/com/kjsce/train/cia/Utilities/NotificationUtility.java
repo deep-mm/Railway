@@ -26,15 +26,15 @@ public class NotificationUtility {
     public NotificationUtility(String mobileNumber,OnNewNotificationAddedListener onNewNotificationAddedListener,OnNotificationListChangeListener onNotificationListChangeListener)
     {
         this(mobileNumber);
-        this.onNewNotificationAddedListener=onNewNotificationAddedListener;
-        this.onNotificationListChangeListener=onNotificationListChangeListener;
+        this.onNewNotificationAddedListener = onNewNotificationAddedListener;
+        this.onNotificationListChangeListener = onNotificationListChangeListener;
     }
     public NotificationUtility(String mobileNumber,OnNewNotificationAddedListener onNewNotificationAddedListener)
     {
         this.mobileNumber=mobileNumber;
         this.onNewNotificationAddedListener=onNewNotificationAddedListener;
-
     }
+
     public NotificationUtility(String mobileNumber) {
         this.mobileNumber = mobileNumber;
         userNotificationEntityList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class NotificationUtility {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(onNotificationListChangeListener!=null)
+                if(onNotificationListChangeListener != null)
                     onNotificationListChangeListener.OnDataChanged(userNotificationEntityList);
             }
 

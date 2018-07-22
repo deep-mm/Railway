@@ -76,6 +76,14 @@ public class TrainUtility
         this.onBogeyListChangeListener=onBogeyListChangeListener;
     }
 
+    public void addBogey(String bogeyNo){
+        mTrainDatabaseReference.child(bogeyNo).setValue(bogeyNo);
+    }
+
+    public void deleteBogey(String bogeyNo){
+        mTrainDatabaseReference.child(bogeyNo).setValue(null);
+    }
+
     public String getTrainNo() {
         return trainNo;
     }
@@ -111,14 +119,6 @@ public class TrainUtility
 
     public TrainEntity getTrainEntity() {
         return trainEntity;
-    }
-
-    public void addBogey(String bogeyNo){
-            mTrainDatabaseReference.child(bogeyNo).setValue(bogeyNo);
-    }
-
-    public void deleteBogey(String bogeyNo){
-        mTrainDatabaseReference.child(bogeyNo).setValue(null);
     }
 
     public void detachListner(){
