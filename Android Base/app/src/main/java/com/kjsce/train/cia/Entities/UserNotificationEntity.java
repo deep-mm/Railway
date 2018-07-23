@@ -9,6 +9,12 @@ public class UserNotificationEntity {
     public UserNotificationEntity() {
     }
 
+    public UserNotificationEntity(String trainNumber, String dateTime, String sender) {
+        this.trainNumber = trainNumber;
+        this.dateTime = dateTime;
+        this.sender = sender;
+    }
+
     public UserNotificationEntity(String trainNumber, String dateTime, String sender, boolean status) {
         this.trainNumber = trainNumber;
         this.dateTime = dateTime;

@@ -13,8 +13,11 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.kjsce.train.cia.Adapter.CheckBoxAdapter;
 import com.kjsce.train.cia.Adapter.TypeCardAdapter;
+import com.kjsce.train.cia.Entities.BogeyAnalysisEntity;
 import com.kjsce.train.cia.Entities.IndexEntryEntity;
+import com.kjsce.train.cia.Listener.GetBogeyAnalysisListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.AnalysisUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +64,20 @@ public class SelectType extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        //Testing area
+        /*try {
+            AnalysisUtility analysisUtility = new AnalysisUtility();
+            analysisUtility.getBogeyAnalysis(sharedData.getBogie(), new GetBogeyAnalysisListener() {
+                @Override
+                public void onCompleteTask(BogeyAnalysisEntity bogeyAnalysisEntity) {
+                    System.out.println("Testing 123: bogey check \n" + bogeyAnalysisEntity);
+                }
+            });
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }*/
     }
 
     public void initialize(){
