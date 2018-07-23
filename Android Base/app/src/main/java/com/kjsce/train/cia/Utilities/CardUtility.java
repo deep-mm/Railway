@@ -83,6 +83,7 @@ public class CardUtility
             }
         };
 
+        mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
     }
@@ -124,6 +125,7 @@ public class CardUtility
                 else{
                     idEntity = new IdEntity(cardReferenceEntity.getSubtype(),cardReferenceEntity.isProblemStatus(),1);
 
+                    analysisReference.keepSynced(true);
                     analysisReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -155,6 +157,7 @@ public class CardUtility
                         }
                     });
                 }
+                temp.keepSynced(true);
                 temp.setValue(idEntity);
             }
 

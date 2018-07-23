@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.Entities.UserNotificationEntity;
 import com.kjsce.train.cia.Listener.OnNewNotificationAddedListener;
@@ -29,6 +30,9 @@ import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
+    static{
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
     private FirebaseAuth mAuth;
     private static int SPLASH_TIME_OUT = 2000;
     private SharedData sharedData;

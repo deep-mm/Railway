@@ -29,10 +29,11 @@ public class Helper {
     }
 
     public boolean isNetworkConnected() {
-        ConnectivityManager connectivityManager
+        /*ConnectivityManager connectivityManager
                 = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();*/
+        return true;
     }
 
     public void clearData(){

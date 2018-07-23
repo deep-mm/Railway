@@ -66,6 +66,7 @@ public class TrainUtility
             }
         };
 
+        mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
 

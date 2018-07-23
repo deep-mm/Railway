@@ -39,6 +39,7 @@ public class NotificationUtility {
         this.mobileNumber = mobileNumber;
         userNotificationEntityList = new ArrayList<>();
         mNotificationListDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Notifications").child(mobileNumber);
+
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -80,6 +81,7 @@ public class NotificationUtility {
             }
         };
 
+        mNotificationListDatabaseReference.keepSynced(true);
         mNotificationListDatabaseReference.addValueEventListener(valueEventListener);
         mNotificationListDatabaseReference.addChildEventListener(childEventListener);
     }
