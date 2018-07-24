@@ -127,7 +127,7 @@ public class CardUtility
                     idEntity.setNumberOfCards(idEntity.getNumberOfCards() + 1);
                 }
                 else{
-                    idEntity = new IdEntity(cardReferenceEntity.getSubtype(),cardReferenceEntity.isProblemStatus(),1);
+                    idEntity = new IdEntity(cardReferenceEntity.getSubtype(),cardReferenceEntity.isProblemStatus(),1,0);
 
                     analysisReference.keepSynced(true);
                     analysisReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -212,7 +212,7 @@ public class CardUtility
                     public void onCompleteTask(List<String> audioS) {
                         cardEntity.setAudio(audioS);
                         mTrainDatabaseReference.setValue(cardEntity);
-                        listner.onCompleteTask();
+                        listner.onCompleteTask(cardEntity);
                     }
                 });
             }

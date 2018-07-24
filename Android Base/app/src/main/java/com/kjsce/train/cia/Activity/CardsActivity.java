@@ -140,11 +140,28 @@ public class CardsActivity extends AppCompatActivity {
                                  * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
                                  * returning false here won't allow the newly selected radio button to actually be selected.
                                  **/
-                                Toast.makeText(getApplicationContext(),text,Toast.LENGTH_SHORT).show();
+                                switch(text.toString()){
+                                    case "High":
+                                        idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),2);
+                                        break;
+
+                                    case "Medium":
+                                        idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),1);
+                                        break;
+
+                                    case "Low":
+                                        idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),0);
+                                        break;
+
+                                    default:
+                                        idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),0);
+                                        break;
+
+                                }
                                 return true;
                             }
                         })
-                        .positiveText("Choose")
+                        .positiveText("Set Priority")
                         .show();
                 return true;
             }
@@ -186,16 +203,17 @@ public class CardsActivity extends AppCompatActivity {
         priority[1] = "Medium";
         priority[2] = "Low";
 
-        if(helper.isInternetConnected()){
+        /*if(helper.isInternetConnected()){
             onProgressStart();
-        }
+        }*/
 
         idUtility = new IdUtility(new ProblemReferenceEntity(sharedData.getBogie(), sharedData.getType()), new IdListener() {
             @Override
             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
+                System.out.println("Changed: "+idList);
                 indexEntryEntities = idList;
                 allIndexEntryEntitities = indexEntryEntities;
-                sharedData.setIndexEntryEntities(idList);
+                sharedData.setIndexEntryEntities(allIndexEntryEntitities);
 
                 for(int i=0;i<indexEntryEntities.size();i++){
                     StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
@@ -230,13 +248,13 @@ public class CardsActivity extends AppCompatActivity {
                 }
                 cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
                 details.setAdapter(cardsAdapter);
-                if(helper.isInternetConnected()){
+                /*if(helper.isInternetConnected()){
                     onProgressStop();
-                }
+                }*/
                 if(indexEntryEntities.size()==0)
                     empty_list.setVisibility(View.VISIBLE);
                 else
-                    empty_list.setVisibility(View.INVISIBLE);
+                    empty_list.setVisibility(View.GONE);
             }
 
             @Override
@@ -290,6 +308,7 @@ public class CardsActivity extends AppCompatActivity {
 
         if(a!=0) {
             indexEntryEntities = sharedData.getIndexEntryEntities();
+            System.out.println("changedResume: "+indexEntryEntities);
             allIndexEntryEntitities = indexEntryEntities;
             for (int i = 0; i < indexEntryEntities.size(); i++) {
                 StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
@@ -323,10 +342,14 @@ public class CardsActivity extends AppCompatActivity {
             if (indexEntryEntities.size() == 0)
                 empty_list.setVisibility(View.VISIBLE);
             else
-                empty_list.setVisibility(View.INVISIBLE);
+                empty_list.setVisibility(View.GONE);
         }
         else{
             a=1;
+            if (indexEntryEntities.size() == 0)
+                empty_list.setVisibility(View.VISIBLE);
+            else
+                empty_list.setVisibility(View.INVISIBLE);
         }
     }
 

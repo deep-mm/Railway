@@ -1,6 +1,8 @@
 package com.kjsce.train.cia.Listener;
 
+import com.kjsce.train.cia.Entities.CardEntity;
+
 public interface AddCardListner {
 
-    void onCompleteTask();
+    void onCompleteTask(CardEntity cardEntity);
 }

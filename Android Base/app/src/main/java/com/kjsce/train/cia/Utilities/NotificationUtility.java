@@ -125,4 +125,14 @@ public class NotificationUtility {
         userNotificationEntityList.clear();
         mNotificationListDatabaseReference.setValue(null);
     }
+
+    public void changeStatus(UserNotificationEntity userNotificationEntity){
+        mNotificationListDatabaseReference.child(userNotificationEntity.getDateTime() + userNotificationEntity.getSender()).child("status").setValue(true);
+    }
+
+    public void changeStatus(List<UserNotificationEntity> userNotificationEntityList){
+        for(int i=0; i<userNotificationEntityList.size();i++){
+            changeStatus(userNotificationEntityList.get(i));
+        }
+    }
 }

@@ -30,10 +30,6 @@ import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
-    static{
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-    }
-    private FirebaseAuth mAuth;
     private static int SPLASH_TIME_OUT = 2000;
     private SharedData sharedData;
     private Helper helper;
@@ -49,7 +45,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        sharedData = new SharedData(getApplicationContext());
+        if(!sharedData.entryFlag()){
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            sharedData.entryFlag(true);
+        }
         initialize();
+
 
         if(helper.isNetworkConnected()) {
 
@@ -89,8 +91,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void initialize(){
-        mAuth = FirebaseAuth.getInstance();
-        sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         keyguardManager = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         userUtility = new UserUtility();

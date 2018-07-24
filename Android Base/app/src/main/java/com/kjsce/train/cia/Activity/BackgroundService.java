@@ -16,6 +16,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Adapter.NotificationsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
@@ -42,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BackgroundService extends Service implements NetworkStateReceiver.NetworkStateReceiverListener {
+
     public Context context = this;
     public Handler handler = null;
     public static Runnable runnable = null;
@@ -85,28 +87,31 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
         notificationUtility = new NotificationUtility(sharedData.getUserEntity().getMobileNumber(), new OnNewNotificationAddedListener() {
             @Override
             public void onNotificationAdded(UserNotificationEntity newUserNotification) {
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-                mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-                mBuilder.setContentTitle("New Report Generated!");
-                mBuilder.setContentText(newUserNotification.getSender()+" has generated a report of train: "+newUserNotification.getTrainNumber()+" on "+
-                        newUserNotification.getDateTime())
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(newUserNotification.getSender()+" has generated a report of train: "+newUserNotification.getTrainNumber()+" on "+
-                                getDate(newUserNotification.getDateTime())))
-                .setPriority(Notification.PRIORITY_MAX);
+                if (!newUserNotification.isStatus()) {
+                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+                    mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+                    mBuilder.setContentTitle("New Report Generated!");
+                    mBuilder.setContentText(newUserNotification.getSender() + " has generated a report of train: " + newUserNotification.getTrainNumber() + " on " +
+                            newUserNotification.getDateTime())
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText(newUserNotification.getSender() + " has generated a report of train: " + newUserNotification.getTrainNumber() + " on " +
+                                            getDate(newUserNotification.getDateTime())))
+                            .setPriority(Notification.PRIORITY_MAX);
 
-                //Intent resultIntent = new Intent(context, Notifications.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                stackBuilder.addParentStack(Notifications.class);
+                    //Intent resultIntent = new Intent(context, Notifications.class);
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+                    stackBuilder.addParentStack(Notifications.class);
 
 // Adds the Intent that starts the Activity to the top of the stack
-                //stackBuilder.addNextIntent(resultIntent);
+                    //stackBuilder.addNextIntent(resultIntent);
                 /*PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
                 mBuilder.setContentIntent(resultPendingIntent);*/
 
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(id, mBuilder.build());
-                id++;
+                    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.notify(id, mBuilder.build());
+                    id++;
+                    notificationUtility.changeStatus(newUserNotification);
+                }
             }
         },
                 new OnNotificationListChangeListener() {
@@ -169,25 +174,28 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
             cardUtility.uploadCard(cardEntityToUpload.getCardEntity(), new CardReferenceEntity(cardEntityToUpload.getBogeyNumber(),
                     cardEntityToUpload.getProblem(), cardEntityToUpload.getId(), cardEntityToUpload.getProblemStatus(), cardEntityToUpload.getSubTypeSelected()), new AddCardListner() {
                 @Override
-                public void onCompleteTask() {
-                    cardEntityToUploads.remove(getIndex(cardEntityToUpload));
-                    cardEntityToUploads.clear();
-                    sharedData.setCardEntityList(cardEntityToUploads);
-                    //TODO: How to find if completed and the only upload other
+                public void onCompleteTask(CardEntity cardEntity) {
+                    try {
+                        List<CardEntityToUpload> list = sharedData.getCardEntityList();
+                        System.out.println("deleted:" +cardEntity);
+                        list.remove(getIndex(cardEntity, list));
+                        sharedData.setCardEntityList(list);
+                        //TODO: How to find if completed and the only upload other
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             });
         }
     }
 
-    public int getIndex(CardEntityToUpload cardEntityToUpload){
-        cardEntityToUploads = sharedData.getCardEntityList();
-        if(cardEntityToUploads==null)
-            cardEntityToUploads = new ArrayList<CardEntityToUpload>();
+    public int getIndex(CardEntity cardEntity, List<CardEntityToUpload> list){
 
         int j=0;
-        for(j=0;j<cardEntityToUploads.size();j++){
-            CardEntityToUpload c = cardEntityToUploads.get(j);
-            if(cardEntityToUpload.getIdentifier()==c.getIdentifier())
+        for(j=0;j<list.size();j++){
+            CardEntityToUpload c = list.get(j);
+            if(cardEntity.getDateTime().equals(c.getCardEntity().getDateTime()))
                 return j;
         }
         return 0;

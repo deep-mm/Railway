@@ -5,14 +5,16 @@ public class IdEntity
     private String subtype;
     private boolean problemStatus;
     private int numberOfCards;
+    private int priority;
 
     public IdEntity() {
     }
 
-    public IdEntity(String subtype, boolean problemStatus, int numberOfCards) {
+    public IdEntity(String subtype, boolean problemStatus, int numberOfCards, int priority) {
         this.subtype = subtype;
         this.problemStatus = problemStatus;
         this.numberOfCards = numberOfCards;
+        this.priority = priority;
     }
 
     public String getSubtype() {
@@ -39,12 +41,21 @@ public class IdEntity
         this.numberOfCards = numberOfCards;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     @Override
     public String toString() {
         return "IdEntity{" +
                 "subtype='" + subtype + '\'' +
                 ", problemStatus=" + problemStatus +
                 ", numberOfCards=" + numberOfCards +
+                ", priority=" + priority +
                 '}';
     }
 }

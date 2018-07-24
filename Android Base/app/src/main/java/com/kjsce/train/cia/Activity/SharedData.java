@@ -45,6 +45,15 @@ public class SharedData {
         return check;
     }
 
+    public void entryFlag(Boolean check){
+        editor.putBoolean("entry_flag", check).commit();
+    }
+
+    public Boolean entryFlag(){
+        Boolean check = pref.getBoolean("entry_flag", false);
+        return check;
+    }
+
     public void isLoggedIn(Boolean check){
         editor.putBoolean("login", check).commit();
     }

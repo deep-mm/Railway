@@ -160,7 +160,7 @@ public class NotifyContacts extends AppCompatActivity {
                 String train = sharedData.getTrain(), sender = sharedData.getUserEntity().getName();
                 for(int i=0;i<checkedList.size();i++){
                         System.out.println("UserEntity: "+checkedList.get(i));
-                        UserNotificationEntity userNotificationEntity = new UserNotificationEntity(train, timeStamp, sender);
+                        UserNotificationEntity userNotificationEntity = new UserNotificationEntity(train, timeStamp, sender, false);
                         BackgroundService.notificationUtility.sendNotification(checkedList.get(i).getMobileNumber(), userNotificationEntity);
                 }
                 CoachSearch.trainUtility.detachListner();

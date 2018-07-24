@@ -11,6 +11,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kjsce.train.cia.Entities.UserEntity;
 import com.kjsce.train.cia.Listener.GetUserListener;
 import com.kjsce.train.cia.Listener.UserAuthListener;
@@ -22,6 +23,9 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
+    /*static{
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }*/
     private SharedData sharedData;
     private Helper helper;
     private Boolean success;
@@ -39,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         initialize();
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {

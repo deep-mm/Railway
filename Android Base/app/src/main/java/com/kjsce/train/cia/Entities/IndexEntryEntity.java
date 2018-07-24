@@ -6,6 +6,7 @@ public class IndexEntryEntity
     private boolean problemStatus;
     private int numberOfCards;
     private String subtype;
+    private int priority;
 
     public IndexEntryEntity() {
     }
@@ -34,7 +35,15 @@ public class IndexEntryEntity
         this.subtype = subtype;
     }
 
-    public IndexEntryEntity(String id,IdEntity idEntity){
+    public IndexEntryEntity(String id, boolean problemStatus, int numberOfCards, String subtype, int priority) {
+        this.id = id;
+        this.problemStatus = problemStatus;
+        this.numberOfCards = numberOfCards;
+        this.subtype = subtype;
+        this.priority = priority;
+    }
+
+    public IndexEntryEntity(String id, IdEntity idEntity){
         this.id = id;
         this.problemStatus = idEntity.isProblemStatus();
         this.numberOfCards = idEntity.getNumberOfCards();
@@ -73,6 +82,14 @@ public class IndexEntryEntity
         this.subtype = subtype;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     @Override
     public String toString() {
         return "IndexEntryEntity{" +
@@ -80,6 +97,7 @@ public class IndexEntryEntity
                 ", problemStatus=" + problemStatus +
                 ", numberOfCards=" + numberOfCards +
                 ", subtype='" + subtype + '\'' +
+                ", priority=" + priority +
                 '}';
     }
 

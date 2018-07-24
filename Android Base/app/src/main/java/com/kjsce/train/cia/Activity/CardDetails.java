@@ -160,9 +160,12 @@ public class CardDetails extends AppCompatActivity {
                     CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
                     cardEntityToUploads.add(cardEntityToUpload);
                     sharedData.setCardEntityList(cardEntityToUploads);
-                    cardEntities.add(cardEntity);
-                    cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
-                    details.setAdapter(cardDetailsAdapter);
+                    if(!helper.isInternetConnected()) {
+                        cardEntities.add(cardEntity);
+                        cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                        details.setAdapter(cardDetailsAdapter);
+                    }
+                    textBox.setText("");
                     /*cardUtility.uploadCard(cardEntity, new CardReferenceEntity(bogeyNumber, problem, id, false, subTypeSelected), new AddCardListner() {
                         @Override
                         public void onCompleteTask() {
@@ -444,9 +447,11 @@ public class CardDetails extends AppCompatActivity {
                             CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
                             cardEntityToUploads.add(cardEntityToUpload);
                             sharedData.setCardEntityList(cardEntityToUploads);
-                            cardEntities.add(cardEntity);
-                            cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
-                            details.setAdapter(cardDetailsAdapter);
+                            if(!helper.isInternetConnected()) {
+                                cardEntities.add(cardEntity);
+                                cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                                details.setAdapter(cardDetailsAdapter);
+                            }
                             /*cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
                                 @Override
                                 public void onCompleteTask() {
@@ -466,9 +471,11 @@ public class CardDetails extends AppCompatActivity {
 
                             cardEntityToUploads.add(cardEntityToUpload);
                             sharedData.setCardEntityList(cardEntityToUploads);
-                            cardEntities.add(cardEntity);
-                            cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
-                            details.setAdapter(cardDetailsAdapter);
+                            if(!helper.isInternetConnected()) {
+                                cardEntities.add(cardEntity);
+                                cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                                details.setAdapter(cardDetailsAdapter);
+                            }
 
                             /*cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
                                 @Override

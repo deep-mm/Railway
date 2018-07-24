@@ -13,6 +13,7 @@ public class CardEntity
     private String comment;
 
     public CardEntity() {
+
     }
 
     public CardEntity(String dateTime, String sender, String trainNumber, String placeOfInspection, List<String> image, List<String> audio, String comment) {
@@ -102,6 +103,7 @@ public class CardEntity
         }
         return false;
     }
+
 
     public void copy(CardEntity cardEntity){
         this.placeOfInspection = cardEntity.getPlaceOfInspection();
