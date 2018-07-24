@@ -1,9 +1,10 @@
 package com.kjsce.train.cia.Entities;
 
 public class UserNotificationEntity {
-   private String trainNumber;
+    private String trainNumber;
     private String dateTime;
     private String sender;
+    private boolean status;
 
     public UserNotificationEntity() {
     }
@@ -12,6 +13,13 @@ public class UserNotificationEntity {
         this.trainNumber = trainNumber;
         this.dateTime = dateTime;
         this.sender = sender;
+    }
+
+    public UserNotificationEntity(String trainNumber, String dateTime, String sender, boolean status) {
+        this.trainNumber = trainNumber;
+        this.dateTime = dateTime;
+        this.sender = sender;
+        this.status = status;
     }
 
     public String getTrainNumber() {
@@ -38,12 +46,21 @@ public class UserNotificationEntity {
         this.sender = sender;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "UserNotificationEntity{" +
                 "trainNumber='" + trainNumber + '\'' +
                 ", dateTime='" + dateTime + '\'' +
                 ", sender='" + sender + '\'' +
+                ", status=" + status +
                 '}';
     }
 }

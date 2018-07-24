@@ -65,6 +65,7 @@ public class UserUtility {
             }
         };
 
+        mUserListDatabaseReference.keepSynced(true);
         mUserListDatabaseReference.addValueEventListener(valueEventListener);
         mUserListDatabaseReference.addChildEventListener(childEventListener);
     }
@@ -118,6 +119,7 @@ public class UserUtility {
     public void getUser(String mobileNumber, final GetUserListener getUserListener) {
         mUserListDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mobileNumber);
 
+        mUserListDatabaseReference.keepSynced(true);
         mUserListDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -135,6 +137,7 @@ public class UserUtility {
     public void authUser(String mobileNumber, UserAuthListener userAuthListener)
     {
         mUserListDatabaseReference.child(mobileNumber);
+        mUserListDatabaseReference.keepSynced(true);
         mUserListDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

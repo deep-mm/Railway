@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kjsce.train.cia.Entities.AnalysisEntity;
 import com.kjsce.train.cia.Entities.CardEntity;
 import com.kjsce.train.cia.Entities.CardReferenceEntity;
 import com.kjsce.train.cia.Entities.IdEntity;
@@ -86,6 +87,7 @@ public class CardUtility
             }
         };
 
+        mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
     }
@@ -103,7 +105,6 @@ public class CardUtility
                 .child(idReferenceEntity.getBogeyNumber())
                 .child(idReferenceEntity.getProblem())
                 .child(idReferenceEntity.getId());
-
     }
 
     private void createIdIndex(final CardReferenceEntity cardReferenceEntity){
@@ -112,6 +113,11 @@ public class CardUtility
                 .child(cardReferenceEntity.getProblem())
                 .child("Index")
                 .child(cardReferenceEntity.getId());
+
+        final DatabaseReference analysisReference = FirebaseDatabase.getInstance().getReference().child("Bogeys")
+                .child(cardReferenceEntity.getBogeyNumber())
+                .child("Analysis")
+                .child(cardReferenceEntity.getProblem());
 
         temp.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -122,7 +128,40 @@ public class CardUtility
                 }
                 else{
                     idEntity = new IdEntity(cardReferenceEntity.getSubtype(),cardReferenceEntity.isProblemStatus(),1);
+
+                    analysisReference.keepSynced(true);
+                    analysisReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            AnalysisEntity analysisEntity = dataSnapshot.getValue(AnalysisEntity.class);
+                            if(analysisEntity != null){
+                                //TODO add prioity also
+                                if(cardReferenceEntity.isProblemStatus()){
+                                    analysisEntity.setSolvedProblems(analysisEntity.getSolvedProblems() + 1);
+                                }
+                                else
+                                    analysisEntity.setUnsolvedProblems(analysisEntity.getUnsolvedProblems() + 1);
+                            }
+                            else{
+                                //TODO add priority also
+                                analysisEntity = new AnalysisEntity();
+                                if(cardReferenceEntity.isProblemStatus()){
+                                    analysisEntity.setSolvedProblems(1);
+                                }
+                                else
+                                    analysisEntity.setUnsolvedProblems(1);
+                            }
+
+                            analysisReference.setValue(analysisEntity);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
+                temp.keepSynced(true);
                 temp.setValue(idEntity);
             }
 

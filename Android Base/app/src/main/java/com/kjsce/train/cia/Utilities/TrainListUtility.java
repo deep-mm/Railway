@@ -61,6 +61,7 @@ public class TrainListUtility {
             }
         };
 
+        mTrainListDatabaseReference.keepSynced(true);
         mTrainListDatabaseReference.addValueEventListener(valueEventListener);
         mTrainListDatabaseReference.addChildEventListener(childEventListener);
 

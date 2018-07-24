@@ -81,6 +81,7 @@ public class IdUtility
             }
         };
 
+        mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
     }
@@ -107,6 +108,62 @@ public class IdUtility
     public void changeProblemStatus(IdReferenceEntity idReferenceEntity,boolean problemStatus){
         createReference(idReferenceEntity);
         mTrainDatabaseReference.child("problemStatus").setValue(problemStatus);
+
+        DatabaseReference analysisReference = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Bogeys")
+                .child(idReferenceEntity.getBogeyNumber())
+                .child("Analysis")
+                .child(idReferenceEntity.getProblem());
+
+        if(problemStatus){
+            analysisReference.child("unsolvedProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    analysisReference.child("unsolvedProblems").setValue(((long)dataSnapshot.getValue() - 1));
+                    analysisReference.child("solvedProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            analysisReference.child("solvedProblems").setValue((long)dataSnapshot.getValue() + 1);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else{
+            analysisReference.child("solvedProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    analysisReference.child("solvedProblems").setValue(((long)dataSnapshot.getValue() - 1));
+                    analysisReference.child("unsolvedProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            analysisReference.child("unsolvedProblems").setValue((long)dataSnapshot.getValue() + 1);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     public void detachListner(){

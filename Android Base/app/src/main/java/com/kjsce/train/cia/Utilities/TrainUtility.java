@@ -66,6 +66,7 @@ public class TrainUtility
             }
         };
 
+        mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
 
@@ -74,6 +75,14 @@ public class TrainUtility
     public TrainUtility(String trainNo, OnBogeyListChangeListener onBogeyListChangeListener){
         this(trainNo);
         this.onBogeyListChangeListener=onBogeyListChangeListener;
+    }
+
+    public void addBogey(String bogeyNo){
+        mTrainDatabaseReference.child(bogeyNo).setValue(bogeyNo);
+    }
+
+    public void deleteBogey(String bogeyNo){
+        mTrainDatabaseReference.child(bogeyNo).setValue(null);
     }
 
     public String getTrainNo() {
@@ -111,14 +120,6 @@ public class TrainUtility
 
     public TrainEntity getTrainEntity() {
         return trainEntity;
-    }
-
-    public void addBogey(String bogeyNo){
-            mTrainDatabaseReference.child(bogeyNo).setValue(bogeyNo);
-    }
-
-    public void deleteBogey(String bogeyNo){
-        mTrainDatabaseReference.child(bogeyNo).setValue(null);
     }
 
     public void detachListner(){
