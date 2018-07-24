@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.CardEntityToUpload;
 import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.Entities.TrainEntity;
 import com.kjsce.train.cia.Entities.UserEntity;
@@ -218,15 +219,15 @@ public class SharedData {
         return firstTime;
     }
 
-    public void setCardEntityToUpload(List<CardEntity> cardEntity){
+    public void setCardEntityToUpload(ArrayList<CardEntity> cardEntity){
         String type = gson.toJson(cardEntity);
         editor.putString("cardEntity_upload",type).commit();
     }
 
-    public List<CardEntity> getCardEntityToUpload(){
+    public ArrayList<CardEntity> getCardEntityToUpload(){
         String json = pref.getString("cardEntity_upload", "");
-        Type listType = new TypeToken<List<CardEntity>>() {}.getType();
-        List<CardEntity> cardEntities = gson.fromJson(json, listType);
+        Type listType = new TypeToken<ArrayList<CardEntity>>() {}.getType();
+        ArrayList<CardEntity> cardEntities = gson.fromJson(json, listType);
         return cardEntities;
     }
 
@@ -264,6 +265,18 @@ public class SharedData {
     public void setDateList(List<String> date_list){
         String date = gson.toJson(date_list);
         editor.putString("date_list",date).commit();
+    }
+
+    public void setCardEntityList(List<CardEntityToUpload> cardEntityList){
+        String type = gson.toJson(cardEntityList);
+        editor.putString("cardEntityList",type).commit();
+    }
+
+    public List<CardEntityToUpload> getCardEntityList(){
+        String json = pref.getString("cardEntityList", "");
+        Type listType = new TypeToken<List<CardEntityToUpload>>() {}.getType();
+        List<CardEntityToUpload> type_list = gson.fromJson(json, listType);
+        return type_list;
     }
 
 

@@ -28,6 +28,10 @@ public class CardUtility
 
     private ArrayList<CardEntity> cardEntities = new ArrayList<>();
 
+    public CardUtility(){
+
+    }
+
     public CardUtility(IdReferenceEntity idReferenceEntity,final CardListener listener){
         createReference(idReferenceEntity);
 

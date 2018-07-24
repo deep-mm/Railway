@@ -29,6 +29,10 @@ public class Helper {
     }
 
     public boolean isNetworkConnected() {
+        return true;
+    }
+
+    public boolean isInternetConnected() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

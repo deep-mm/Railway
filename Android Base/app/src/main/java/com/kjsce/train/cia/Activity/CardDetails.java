@@ -36,8 +36,10 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.gson.Gson;
 import com.kjsce.train.cia.Adapter.CardDetailsAdapter;
 import com.kjsce.train.cia.Entities.CardEntity;
+import com.kjsce.train.cia.Entities.CardEntityToUpload;
 import com.kjsce.train.cia.Entities.CardReferenceEntity;
 import com.kjsce.train.cia.Entities.IdReferenceEntity;
 import com.kjsce.train.cia.Entities.Problem.CoachExteriorProblem;
@@ -85,6 +87,7 @@ public class CardDetails extends AppCompatActivity {
     private CardUtility cardUtility;
     private Intent intent;
     private RecyclerView details;
+    private List<CardEntityToUpload> cardEntityToUploads;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,16 +151,25 @@ public class CardDetails extends AppCompatActivity {
                 }
                 else {
                     subTypeSpinner.setEnabled(false);
-                    onProgressStart();
                     timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
                     CardEntity cardEntity = new CardEntity(timeStamp, userName, trainNumber, placeOfInspection, null, null, text);
-                    cardUtility.uploadCard(cardEntity, new CardReferenceEntity(bogeyNumber, problem, id, false, subTypeSelected), new AddCardListner() {
+                    cardEntityToUploads = sharedData.getCardEntityList();
+                    if(cardEntityToUploads==null)
+                        cardEntityToUploads = new ArrayList<CardEntityToUpload>();
+
+                    CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
+                    cardEntityToUploads.add(cardEntityToUpload);
+                    sharedData.setCardEntityList(cardEntityToUploads);
+                    cardEntities.add(cardEntity);
+                    cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                    details.setAdapter(cardDetailsAdapter);
+                    /*cardUtility.uploadCard(cardEntity, new CardReferenceEntity(bogeyNumber, problem, id, false, subTypeSelected), new AddCardListner() {
                         @Override
                         public void onCompleteTask() {
                             onProgressStop();
                             textBox.setText("");
                         }
-                    });
+                    });*/
                 }
             }
         });
@@ -270,6 +282,7 @@ public class CardDetails extends AppCompatActivity {
         subTypes = new ArrayList<String>();
         subTypeSpinner = (Spinner) findViewById(R.id.sub_type_spinner);
         subTypeSelected = "";
+        cardEntityToUploads = sharedData.getCardEntityList();
 
         audio = new ArrayList<String>();
         image = new ArrayList<String>();
@@ -307,6 +320,7 @@ public class CardDetails extends AppCompatActivity {
             @Override
             public void onDataChanged(ArrayList<CardEntity> cardEntity) {
                 cardEntities = cardEntity;
+                sharedData.setCardEntityToUpload(cardEntities);
                 cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
                 details.setAdapter(cardDetailsAdapter);
             }
@@ -419,28 +433,49 @@ public class CardDetails extends AppCompatActivity {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         text = input.toString();
-                        onProgressStart();
                         if(flag.equalsIgnoreCase("image")){
                             timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
                             image.add(imageFilePath);
                             CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,image,null,text);
-                            cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
+                            cardEntityToUploads = sharedData.getCardEntityList();
+                            if(cardEntityToUploads==null)
+                                cardEntityToUploads = new ArrayList<CardEntityToUpload>();
+
+                            CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
+                            cardEntityToUploads.add(cardEntityToUpload);
+                            sharedData.setCardEntityList(cardEntityToUploads);
+                            cardEntities.add(cardEntity);
+                            cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                            details.setAdapter(cardDetailsAdapter);
+                            /*cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
                                 @Override
                                 public void onCompleteTask() {
                                     onProgressStop();
                                 }
-                            });
+                            });*/
                         }
                         else{
                             timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
                             audio.add(audioFilePath);
                             CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,null,audio,text);
-                            cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
+                            cardEntityToUploads = sharedData.getCardEntityList();
+                            if(cardEntityToUploads==null)
+                                cardEntityToUploads = new ArrayList<CardEntityToUpload>();
+
+                            CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
+
+                            cardEntityToUploads.add(cardEntityToUpload);
+                            sharedData.setCardEntityList(cardEntityToUploads);
+                            cardEntities.add(cardEntity);
+                            cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+                            details.setAdapter(cardDetailsAdapter);
+
+                            /*cardUtility.uploadCard(cardEntity,new CardReferenceEntity(bogeyNumber,problem,id,false,subTypeSelected), new AddCardListner() {
                                 @Override
                                 public void onCompleteTask() {
                                     onProgressStop();
                                 }
-                            });
+                            });*/
                         }
 
                     }
@@ -621,7 +656,18 @@ public class CardDetails extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        /*cardEntities = sharedData.getCardEntityToUpload();
+        if(cardEntities==null)
+            cardEntities = new ArrayList<CardEntity>();
+        cardDetailsAdapter = new CardDetailsAdapter(cardEntities, CardDetails.this);
+        details.setAdapter(cardDetailsAdapter);*/
         checkInternetConnection();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        //sharedData.setCardEntityToUpload(cardEntities);
     }
 
     public void checkInternetConnection(){

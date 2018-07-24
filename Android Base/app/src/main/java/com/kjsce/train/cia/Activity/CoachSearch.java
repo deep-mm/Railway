@@ -151,16 +151,19 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         empty_list = (RelativeLayout) findViewById(R.id.empty_page);
         empty_list.setVisibility(View.GONE);
 
-        onProgressStart();
+        /*if(helper.isInternetConnected())
+            onProgressStart();*/
         trainUtility = new TrainUtility(sharedData.getTrain(), new OnBogeyListChangeListener() {
             @Override
             public void onDataChanged(TrainEntity newTrainEntity) {
                 coach_list = newTrainEntity.getBogeyList();
+                coach_list.add("General");
                 allCoaches = coach_list;
                 trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
                 details.setAdapter(trainAdapter);
                 //empty_coaches();
-                onProgressStop();
+                /*if(helper.isInternetConnected())
+                    onProgressStop();*/
             }
         });
 

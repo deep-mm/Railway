@@ -54,6 +54,7 @@ public class CardsActivity extends AppCompatActivity {
     private RelativeLayout empty_list;
     private Date startDate=null,endDate=null;
     private String[] priority;
+    private int a;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,13 +179,14 @@ public class CardsActivity extends AppCompatActivity {
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
         empty_list = (RelativeLayout) findViewById(R.id.empty_page);
         empty_list.setVisibility(View.GONE);
+        a=0;
 
         priority = new String[3];
         priority[0] = "High";
         priority[1] = "Medium";
         priority[2] = "Low";
 
-        if(helper.isNetworkConnected()){
+        if(helper.isInternetConnected()){
             onProgressStart();
         }
 
@@ -194,12 +196,11 @@ public class CardsActivity extends AppCompatActivity {
                 indexEntryEntities = idList;
                 allIndexEntryEntitities = indexEntryEntities;
                 sharedData.setIndexEntryEntities(idList);
-                System.out.println("indexEntryEntities: "+indexEntryEntities.size());
+
                 for(int i=0;i<indexEntryEntities.size();i++){
                     StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
                     String date = stringBuffer.substring(0,15);
                     Date d = getDate(date);
-                    System.out.println("xxxxx d ="+d+" start= "+startDate+" end = "+endDate);
 
                     if(startDate!=null && endDate!=null) {
                         if (!(d.after(startDate) && d.before(endDate))) {
@@ -229,7 +230,7 @@ public class CardsActivity extends AppCompatActivity {
                 }
                 cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
                 details.setAdapter(cardsAdapter);
-                if(helper.isNetworkConnected()){
+                if(helper.isInternetConnected()){
                     onProgressStop();
                 }
                 if(indexEntryEntities.size()==0)
@@ -287,47 +288,46 @@ public class CardsActivity extends AppCompatActivity {
             }
         }
 
-        indexEntryEntities = sharedData.getIndexEntryEntities();
-        System.out.println("yyyy "+indexEntryEntities);
-        allIndexEntryEntitities = indexEntryEntities;
-        for(int i=0;i<indexEntryEntities.size();i++){
-            StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
-            String date = stringBuffer.substring(0,15);
-            Date d = getDate(date);
-            System.out.println("xxxxx d ="+d+" start= "+startDate+" end = "+endDate);
+        if(a!=0) {
+            indexEntryEntities = sharedData.getIndexEntryEntities();
+            allIndexEntryEntitities = indexEntryEntities;
+            for (int i = 0; i < indexEntryEntities.size(); i++) {
+                StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
+                String date = stringBuffer.substring(0, 15);
+                Date d = getDate(date);
 
-            if(startDate!=null && endDate!=null) {
-                if (!(d.after(startDate) && d.before(endDate))) {
-                    indexEntryEntities.remove(i);
-                    i--;
+                if (startDate != null && endDate != null) {
+                    if (!(d.after(startDate) && d.before(endDate))) {
+                        indexEntryEntities.remove(i);
+                        i--;
+                    }
+                } else if (statusList.get(0) && statusList.get(1)) {
+                    //
+                } else if (statusList.get(0)) {
+                    if (indexEntryEntities.get(i).isProblemStatus() == false) {
+                        indexEntryEntities.remove(i);
+                        i--;
+                    }
+                } else if (statusList.get(1)) {
+                    if (indexEntryEntities.get(i).isProblemStatus() == true) {
+                        indexEntryEntities.remove(i);
+                        i--;
+                    }
+                } else {
+                    //
                 }
-            }
-            else if(statusList.get(0) && statusList.get(1)){
-                //
-            }
-            else if(statusList.get(0)){
-                if(indexEntryEntities.get(i).isProblemStatus()==false) {
-                    indexEntryEntities.remove(i);
-                    i--;
-                }
-            }
-            else if(statusList.get(1)){
-                if(indexEntryEntities.get(i).isProblemStatus()==true) {
-                    indexEntryEntities.remove(i);
-                    i--;
-                }
-            }
-            else{
-                //
-            }
 
+            }
+            cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
+            details.setAdapter(cardsAdapter);
+            if (indexEntryEntities.size() == 0)
+                empty_list.setVisibility(View.VISIBLE);
+            else
+                empty_list.setVisibility(View.INVISIBLE);
         }
-        cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
-        details.setAdapter(cardsAdapter);
-        if(indexEntryEntities.size()==0)
-            empty_list.setVisibility(View.VISIBLE);
-        else
-            empty_list.setVisibility(View.INVISIBLE);
+        else{
+            a=1;
+        }
     }
 
     public Date getDate(String date) {
