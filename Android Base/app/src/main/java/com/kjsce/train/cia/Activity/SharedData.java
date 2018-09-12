@@ -118,6 +118,18 @@ public class SharedData {
         return train_list;
     }
 
+    public void setCoachList(List<String> user_list){
+        String user = gson.toJson(user_list);
+        editor.putString("coach_list",user).commit();
+    }
+
+    public List<String> getCoachList(){
+        String json = pref.getString("coach_list", "");
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        List<String> train_list = gson.fromJson(json, listType);
+        return train_list;
+    }
+
     public void setTypeList(List<Boolean> type_list){
         String type = gson.toJson(type_list);
         editor.putString("type_list",type).commit();

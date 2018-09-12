@@ -47,6 +47,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     private RelativeLayout empty_list;
     private List<Boolean> statusList,typeList;
     private List<String> dateList;
+    private int x=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,10 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         });
 
         allCoaches = coach_list;
+        System.out.println("SEtting: "+coach_list);
         searchView.setOnQueryTextListener(this);
         trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+        System.out.println("SEtting: "+coach_list);
         details.setAdapter(trainAdapter);
         
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -82,9 +85,15 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         analysisButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),FilterActivity.class);
-                intent.putExtra("from","Analysis");
-                startActivity(intent);
+                if(x==1) {
+                    if (helper.isInternetConnected()) {
+                        Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+                        intent.putExtra("from", "Analysis");
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Active Internet Connection Required for Analysis", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
@@ -157,10 +166,14 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             @Override
             public void onDataChanged(TrainEntity newTrainEntity) {
                 coach_list = newTrainEntity.getBogeyList();
+                System.out.println("SEtting: "+coach_list);
+                sharedData.setCoachList(coach_list);
                 coach_list.add("General");
                 allCoaches = coach_list;
                 trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+                System.out.println("SEtting: "+coach_list);
                 details.setAdapter(trainAdapter);
+                x=1;
                 //empty_coaches();
                 /*if(helper.isInternetConnected())
                     onProgressStop();*/
@@ -249,6 +262,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         data1.clear();
         int i;
 
+        System.out.println("SEtting: "+allCoaches);
         for (i = 0; i < allCoaches.size(); i++) {
             if (allCoaches.get(i).toLowerCase().contains(newText))
                 data1.add(allCoaches.get(i));
@@ -257,6 +271,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         coach_list = data1;
         System.out.println("train_list: " + data1);
         trainAdapter = new TrainAdapter(data1, CoachSearch.this, "coach");
+        System.out.println("SEtting: "+data1);
         details.setAdapter(trainAdapter);
         trainAdapter.notifyDataSetChanged();
 
@@ -264,6 +279,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             data1.clear();
             coach_list = allCoaches;
             trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+            System.out.println("SEtting: "+coach_list);
             details.setAdapter(trainAdapter);
             trainAdapter.notifyDataSetChanged();
         }
