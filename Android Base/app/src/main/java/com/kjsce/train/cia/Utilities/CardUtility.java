@@ -87,7 +87,7 @@ public class CardUtility
             }
         };
 
-        mTrainDatabaseReference.keepSynced(true);
+        //mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
     }

@@ -140,21 +140,26 @@ public class CardsActivity extends AppCompatActivity {
                                  * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
                                  * returning false here won't allow the newly selected radio button to actually be selected.
                                  **/
+                                System.out.println("SetPriority = "+sharedData.getBogie()+" "+sharedData.getType()+" "+itemData.getId());
                                 switch(text.toString()){
                                     case "High":
                                         idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),2);
+                                        System.out.println("High");
                                         break;
 
                                     case "Medium":
                                         idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),1);
+                                        System.out.println("Medium");
                                         break;
 
                                     case "Low":
                                         idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),0);
+                                        System.out.println("Low");
                                         break;
 
                                     default:
                                         idUtility.changePriority(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(),itemData.getId()),0);
+                                        System.out.println("Default");
                                         break;
 
                                 }

@@ -81,7 +81,7 @@ public class IdUtility
             }
         };
 
-        mTrainDatabaseReference.keepSynced(true);
+        //mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
         mTrainDatabaseReference.addChildEventListener(childEventListener);
     }
@@ -168,8 +168,6 @@ public class IdUtility
 
     public void changePriority(IdReferenceEntity idReferenceEntity,int priority){
         createReference(idReferenceEntity);
-
-
         mTrainDatabaseReference.child("priority").setValue(priority);
 
         /*DatabaseReference analysisReference = FirebaseDatabase.getInstance()
