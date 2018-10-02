@@ -57,6 +57,7 @@ public class IdUtility
                     int i = indexEntryEntities.indexOf(indexEntryEntity);
                     indexEntryEntities.get(i).setNumberOfCards(indexEntryEntity.getNumberOfCards());
                     indexEntryEntities.get(i).setProblemStatus(indexEntryEntity.isProblemStatus());
+                    indexEntryEntities.get(i).setPriority(indexEntryEntity.getPriority());
                 }
                 listener.onIdChanged(indexEntryEntity);
             }
