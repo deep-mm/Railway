@@ -1,5 +1,7 @@
 package com.kjsce.train.cia.Utilities;
 
+import android.provider.ContactsContract;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -175,18 +177,149 @@ public class IdUtility
         }
     }
 
+    public void incrementLowProblems(DatabaseReference analysisReference){
+        analysisReference.child("lowProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                analysisReference.child("lowProblems").setValue(dataSnapshot.getValue(Integer.class) + 1);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void incrementMediumProblems(DatabaseReference analysisReference){
+        analysisReference.child("mediumProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                analysisReference.child("mediumProblems").setValue(dataSnapshot.getValue(Integer.class) + 1);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void incrementCriticalProblems(DatabaseReference analysisReference){
+        analysisReference.child("criticalProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                analysisReference.child("criticalProblems").setValue(dataSnapshot.getValue(Integer.class) + 1);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void changePriority(IdReferenceEntity idReferenceEntity,int priority){
         createReference(idReferenceEntity);
-        mTrainDatabaseReference.child("priority").setValue(priority);
 
-        DatabaseReference analysisReference = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Bogeys")
-                .child(idReferenceEntity.getBogeyNumber())
-                .child("Analysis")
-                .child(idReferenceEntity.getProblem());
 
-        //int exitingPriority = analysisReference.
+        mTrainDatabaseReference.child("priority").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int existingPriority = dataSnapshot.getValue(Integer.class);
+
+                if (existingPriority != priority) {
+
+                    System.out.println("Existing: " + existingPriority + " Priority: " + priority);
+                    mTrainDatabaseReference.child("priority").setValue(priority);
+
+                    DatabaseReference analysisReference = FirebaseDatabase.getInstance()
+                            .getReference()
+                            .child("Bogeys")
+                            .child(idReferenceEntity.getBogeyNumber())
+                            .child("Analysis")
+                            .child(idReferenceEntity.getProblem());
+
+                    switch (existingPriority) {
+                        case 0:
+                            analysisReference.child("lowProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    analysisReference.child("lowProblems").setValue(dataSnapshot.getValue(Integer.class) - 1);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            switch (priority) {
+                                case 1:
+                                    incrementMediumProblems(analysisReference);
+                                    break;
+
+                                case 2:
+                                    incrementCriticalProblems(analysisReference);
+                                    break;
+                            }
+                            break;
+
+                        case 1:
+                            analysisReference.child("mediumProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    analysisReference.child("mediumProblems").setValue(dataSnapshot.getValue(Integer.class) - 1);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            switch (priority) {
+                                case 0:
+                                    incrementLowProblems(analysisReference);
+                                    break;
+
+                                case 2:
+                                    incrementCriticalProblems(analysisReference);
+                                    break;
+                            }
+                            break;
+
+                        case 2:
+                            analysisReference.child("criticalProblems").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    analysisReference.child("criticalProblems").setValue(dataSnapshot.getValue(Integer.class) - 1);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            switch (priority) {
+                                case 0:
+                                    incrementLowProblems(analysisReference);
+                                    break;
+
+                                case 1:
+                                    incrementMediumProblems(analysisReference);
+                                    break;
+                            }
+                            break;
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         /*if(problemStatus){
             analysisReference.child("unsolvedProblems").addListenerForSingleValueEvent(new ValueEventListener() {
