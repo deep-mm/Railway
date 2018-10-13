@@ -65,7 +65,6 @@ public class CardsActivity extends AppCompatActivity {
 
         bogieNumber.setText("Coach: "+sharedData.getBogie());
 
-        details = (RecyclerView) findViewById(R.id.details);
         cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
         RecyclerView.LayoutManager mlayoutmanager = new LinearLayoutManager(getApplicationContext());
         details.setLayoutManager(mlayoutmanager);
@@ -110,8 +109,9 @@ public class CardsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(MaterialDialog dialog, DialogAction which) {
                                     idUtility.changeProblemStatus(new IdReferenceEntity(sharedData.getBogie(), sharedData.getType(), itemData.getId()), true);
+                                    /*idUtility.detachListner();
                                     intent = new Intent(getApplicationContext(),CardsActivity.class);
-                                    startActivity(intent);
+                                    startActivity(intent);*/
                                 }
                             })
                             .onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -201,6 +201,7 @@ public class CardsActivity extends AppCompatActivity {
         bogieNumber = (TextView) findViewById(R.id.bogey_number);
         empty_list = (RelativeLayout) findViewById(R.id.empty_page);
         empty_list.setVisibility(View.GONE);
+        details = (RecyclerView) findViewById(R.id.details);
         a=0;
 
         priority = new String[3];
@@ -279,6 +280,53 @@ public class CardsActivity extends AppCompatActivity {
 
 
         });
+
+        indexEntryEntities = idUtility.getIdList();
+        System.out.println("ChangedOut: "+indexEntryEntities);
+        allIndexEntryEntitities = indexEntryEntities;
+        sharedData.setIndexEntryEntities(allIndexEntryEntitities);
+
+        for(int i=0;i<indexEntryEntities.size();i++){
+            StringBuffer stringBuffer = new StringBuffer(indexEntryEntities.get(i).getId());
+            String date = stringBuffer.substring(0,15);
+            Date d = getDate(date);
+
+            if(startDate!=null && endDate!=null) {
+                if (!(d.after(startDate) && d.before(endDate))) {
+                    indexEntryEntities.remove(i);
+                    i--;
+                }
+            }
+            else if(statusList.get(0) && statusList.get(1)){
+                //
+            }
+            else if(statusList.get(0)){
+                if(indexEntryEntities.get(i).isProblemStatus()==false) {
+                    indexEntryEntities.remove(i);
+                    i--;
+                }
+            }
+            else if(statusList.get(1)){
+                if(indexEntryEntities.get(i).isProblemStatus()==true) {
+                    indexEntryEntities.remove(i);
+                    i--;
+                }
+            }
+            else{
+                //Remove nothing
+            }
+
+        }
+        cardsAdapter = new CardsAdapter(indexEntryEntities, CardsActivity.this);
+        details.setAdapter(cardsAdapter);
+                /*if(helper.isInternetConnected()){
+                    onProgressStop();
+                }*/
+        if(indexEntryEntities.size()==0)
+            empty_list.setVisibility(View.VISIBLE);
+        else
+            empty_list.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -324,8 +372,11 @@ public class CardsActivity extends AppCompatActivity {
                     if (!(d.after(startDate) && d.before(endDate))) {
                         indexEntryEntities.remove(i);
                         i--;
+                        continue;
                     }
-                } else if (statusList.get(0) && statusList.get(1)) {
+                }
+
+                if (statusList.get(0) && statusList.get(1)) {
                     //
                 } else if (statusList.get(0)) {
                     if (indexEntryEntities.get(i).isProblemStatus() == false) {
@@ -387,6 +438,7 @@ public class CardsActivity extends AppCompatActivity {
         idUtility.detachListner();
         indexEntryEntities = new ArrayList<IndexEntryEntity>();
         sharedData.setIndexEntryEntities(indexEntryEntities);
+        finish();
         intent = new Intent(getApplicationContext(),SelectType.class);
         startActivity(intent);
     }

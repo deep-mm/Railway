@@ -9,6 +9,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.kjsce.train.cia.Entities.TrainEntity;
 import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
 
+import java.util.Iterator;
+
 public class TrainUtility
 {
     private TrainEntity trainEntity;
@@ -29,6 +31,14 @@ public class TrainUtility
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                trainEntity = new TrainEntity(dataSnapshot.getKey());
+
+                Iterator<DataSnapshot> bogeyListIterator = dataSnapshot.getChildren().iterator();
+                while(bogeyListIterator.hasNext()){
+                    trainEntity.getBogeyList().add(bogeyListIterator.next().getValue(String.class));
+                }
+
                 if(onBogeyListChangeListener!=null)
                     onBogeyListChangeListener.onDataChanged(trainEntity);
             }
@@ -39,7 +49,7 @@ public class TrainUtility
             }
         };
 
-        childEventListener = new ChildEventListener() {
+        /*childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 trainEntity.getBogeyList().add(dataSnapshot.getValue(String.class));
@@ -64,11 +74,11 @@ public class TrainUtility
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        };*/
 
         mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
-        mTrainDatabaseReference.addChildEventListener(childEventListener);
+        //mTrainDatabaseReference.addChildEventListener(childEventListener);
 
     }
 
@@ -123,7 +133,7 @@ public class TrainUtility
     }
 
     public void detachListner(){
-        mTrainDatabaseReference.removeEventListener(childEventListener);
+        //mTrainDatabaseReference.removeEventListener(childEventListener);
         mTrainDatabaseReference.removeEventListener(valueEventListener);
     }
 

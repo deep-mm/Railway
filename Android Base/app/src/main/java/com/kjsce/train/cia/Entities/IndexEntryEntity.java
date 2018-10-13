@@ -28,13 +28,6 @@ public class IndexEntryEntity
         this.subtype = subtype;
     }
 
-    public IndexEntryEntity(String id, boolean problemStatus, int numberOfCards, String subtype) {
-        this.id = id;
-        this.problemStatus = problemStatus;
-        this.numberOfCards = numberOfCards;
-        this.subtype = subtype;
-    }
-
     public IndexEntryEntity(String id, boolean problemStatus, int numberOfCards, String subtype, int priority) {
         this.id = id;
         this.problemStatus = problemStatus;
@@ -48,6 +41,7 @@ public class IndexEntryEntity
         this.problemStatus = idEntity.isProblemStatus();
         this.numberOfCards = idEntity.getNumberOfCards();
         this.subtype = idEntity.getSubtype();
+        this.priority = idEntity.getPriority();
     }
 
     public boolean isProblemStatus() {

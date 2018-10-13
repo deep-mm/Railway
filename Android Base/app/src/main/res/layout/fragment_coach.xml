@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.andexert.library.RippleView
+        android:id="@+id/ripple"
+        app:rv_color="@color/colorPrimaryDark"
+        app:rv_centered="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        rv_centered="true">
+
+        <ImageView
+            android:id="@+id/train_icon_left"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:background="@mipmap/train"/>
+
+        <TextView
+            android:layout_toLeftOf="@id/train_icon_right"
+            android:id="@+id/train_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:textSize="18sp"
+            android:textColor="@color/primaryText"
+            android:text="123456 - Rajdhani Express"
+            android:layout_toRightOf="@id/train_icon_left"
+            android:gravity="center"
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:id="@+id/train_icon_right"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/train"/>
+
+    </com.andexert.library.RippleView>
+
+</RelativeLayout>

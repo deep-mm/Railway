@@ -24,43 +24,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder>{
+public class CoachAdapter extends RecyclerView.Adapter<CoachAdapter.ViewHolder>{
     private final List<String> Mvalues;
     Context context;
     String placeOfInspection, type;
     Intent intent;
     SharedData sharedData;
 
-    public TrainAdapter() {
+    public CoachAdapter() {
         Mvalues = null;
 
     }
 
-    public TrainAdapter(List mvalues, Context c, String type) {
+    public CoachAdapter(List mvalues, Context c, String type) {
         this.Mvalues = mvalues;
         this.context = c;
         this.type = type;
     }
 
     @Override
-    public TrainAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CoachAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_train, parent, false);
-        return new TrainAdapter.ViewHolder(view);
+                .inflate(R.layout.fragment_coach, parent, false);
+        return new CoachAdapter.ViewHolder(view);
 
     }
     @Override
-    public void onBindViewHolder(final TrainAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final CoachAdapter.ViewHolder holder, final int position) {
 
         sharedData = new SharedData(context);
-        String[] splited = Mvalues.get(position).split("\\s+");
-        String str = "";
-        holder.train_number.setText(splited[0]);
-        for(int i=1;i<splited.length;i++)
-        {
-            str = str+" "+splited[i];
-        }
-        holder.train_name.setText(str);
+        holder.train_name.setText(Mvalues.get(position));
         holder.rippleView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,13 +102,11 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         final TextView train_name;
-        final TextView train_number;
         final RippleView rippleView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             train_name = (TextView) itemView.findViewById(R.id.train_name_text);
-            train_number = (TextView) itemView.findViewById(R.id.train_name_text_number);
             rippleView = (RippleView) itemView.findViewById(R.id.ripple);
         }
     }

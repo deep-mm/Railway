@@ -13,6 +13,7 @@ import com.kjsce.train.cia.Entities.ProblemReferenceEntity;
 import com.kjsce.train.cia.Listener.IdListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class IdUtility
 {
@@ -27,6 +28,13 @@ public class IdUtility
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                indexEntryEntities.clear();
+                Iterator<DataSnapshot> iEEIterables = dataSnapshot.getChildren().iterator();
+                while(iEEIterables.hasNext()){
+                    DataSnapshot temp = iEEIterables.next();
+                    IndexEntryEntity indexEntryEntity = new IndexEntryEntity(temp.getKey(),temp.getValue(IdEntity.class));
+                    indexEntryEntities.add(indexEntryEntity);
+                }
                 listener.onIdListChanged(indexEntryEntities);
             }
 
@@ -36,12 +44,12 @@ public class IdUtility
             }
         };
 
-        childEventListener = new ChildEventListener() {
+        /*childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
                 String id = dataSnapshot.getKey();
-                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype());
+                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype(),idEntity.getPriority());
                 indexEntryEntities.add(indexEntryEntity);
                 listener.onIdAdded(indexEntryEntity);
             }
@@ -50,7 +58,7 @@ public class IdUtility
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
                 String id = dataSnapshot.getKey();
-                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype());
+                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype(),idEntity.getPriority());
                 if(!indexEntryEntities.contains(indexEntryEntity))
                     indexEntryEntities.add(indexEntryEntity);
                 else{
@@ -66,7 +74,7 @@ public class IdUtility
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 IdEntity idEntity = dataSnapshot.getValue(IdEntity.class);
                 String id = dataSnapshot.getKey();
-                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype());
+                IndexEntryEntity indexEntryEntity = new IndexEntryEntity(id,idEntity.isProblemStatus(),idEntity.getNumberOfCards(),idEntity.getSubtype(),idEntity.getPriority());
                 indexEntryEntities.remove(indexEntryEntity);
                 listener.onIdRemoved(indexEntryEntity);
             }
@@ -80,11 +88,11 @@ public class IdUtility
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        };*/
 
-        //mTrainDatabaseReference.keepSynced(true);
+        mTrainDatabaseReference.keepSynced(true);
         mTrainDatabaseReference.addValueEventListener(valueEventListener);
-        mTrainDatabaseReference.addChildEventListener(childEventListener);
+        //mTrainDatabaseReference.addChildEventListener(childEventListener);
     }
 
     public void createReference(ProblemReferenceEntity problemReferenceEntity){
@@ -229,7 +237,7 @@ public class IdUtility
     }
 
     public void detachListner(){
-        mTrainDatabaseReference.removeEventListener(childEventListener);
+        //mTrainDatabaseReference.removeEventListener(childEventListener);
         mTrainDatabaseReference.removeEventListener(valueEventListener);
     }
 }

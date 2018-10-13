@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.kjsce.train.cia.Adapter.CoachAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
 import com.kjsce.train.cia.Entities.TrainEntity;
 import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
@@ -35,7 +36,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
     private MaterialDialog materialDialog;
     private ImageButton backButton, addButton, submitButton, analysisButton;
     private RecyclerView details;
-    private TrainAdapter trainAdapter;
+    private CoachAdapter coachAdapter;
     private List<String> coach_list, data1, allCoaches;
     private SharedData sharedData;
     private Helper helper;
@@ -71,9 +72,9 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         allCoaches = coach_list;
         System.out.println("SEtting: "+coach_list);
         searchView.setOnQueryTextListener(this);
-        trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+        coachAdapter = new CoachAdapter(coach_list, CoachSearch.this, "coach");
         System.out.println("SEtting: "+coach_list);
-        details.setAdapter(trainAdapter);
+        details.setAdapter(coachAdapter);
         
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,9 +171,9 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 sharedData.setCoachList(coach_list);
                 coach_list.add("General");
                 allCoaches = coach_list;
-                trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+                coachAdapter = new CoachAdapter(coach_list, CoachSearch.this, "coach");
                 System.out.println("SEtting: "+coach_list);
-                details.setAdapter(trainAdapter);
+                details.setAdapter(coachAdapter);
                 x=1;
                 //empty_coaches();
                 /*if(helper.isInternetConnected())
@@ -270,18 +271,18 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
 
         coach_list = data1;
         System.out.println("train_list: " + data1);
-        trainAdapter = new TrainAdapter(data1, CoachSearch.this, "coach");
+        coachAdapter = new CoachAdapter(data1, CoachSearch.this, "coach");
         System.out.println("SEtting: "+data1);
-        details.setAdapter(trainAdapter);
-        trainAdapter.notifyDataSetChanged();
+        details.setAdapter(coachAdapter);
+        coachAdapter.notifyDataSetChanged();
 
         if (newText.length() == 0) {
             data1.clear();
             coach_list = allCoaches;
-            trainAdapter = new TrainAdapter(coach_list, CoachSearch.this, "coach");
+            coachAdapter = new CoachAdapter(coach_list, CoachSearch.this, "coach");
             System.out.println("SEtting: "+coach_list);
-            details.setAdapter(trainAdapter);
-            trainAdapter.notifyDataSetChanged();
+            details.setAdapter(coachAdapter);
+            coachAdapter.notifyDataSetChanged();
         }
 
         empty_coaches();

@@ -72,6 +72,12 @@ public class FilterActivity extends AppCompatActivity {
             if(getIntent().getExtras().getString("from").equals("CardsActivity")){
                 problemTypeOption.setVisibility(View.GONE);
             }
+            else{
+                problemStatusOption.setVisibility(View.GONE);
+            }
+        }
+        else{
+            problemStatusOption.setVisibility(View.GONE);
         }
 
         dateOption.setOnClickListener(new View.OnClickListener() {
