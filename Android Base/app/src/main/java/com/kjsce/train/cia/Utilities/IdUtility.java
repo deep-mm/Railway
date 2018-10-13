@@ -171,12 +171,14 @@ public class IdUtility
         createReference(idReferenceEntity);
         mTrainDatabaseReference.child("priority").setValue(priority);
 
-        /*DatabaseReference analysisReference = FirebaseDatabase.getInstance()
+        DatabaseReference analysisReference = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Bogeys")
                 .child(idReferenceEntity.getBogeyNumber())
                 .child("Analysis")
-                .child(idReferenceEntity.getProblem());*/
+                .child(idReferenceEntity.getProblem());
+
+        //int exitingPriority = analysisReference.
 
         /*if(problemStatus){
             analysisReference.child("unsolvedProblems").addListenerForSingleValueEvent(new ValueEventListener() {

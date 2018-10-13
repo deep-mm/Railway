@@ -135,21 +135,27 @@ public class CardUtility
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             AnalysisEntity analysisEntity = dataSnapshot.getValue(AnalysisEntity.class);
                             if(analysisEntity != null){
-                                //TODO add prioity also
+                                //Solved and unsolved problems
                                 if(cardReferenceEntity.isProblemStatus()){
                                     analysisEntity.setSolvedProblems(analysisEntity.getSolvedProblems() + 1);
                                 }
                                 else
                                     analysisEntity.setUnsolvedProblems(analysisEntity.getUnsolvedProblems() + 1);
+
+                                //Priority adjusted
+                                analysisEntity.setLowProblems(analysisEntity.getLowProblems() + 1);
                             }
                             else{
-                                //TODO add priority also
+                                //Solved and unsolved problems
                                 analysisEntity = new AnalysisEntity();
                                 if(cardReferenceEntity.isProblemStatus()){
                                     analysisEntity.setSolvedProblems(1);
                                 }
                                 else
                                     analysisEntity.setUnsolvedProblems(1);
+
+                                //Priority adjusted
+                                analysisEntity.setLowProblems(1);
                             }
 
                             analysisReference.setValue(analysisEntity);

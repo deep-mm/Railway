@@ -4,9 +4,9 @@ public class AnalysisEntity
 {
     private int solvedProblems;
     private int unsolvedProblems;
-    private int criticalProblems;
-    private int mediumProblems;
-    private int lowProblems;
+    private int criticalProblems;   //2 value
+    private int mediumProblems;     //1 value
+    private int lowProblems;        //0 value
 
     public AnalysisEntity() {
         this.solvedProblems = 0;
