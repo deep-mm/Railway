@@ -66,7 +66,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder>{
             System.out.println("ccccc"+indexEntryEntity.getPriority());
             switch (indexEntryEntity.getPriority()) {
                 case 2:
-                    holder.frontView.setBackgroundColor(context.getResources().getColor(R.color.red_error));
+                    holder.frontView.setBackgroundColor(context.getResources().getColor(R.color.errorRed));
                     break;
 
                 case 1:

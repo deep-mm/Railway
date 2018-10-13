@@ -36,7 +36,10 @@ public class AnalysisActivity extends AppCompatActivity {
     private List<String> type_list;
     private IdUtility idUtility;
     private List<IndexEntryEntity> indexEntryEntities;
-    private int x=0;
+    private List<Integer> totalProblems;
+    private List<StackedBarModel> stackedBarModels;
+    private int x = 0;
+    private boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +48,36 @@ public class AnalysisActivity extends AppCompatActivity {
 
         initialize();
 
-                coach_list = sharedData.getCoachList();
-                System.out.println("indexEntryEntities: "+x+" id = "+coach_list);
-                for (int i = 0; i < coach_list.size(); i++) {
-                    String coach = coach_list.get(i);
-                    System.out.println("indexEntryEntities: " + x + " id = " + coach);
-                    for (int j = 0; j < type_list.size(); j++) {
-                        String type = type_list.get(i);
+        int i;
+        coach_list = sharedData.getCoachList();
+        System.out.println("indexEntryEntities: " + x + " id = " + coach_list);
+        for (i = 0; i < coach_list.size(); i++) {
+            String coach = coach_list.get(i);
+            System.out.println("indexEntryEntities: " + x + " id = " + coach);
+            flag = true;
+            x = 0;
+            for (int j = 0; j < type_list.size(); j++) {
+                if (typeChecked.get(j)) {
+                    int check = j;
+                    String type = type_list.get(j);
+                    if(flag) {
+                        flag = false;
                         idUtility = new IdUtility(new ProblemReferenceEntity(coach, type), new IdListener() {
                             @Override
                             public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
                                 System.out.println("indexEntryEntities: " + x + " id = " + idList);
-                                indexEntryEntities.addAll(idList);
-                                x++;
+                                for (int k = 0; k < idList.size(); k++) {
+                                    indexEntryEntities.add(idList.get(k));
+                                }
+
+                                System.out.println("indexEntryEntitities: " + indexEntryEntities);
+                                //indexEntryEntities.addAll(idList);
                                 idUtility.detachListner();
+                                x++;
                                 if (x == 8) {
                                     display();
                                 }
+                                flag = true;
                             }
 
                             @Override
@@ -81,44 +97,79 @@ public class AnalysisActivity extends AppCompatActivity {
                         });
                     }
                 }
+                else{
+                    x++;
+                    if (x == 8) {
+                        display();
+                    }
+                }
+            }
+        }
 
+
+    }
+
+    public float getTotalSolved(String type){
+
+        int i;
+        int count=0;
+        int flag=0;
+        System.out.println("analysis: "+indexEntryEntities);
+        for(i=0;i<indexEntryEntities.size();i++){
+            IndexEntryEntity indexEntryEntity = indexEntryEntities.get(i);
+            System.out.println("analysis: "+indexEntryEntity.getSubtype()+" to: "+type+" status: "+indexEntryEntity.isProblemStatus());
+            if(indexEntryEntity.getSubtype().equalsIgnoreCase(type) && indexEntryEntity.isProblemStatus()) {
+                count++;
+                flag = 1;
+            }
+        }
+
+        return (float)count;
+    }
+
+    public float getTotalUnsolved(String type){
+
+        int i;
+        int count=0;
+        int flag=0;
+        System.out.println("analysis: "+indexEntryEntities+" totalProblems= "+totalProblems);
+        for(i=0;i<indexEntryEntities.size();i++){
+            IndexEntryEntity indexEntryEntity = indexEntryEntities.get(i);
+            System.out.println("analysis: "+indexEntryEntity.getSubtype()+" to: "+type+" status: "+indexEntryEntity.isProblemStatus());
+            if(indexEntryEntity.getSubtype().equalsIgnoreCase(type) && (!indexEntryEntity.isProblemStatus())) {
+                count++;
+                flag = 1;
+            }
+        }
+
+        return (float)count;
+    }
+    public void display() {
+        System.out.println("analysis: done");
         StackedBarChart mStackedBarChart = (StackedBarChart) findViewById(R.id.stackedbarchart);
+        StackedBarChart mStackedBarChartSolved = (StackedBarChart) findViewById(R.id.stackedbarchartSolved);
+        StackedBarChart mStackedBarChartUnsolved = (StackedBarChart) findViewById(R.id.stackedbarchartUnsolved);
 
-        StackedBarModel s1 = new StackedBarModel("12.4");
-
-        s1.addBar(new BarModel(2.3f, 0xFF63CBB0));
-        s1.addBar(new BarModel(2.3f, 0xFF56B7F1));
-        s1.addBar(new BarModel(2.3f, 0xFFCDA67F));
-
-        StackedBarModel s2 = new StackedBarModel("13.4");
-        s2.addBar(new BarModel(1.1f, 0xFF63CBB0));
-        s2.addBar(new BarModel(2.7f, 0xFF56B7F1));
-        s2.addBar(new BarModel(0.7f, 0xFFCDA67F));
-
-        StackedBarModel s3 = new StackedBarModel("14.4");
-
-        s3.addBar(new BarModel(2.3f, 0xFF63CBB0));
-        s3.addBar(new BarModel(2.f, 0xFF56B7F1));
-        s3.addBar(new BarModel(3.3f, 0xFFCDA67F));
-
-        StackedBarModel s4 = new StackedBarModel("15.4");
-        s4.addBar(new BarModel(1.f, 0xFF63CBB0));
-        s4.addBar(new BarModel(4.2f, 0xFF56B7F1));
-        s4.addBar(new BarModel(2.1f, 0xFFCDA67F));
-
-        mStackedBarChart.addBar(s1);
-        mStackedBarChart.addBar(s2);
-        mStackedBarChart.addBar(s3);
-        mStackedBarChart.addBar(s4);
+        //All Problems
+        int i;
+        for(i=0;i<type_list.size();i++){
+            if(typeChecked.get(i)) {
+                StackedBarModel s = new StackedBarModel(type_list.get(i));
+                float solved = getTotalSolved(type_list.get(i));
+                float unsolved = getTotalUnsolved(type_list.get(i));
+                System.out.println("analysis: " + solved);
+                System.out.println("analysis: " + unsolved);
+                s.addBar(new BarModel(solved, 0xFF63CBB0));
+                s.addBar(new BarModel(unsolved, 0xFF56B7F1));
+                mStackedBarChart.addBar(s);
+                stackedBarModels.add(s);
+            }
+        }
 
         mStackedBarChart.startAnimation();
     }
 
-    public void display(){
-        System.out.println("analysis: done");
-    }
-
-    public void initialize(){
+    public void initialize() {
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
         exportButton = (ImageButton) findViewById(R.id.button_export);
@@ -126,6 +177,9 @@ public class AnalysisActivity extends AppCompatActivity {
         statusChecked = sharedData.getStatusCheckedList();
         typeChecked = sharedData.getTypeCheckedList();
         dateList = sharedData.getDateList();
+        indexEntryEntities = new ArrayList<IndexEntryEntity>();
+        totalProblems = new ArrayList<Integer>();
+        stackedBarModels = new ArrayList<StackedBarModel>();
 
         type_list = new ArrayList<String>();
         type_list.add("Toilets");

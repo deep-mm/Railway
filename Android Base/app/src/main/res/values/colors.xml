@@ -13,6 +13,6 @@
     <color name="dividerColor">#BDBDBD</color>
     <color name="colorPrimaryLight">#B2DFDB</color>
     <color name="greyBackground">#bdbdbd</color>
-    <color name="errorRed">#cc0000</color>
-    <color name="warningYellow">#E4E426</color>
+    <color name="errorRed">#FFA8B2</color>
+    <color name="warningYellow">#F3FFD0</color>
 </resources>
