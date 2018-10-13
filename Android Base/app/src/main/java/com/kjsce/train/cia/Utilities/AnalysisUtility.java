@@ -10,13 +10,15 @@ import com.kjsce.train.cia.Entities.AnalysisEntity;
 import com.kjsce.train.cia.Entities.BogeyAnalysisEntity;
 import com.kjsce.train.cia.Listener.GetBogeyAnalysisListener;
 
+import java.util.Iterator;
+
 public class AnalysisUtility
 {
-    ChildEventListener childEventListener;
+    //ChildEventListener childEventListener;
     ValueEventListener valueEventListener;
 
     public void getBogeyAnalysis(String bogeyNumber, GetBogeyAnalysisListener listener){
-        BogeyAnalysisEntity bogeyAnalysisEntity = new BogeyAnalysisEntity(bogeyNumber);
+
 
         DatabaseReference analysisReference = FirebaseDatabase.getInstance()
                 .getReference()
@@ -24,7 +26,7 @@ public class AnalysisUtility
                 .child(bogeyNumber)
                 .child("Analysis");
 
-        childEventListener = new ChildEventListener() {
+        /*childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 bogeyAnalysisEntity.addProblemAnalysis(dataSnapshot.getKey(),dataSnapshot.getValue(AnalysisEntity.class));
@@ -49,10 +51,20 @@ public class AnalysisUtility
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        };*/
+
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterator<DataSnapshot> problemIterator = dataSnapshot.getChildren().iterator();
+                BogeyAnalysisEntity bogeyAnalysisEntity = new BogeyAnalysisEntity(bogeyNumber);
+                while(problemIterator.hasNext()){
+                    DataSnapshot problemSnapshot = problemIterator.next();
+                    String problem = problemSnapshot.getKey();
+                    AnalysisEntity problemAnalysis = problemSnapshot.getValue(AnalysisEntity.class);
+                    bogeyAnalysisEntity.addProblemAnalysis(problem,problemAnalysis);
+                }
+
                 listener.onCompleteTask(bogeyAnalysisEntity);
             }
 
@@ -62,7 +74,7 @@ public class AnalysisUtility
             }
         };
 
-        analysisReference.addChildEventListener(childEventListener);
+        //analysisReference.addChildEventListener(childEventListener);
         analysisReference.addValueEventListener(valueEventListener);
     }
 
@@ -73,7 +85,7 @@ public class AnalysisUtility
                 .child(bogeyNumber)
                 .child("Analysis");
 
-        analysisReference.removeEventListener(childEventListener);
+        //analysisReference.removeEventListener(childEventListener);
         analysisReference.removeEventListener(valueEventListener);
     }
 }
