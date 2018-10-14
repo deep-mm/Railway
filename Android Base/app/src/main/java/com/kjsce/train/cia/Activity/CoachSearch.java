@@ -34,7 +34,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 public class CoachSearch extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private MaterialDialog materialDialog;
-    private ImageButton backButton, addButton, submitButton, analysisButton;
+    private ImageButton backButton, addButton, submitButton;
     private RecyclerView details;
     private CoachAdapter coachAdapter;
     private List<String> coach_list, data1, allCoaches;
@@ -80,21 +80,6 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
             @Override
             public void onClick(View v) {
                 addNewCoach();
-            }
-        });
-
-        analysisButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(x==1) {
-                    if (helper.isInternetConnected()) {
-                        Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
-                        intent.putExtra("from", "Analysis");
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Active Internet Connection Required for Analysis", Toast.LENGTH_LONG).show();
-                    }
-                }
             }
         });
 
@@ -153,7 +138,6 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
         addButton = (ImageButton) findViewById(R.id.button_add);
         submitButton = (ImageButton) findViewById(R.id.done_button);
         searchView = (SearchView) findViewById(R.id.search_bar);
-        analysisButton = (ImageButton) findViewById(R.id.button_analysis);
         coach_list = new ArrayList<String>();
         data1 = new ArrayList<String>();
         allCoaches = new ArrayList<String>();
@@ -201,6 +185,7 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         coachNumber = input.toString();
+                        coachNumber = getReplacedString(coachNumber);
                         trainUtility.addBogey(coachNumber);
                         sharedData.setBogie(coachNumber);
                         intent = new Intent(getApplicationContext(),SelectType.class);
@@ -209,6 +194,22 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 })
                 .canceledOnTouchOutside(false)
                 .show();
+    }
+
+    public String getReplacedString(String text){
+
+        char[] arr = text.toCharArray();
+        String str="";
+        for(int i=0;i<arr.length;i++) {
+            if (arr[i] == '/') {
+                arr[i] = '-';
+                str = str+arr[i];
+            }
+            else{
+                str = str+arr[i];
+            }
+        }
+        return str;
     }
 
     @Override

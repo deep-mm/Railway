@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="All Problems"
+                    android:text="All Problems - Solved/Unsolved"
                     android:textSize="16sp"
                     android:textColor="@color/primaryText"/>
 
@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="Solved Problems"
+                    android:text="All Problems - Priority"
                     android:textSize="16sp"
                     android:textColor="@color/primaryText"/>
 
@@ -123,49 +123,11 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:id="@+id/unsolved_problems">
-
-                <TextView
-                    android:id="@+id/unsolved_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:text="Unsolved Problems"
-                    android:textSize="16sp"
-                    android:textColor="@color/primaryText"/>
-
-                <org.eazegraph.lib.charts.StackedBarChart
-                    android:layout_below="@id/unsolved_title"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/stackedbarchartUnsolved"
-                    android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    android:padding="10dp"
-                    app:egFixedBarWidth="true"
-                    app:egBarWidth="20dp"
-                    app:egLegendHeight="40dp"/>
-
-            </RelativeLayout>
-
 
         </LinearLayout>
 
     </ScrollView>
 
-    <ImageButton
-        android:id="@+id/button_export"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:background="@mipmap/button_export"
-        android:textAllCaps="false"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:elevation="5dp"/>
+
 
 </RelativeLayout>

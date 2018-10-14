@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         helper = new Helper(getApplicationContext());
         users = new ArrayList<String>();
-        firstTime = Arrays.asList(true,true,true);
+        firstTime = Arrays.asList(true,true,true,true);
         train_list = new ArrayList<String>();
     }
 

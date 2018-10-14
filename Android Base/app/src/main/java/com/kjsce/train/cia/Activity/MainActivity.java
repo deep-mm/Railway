@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         trainName = input.toString();
+                        trainName = getReplacedString(trainName);
                         sharedData.setTrain(trainName);
                         getInputName();
                     }
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity
                     public void onInput(MaterialDialog dialog, CharSequence input) {
                         placeOfInspection = input.toString();
                         if (!placeOfInspection.isEmpty()) {
+                            placeOfInspection = getReplacedString(placeOfInspection);
                             sharedData.setPlaceOfInspection(placeOfInspection);
                             intent = new Intent(getApplicationContext(), CoachSearch.class);
                             startActivity(intent);
@@ -171,6 +173,21 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
+    public String getReplacedString(String text){
+
+        char[] arr = text.toCharArray();
+        String str="";
+        for(int i=0;i<arr.length;i++) {
+            if (arr[i] == '/') {
+                arr[i] = '-';
+                str = str+arr[i];
+            }
+            else{
+                str = str+arr[i];
+            }
+        }
+        return str;
+    }
     public void initialize() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

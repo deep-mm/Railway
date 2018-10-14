@@ -170,6 +170,7 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
             cardEntityToUploads = new ArrayList<CardEntityToUpload>();
 
         for(i=0;i<cardEntityToUploads.size() && helper.isInternetConnected();i++) {
+
             CardEntityToUpload cardEntityToUpload = cardEntityToUploads.get(i);
             cardUtility.uploadCard(cardEntityToUpload.getCardEntity(), new CardReferenceEntity(cardEntityToUpload.getBogeyNumber(),
                     cardEntityToUpload.getProblem(), cardEntityToUpload.getId(), cardEntityToUpload.getProblemStatus(), cardEntityToUpload.getSubTypeSelected()), new AddCardListner() {

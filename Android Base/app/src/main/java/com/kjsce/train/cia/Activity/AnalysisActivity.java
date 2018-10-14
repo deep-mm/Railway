@@ -7,12 +7,16 @@ import android.widget.ImageButton;
 
 import com.kjsce.train.cia.Adapter.CardsAdapter;
 import com.kjsce.train.cia.Adapter.TrainAdapter;
+import com.kjsce.train.cia.Entities.AnalysisEntity;
+import com.kjsce.train.cia.Entities.BogeyAnalysisEntity;
 import com.kjsce.train.cia.Entities.IndexEntryEntity;
 import com.kjsce.train.cia.Entities.ProblemReferenceEntity;
 import com.kjsce.train.cia.Entities.TrainEntity;
+import com.kjsce.train.cia.Listener.GetBogeyAnalysisListener;
 import com.kjsce.train.cia.Listener.IdListener;
 import com.kjsce.train.cia.Listener.OnBogeyListChangeListener;
 import com.kjsce.train.cia.R;
+import com.kjsce.train.cia.Utilities.AnalysisUtility;
 import com.kjsce.train.cia.Utilities.IdUtility;
 import com.kjsce.train.cia.Utilities.TrainUtility;
 
@@ -22,7 +26,9 @@ import org.eazegraph.lib.models.StackedBarModel;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AnalysisActivity extends AppCompatActivity {
 
@@ -38,8 +44,10 @@ public class AnalysisActivity extends AppCompatActivity {
     private List<IndexEntryEntity> indexEntryEntities;
     private List<Integer> totalProblems;
     private List<StackedBarModel> stackedBarModels;
+    private Map<String,AnalysisEntity> analysisEntityMap;
     private int x = 0;
     private boolean flag;
+    private String coach;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,117 +56,47 @@ public class AnalysisActivity extends AppCompatActivity {
 
         initialize();
 
-        int i;
-        coach_list = sharedData.getCoachList();
-        System.out.println("indexEntryEntities: " + x + " id = " + coach_list);
-        for (i = 0; i < coach_list.size(); i++) {
-            String coach = coach_list.get(i);
-            System.out.println("indexEntryEntities: " + x + " id = " + coach);
-            flag = true;
-            x = 0;
-            for (int j = 0; j < type_list.size(); j++) {
-                if (typeChecked.get(j)) {
-                    int check = j;
-                    String type = type_list.get(j);
-                    if(flag) {
-                        flag = false;
-                        idUtility = new IdUtility(new ProblemReferenceEntity(coach, type), new IdListener() {
-                            @Override
-                            public void onIdListChanged(ArrayList<IndexEntryEntity> idList) {
-                                System.out.println("indexEntryEntities: " + x + " id = " + idList);
-                                for (int k = 0; k < idList.size(); k++) {
-                                    indexEntryEntities.add(idList.get(k));
-                                }
+        AnalysisUtility analysisUtility = new AnalysisUtility();
+        analysisUtility.getBogeyAnalysis(coach, new GetBogeyAnalysisListener() {
+            @Override
+            public void onCompleteTask(BogeyAnalysisEntity bogeyAnalysisEntity) {
+                ArrayList<String> bogeyAnalysisList = bogeyAnalysisEntity.getProblemList();
 
-                                System.out.println("indexEntryEntitities: " + indexEntryEntities);
-                                //indexEntryEntities.addAll(idList);
-                                idUtility.detachListner();
-                                x++;
-                                if (x == 8) {
-                                    display();
-                                }
-                                flag = true;
-                            }
-
-                            @Override
-                            public void onIdAdded(IndexEntryEntity indexEntryEntity) {
-
-                            }
-
-                            @Override
-                            public void onIdRemoved(IndexEntryEntity indexEntryEntity) {
-
-                            }
-
-                            @Override
-                            public void onIdChanged(IndexEntryEntity indexEntryEntity) {
-
-                            }
-                        });
+                for(int i=0;i<type_list.size();i++) {
+                    if (typeChecked.get(i) && bogeyAnalysisList.contains(type_list.get(i))) {
+                        AnalysisEntity ae = bogeyAnalysisEntity.getProblemAnalysis(type_list.get(i));
+                        analysisEntityMap.put(type_list.get(i),ae);
+                    }
+                    else{
+                        continue;
                     }
                 }
-                else{
-                    x++;
-                    if (x == 8) {
-                        display();
-                    }
-                }
+                display();
             }
-        }
-
+        });
 
     }
 
-    public float getTotalSolved(String type){
-
-        int i;
-        int count=0;
-        int flag=0;
-        System.out.println("analysis: "+indexEntryEntities);
-        for(i=0;i<indexEntryEntities.size();i++){
-            IndexEntryEntity indexEntryEntity = indexEntryEntities.get(i);
-            System.out.println("analysis: "+indexEntryEntity.getSubtype()+" to: "+type+" status: "+indexEntryEntity.isProblemStatus());
-            if(indexEntryEntity.getSubtype().equalsIgnoreCase(type) && indexEntryEntity.isProblemStatus()) {
-                count++;
-                flag = 1;
-            }
-        }
-
-        return (float)count;
-    }
-
-    public float getTotalUnsolved(String type){
-
-        int i;
-        int count=0;
-        int flag=0;
-        System.out.println("analysis: "+indexEntryEntities+" totalProblems= "+totalProblems);
-        for(i=0;i<indexEntryEntities.size();i++){
-            IndexEntryEntity indexEntryEntity = indexEntryEntities.get(i);
-            System.out.println("analysis: "+indexEntryEntity.getSubtype()+" to: "+type+" status: "+indexEntryEntity.isProblemStatus());
-            if(indexEntryEntity.getSubtype().equalsIgnoreCase(type) && (!indexEntryEntity.isProblemStatus())) {
-                count++;
-                flag = 1;
-            }
-        }
-
-        return (float)count;
-    }
     public void display() {
         System.out.println("analysis: done");
         StackedBarChart mStackedBarChart = (StackedBarChart) findViewById(R.id.stackedbarchart);
         StackedBarChart mStackedBarChartSolved = (StackedBarChart) findViewById(R.id.stackedbarchartSolved);
-        StackedBarChart mStackedBarChartUnsolved = (StackedBarChart) findViewById(R.id.stackedbarchartUnsolved);
 
         //All Problems
         int i;
         for(i=0;i<type_list.size();i++){
             if(typeChecked.get(i)) {
                 StackedBarModel s = new StackedBarModel(type_list.get(i));
-                float solved = getTotalSolved(type_list.get(i));
-                float unsolved = getTotalUnsolved(type_list.get(i));
-                System.out.println("analysis: " + solved);
-                System.out.println("analysis: " + unsolved);
+                AnalysisEntity ae = analysisEntityMap.get(type_list.get(i));
+                float solved;
+                float unsolved;
+                if(ae==null){
+                    solved = 0.0f;
+                    unsolved = 0.0f;
+                }else{
+                    solved = (float) ae.getSolvedProblems();
+                    unsolved = (float) ae.getUnsolvedProblems();
+                }
                 s.addBar(new BarModel(solved, 0xFF63CBB0));
                 s.addBar(new BarModel(unsolved, 0xFF56B7F1));
                 mStackedBarChart.addBar(s);
@@ -167,12 +105,37 @@ public class AnalysisActivity extends AppCompatActivity {
         }
 
         mStackedBarChart.startAnimation();
+
+        //Solved Problems
+        for(i=0;i<type_list.size();i++){
+            if(typeChecked.get(i)) {
+                StackedBarModel s = new StackedBarModel(type_list.get(i));
+                AnalysisEntity ae = analysisEntityMap.get(type_list.get(i));
+                float low,medium,high;
+                if(ae==null){
+                    low = 0.0f;
+                    medium = 0.0f;
+                    high = 0.0f;
+                }else{
+                    low = (float) ae.getLowProblems();
+                    medium = (float) ae.getMediumProblems();
+                    high = (float) ae.getCriticalProblems();
+                }
+                s.addBar(new BarModel(low, R.color.colorWhite));
+                s.addBar(new BarModel(medium, R.color.warningYellow));
+                s.addBar(new BarModel(high, R.color.errorRed));
+                mStackedBarChartSolved.addBar(s);
+                stackedBarModels.add(s);
+            }
+        }
+
+        mStackedBarChartSolved.startAnimation();
     }
 
     public void initialize() {
         sharedData = new SharedData(getApplicationContext());
         helper = new Helper(getApplicationContext());
-        exportButton = (ImageButton) findViewById(R.id.button_export);
+        //exportButton = (ImageButton) findViewById(R.id.button_export);
         backButton = (ImageButton) findViewById(R.id.back_button);
         statusChecked = sharedData.getStatusCheckedList();
         typeChecked = sharedData.getTypeCheckedList();
@@ -180,6 +143,8 @@ public class AnalysisActivity extends AppCompatActivity {
         indexEntryEntities = new ArrayList<IndexEntryEntity>();
         totalProblems = new ArrayList<Integer>();
         stackedBarModels = new ArrayList<StackedBarModel>();
+        analysisEntityMap = new HashMap<>();
+        coach = sharedData.getBogie();
 
         type_list = new ArrayList<String>();
         type_list.add("Toilets");

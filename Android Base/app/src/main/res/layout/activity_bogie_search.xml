@@ -45,16 +45,6 @@
                     android:textSize="20sp" />
 
                 <ImageButton
-                    android:id="@+id/button_analysis"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_toLeftOf="@id/done_button"
-                    android:layout_centerVertical="true"
-                    android:background="@mipmap/button_analysis"
-                    android:textAllCaps="false"
-                    android:layout_margin="8dp"/>
-
-                <ImageButton
                     android:id="@+id/done_button"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

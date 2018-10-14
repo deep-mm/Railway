@@ -48,6 +48,7 @@ public class FilterActivity extends AppCompatActivity {
     private List<Boolean> status_list,type_list;
     private Intent intent;
     private Date startDate,endDate;
+    private CheckBox checkBox;
 
     public static final String DATES = "dates";
     public static final String OPTIONS = "options";
@@ -73,11 +74,20 @@ public class FilterActivity extends AppCompatActivity {
                 problemTypeOption.setVisibility(View.GONE);
             }
             else{
+                dateOption.setVisibility(View.GONE);
+                //dateOption.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 problemStatusOption.setVisibility(View.GONE);
+                problemTypeOption.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                Toast.makeText(getApplicationContext(),"Select a maximum of 4 sub-types",Toast.LENGTH_LONG).show();
+                showSubOptions();
             }
         }
         else{
+            dateOption.setVisibility(View.GONE);
             problemStatusOption.setVisibility(View.GONE);
+            problemTypeOption.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            Toast.makeText(getApplicationContext(),"Select a maximum of 4 sub-types",Toast.LENGTH_LONG).show();
+            showSubOptions();
         }
 
         dateOption.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +146,14 @@ public class FilterActivity extends AppCompatActivity {
                     FilterActivity.super.onBackPressed();
                 }
                 else{
-                    intent = new Intent(getApplicationContext(),AnalysisActivity.class);
-                    startActivity(intent);
-                }
+                        if(getTotalChecked()<=4){
+                            intent = new Intent(getApplicationContext(),AnalysisActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Only a maximum of 4 sub-types can be selected",Toast.LENGTH_LONG).show();
+                        }
+                    }
 
             }
         });
@@ -188,7 +203,6 @@ public class FilterActivity extends AppCompatActivity {
         final String options[] = {"Toilets", "Coach Interior Amenities", "Coach Interior Cleanliness", "Coach Exterior",
                 "Undergear", "Electricals", "Windows", "Others"};
 
-        CheckBox checkBox;
         for (int i = 0; i < options.length; i++) {
             TableRow row = new TableRow(this);
             TableLayout.LayoutParams tableRowParams=
@@ -212,13 +226,23 @@ public class FilterActivity extends AppCompatActivity {
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    int index = compoundButton.getId();
-                    type_list.set(index,b);
+                        int index = compoundButton.getId();
+                        type_list.set(index, b);
                 }
             });
 
 
         }
+    }
+
+    private Integer getTotalChecked(){
+
+        int count=0;
+        for(int i=0;i<type_list.size();i++){
+            if(type_list.get(i))
+                count++;
+        }
+        return count;
     }
 
     private void showDateFilter() {

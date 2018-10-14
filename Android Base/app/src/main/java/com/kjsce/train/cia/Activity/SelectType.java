@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
+
 public class SelectType extends AppCompatActivity {
 
     private SharedData sharedData;
@@ -34,6 +37,8 @@ public class SelectType extends AppCompatActivity {
     private List<Boolean> statusList, typeList;
     private List<String> dateList;
     private ArrayList<IndexEntryEntity> indexEntryEntities;
+    private ImageButton analysisButton;
+    private List<Boolean> firstTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +70,18 @@ public class SelectType extends AppCompatActivity {
             }
         });
 
-        //Testing area
-        /*try {
-            AnalysisUtility analysisUtility = new AnalysisUtility();
-            analysisUtility.getBogeyAnalysis(sharedData.getBogie(), new GetBogeyAnalysisListener() {
-                @Override
-                public void onCompleteTask(BogeyAnalysisEntity bogeyAnalysisEntity) {
-                    System.out.println("Testing 123: bogey check \n" + bogeyAnalysisEntity);
-                }
-            });
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }*/
+        analysisButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    if (checkInternetConnection()) {
+                        Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+                        intent.putExtra("from", "Analysis");
+                        startActivity(intent);
+                    } else {
+                        //Toast.makeText(getApplicationContext(), "Active Internet Connection Required for Analysis", Toast.LENGTH_LONG).show();
+                    }
+            }
+        });
     }
 
     public void initialize(){
@@ -85,6 +89,8 @@ public class SelectType extends AppCompatActivity {
         helper = new Helper(getApplicationContext());
         backButton = (ImageButton) findViewById(R.id.back_button);
         type_list = new ArrayList<String>();
+        analysisButton = (ImageButton) findViewById(R.id.button_analysis);
+        firstTime = sharedData.getFirstTime();
 
         statusList = Arrays.asList(false,true);
         typeList = Arrays.asList(false,false,false,false,false,false,false,false);
@@ -95,6 +101,17 @@ public class SelectType extends AppCompatActivity {
         sharedData.setTypeCheckedList(typeList);
         sharedData.setStatusCheckedList(statusList);
         sharedData.setIndexEntryEntities(indexEntryEntities);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        /*firstTime = sharedData.getFirstTime();
+        if(firstTime.get(3)) {
+            sequence();
+            firstTime.set(3, false);
+            sharedData.setFirstTime(firstTime);
+        }*/
     }
 
     @Override
@@ -117,6 +134,54 @@ public class SelectType extends AppCompatActivity {
                     }
                 })
                 .canceledOnTouchOutside(false)
+                .show();
+    }
+
+    public boolean checkInternetConnection(){
+        if(!helper.isInternetConnected()){
+            new MaterialDialog.Builder(SelectType.this)
+                    .title("No Internet Connection")
+                    .content("You need active internet connection")
+                    .positiveText("Retry")
+                    .negativeText("Exit")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            checkInternetConnection();
+                        }
+                    })
+                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(MaterialDialog dialog, DialogAction which) {
+                            //Nothing
+                        }
+                    })
+                    .canceledOnTouchOutside(false)
+                    .cancelable(false)
+                    .show();
+        }
+        else{
+            return true;
+        }
+        return false;
+    }
+
+    public void sequence() {
+        new MaterialTapTargetPrompt.Builder(SelectType.this)
+                .setTarget(findViewById(R.id.button_analysis))
+                .setPrimaryText("Coach Analysis")
+                .setSecondaryText("Click on this to get a detailed graphical analysis of the coach")
+                .setPromptStateChangeListener(new MaterialTapTargetPrompt.PromptStateChangeListener()
+                {
+                    @Override
+                    public void onPromptStateChanged(MaterialTapTargetPrompt prompt, int state)
+                    {
+                        if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED)
+                        {
+                            // User has pressed the prompt target
+                        }
+                    }
+                })
                 .show();
     }
 }

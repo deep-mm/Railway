@@ -159,6 +159,7 @@ public class CardDetails extends AppCompatActivity {
 
                     CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
                     cardEntityToUploads.add(cardEntityToUpload);
+                    System.out.println("CardEntityUpload: "+cardEntityToUploads);
                     sharedData.setCardEntityList(cardEntityToUploads);
                     if(!helper.isInternetConnected()) {
                         cardEntities.add(cardEntity);
@@ -446,6 +447,7 @@ public class CardDetails extends AppCompatActivity {
 
                             CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
                             cardEntityToUploads.add(cardEntityToUpload);
+                            System.out.println("CardEntityUpload: "+cardEntityToUploads);
                             sharedData.setCardEntityList(cardEntityToUploads);
                             if(!helper.isInternetConnected()) {
                                 cardEntities.add(cardEntity);
@@ -468,8 +470,8 @@ public class CardDetails extends AppCompatActivity {
                                 cardEntityToUploads = new ArrayList<CardEntityToUpload>();
 
                             CardEntityToUpload cardEntityToUpload = new CardEntityToUpload(cardEntityToUploads.size(),cardEntity,bogeyNumber,problem,id,subTypeSelected,false);
-
                             cardEntityToUploads.add(cardEntityToUpload);
+                            System.out.println("CardEntityUpload: "+cardEntityToUploads);
                             sharedData.setCardEntityList(cardEntityToUploads);
                             if(!helper.isInternetConnected()) {
                                 cardEntities.add(cardEntity);
