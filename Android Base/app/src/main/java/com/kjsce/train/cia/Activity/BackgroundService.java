@@ -161,7 +161,7 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
         };
 
         handler.postDelayed(runnable, 3000);
-        uploadCards();
+        //uploadCards();
         return START_STICKY;
     }
 
@@ -197,6 +197,12 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
                         }
                     }
                 });
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // Actions to do after 10 seconds
+                    }
+                }, 5000);
         }
     }
 
