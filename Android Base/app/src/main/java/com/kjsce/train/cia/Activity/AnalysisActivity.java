@@ -39,7 +39,7 @@ public class AnalysisActivity extends AppCompatActivity {
     private List<String> dateList;
     //private TrainUtility trainUtility;
     private List<String> coach_list;
-    private List<String> type_list;
+    private List<String> type_list,short_type_list;
     private IdUtility idUtility;
     private List<IndexEntryEntity> indexEntryEntities;
     private List<Integer> totalProblems;
@@ -86,7 +86,7 @@ public class AnalysisActivity extends AppCompatActivity {
         int i;
         for(i=0;i<type_list.size();i++){
             if(typeChecked.get(i)) {
-                StackedBarModel s = new StackedBarModel(type_list.get(i));
+                StackedBarModel s = new StackedBarModel(short_type_list.get(i));
                 AnalysisEntity ae = analysisEntityMap.get(type_list.get(i));
                 float solved;
                 float unsolved;
@@ -109,7 +109,7 @@ public class AnalysisActivity extends AppCompatActivity {
         //Solved Problems
         for(i=0;i<type_list.size();i++){
             if(typeChecked.get(i)) {
-                StackedBarModel s = new StackedBarModel(type_list.get(i));
+                StackedBarModel s = new StackedBarModel(short_type_list.get(i));
                 AnalysisEntity ae = analysisEntityMap.get(type_list.get(i));
                 float low,medium,high;
                 if(ae==null){
@@ -121,9 +121,9 @@ public class AnalysisActivity extends AppCompatActivity {
                     medium = (float) ae.getMediumProblems();
                     high = (float) ae.getCriticalProblems();
                 }
-                s.addBar(new BarModel(low, R.color.colorWhite));
-                s.addBar(new BarModel(medium, R.color.warningYellow));
-                s.addBar(new BarModel(high, R.color.errorRed));
+                s.addBar(new BarModel(low, 0xFF000000));
+                s.addBar(new BarModel(medium, 0xFFFFFB60));
+                s.addBar(new BarModel(high, 0xFFFFA8B2));
                 mStackedBarChartSolved.addBar(s);
                 stackedBarModels.add(s);
             }
@@ -155,5 +155,15 @@ public class AnalysisActivity extends AppCompatActivity {
         type_list.add("Electricals");
         type_list.add("Windows");
         type_list.add("Others");
+
+        short_type_list = new ArrayList<String>();
+        short_type_list.add("Toilets");
+        short_type_list.add("Coach Amenities");
+        short_type_list.add("Coach Cleanliness");
+        short_type_list.add("Coach Exterior");
+        short_type_list.add("Undergear");
+        short_type_list.add("Electricals");
+        short_type_list.add("Windows");
+        short_type_list.add("Others");
     }
 }

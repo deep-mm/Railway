@@ -146,12 +146,12 @@ public class FilterActivity extends AppCompatActivity {
                     FilterActivity.super.onBackPressed();
                 }
                 else{
-                        if(getTotalChecked()<=4){
+                        if(getTotalChecked()<=3){
                             intent = new Intent(getApplicationContext(),AnalysisActivity.class);
                             startActivity(intent);
                         }
                         else{
-                            Toast.makeText(getApplicationContext(),"Only a maximum of 4 sub-types can be selected",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),"Only a maximum of 3 sub-types can be selected",Toast.LENGTH_LONG).show();
                         }
                     }
 

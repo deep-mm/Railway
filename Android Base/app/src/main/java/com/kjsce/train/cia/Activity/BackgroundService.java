@@ -197,12 +197,7 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
                         }
                     }
                 });
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        // Actions to do after 10 seconds
-                    }
-                }, 5000);
+
         }
     }
 
