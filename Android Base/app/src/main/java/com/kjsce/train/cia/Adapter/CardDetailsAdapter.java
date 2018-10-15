@@ -96,6 +96,7 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.image_left.setVisibility(View.VISIBLE);
                 holder.text_left.setVisibility(View.GONE);
 
+                System.out.println("mmmmm: "+cardEntity.getImage().get(0));
                 Picasso.with(context).load(cardEntity.getImage().get(0)).into(holder.image_left);
             }
 

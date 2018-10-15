@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.PointF;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
@@ -57,6 +59,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder;
@@ -77,7 +80,8 @@ public class CardDetails extends AppCompatActivity {
     private String audioFilePath, imageFilePath, text, subTypeSelected, subType, timeStamp;
     private String userName,trainNumber,placeOfInspection,bogeyNumber,problem, id;
     private List<String> audio,image;
-    private Uri filePath;
+    private Uri filePath,uriFilePath;
+    private String camera_name;
     private Boolean flag;
     private final int PICK_IMAGE_REQUEST = 10;
     private final int CAMERA = 100;
@@ -408,17 +412,31 @@ public class CardDetails extends AppCompatActivity {
             }
         }
         else if (requestCode == CAMERA && resultCode == RESULT_OK) {
-            System.out.println("Where: In ELse if");
+            Bitmap mBitmap = null;
+            uriFilePath = Uri.parse(sharedData.getUriFilePath());
+            try {
+                System.out.println("nnnnn: "+uriFilePath.toString());
+                mBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriFilePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("nnnnn: "+e);
+            }
+
+            imageFilePath = saveImage(mBitmap);
+            File mainDirectory=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/RailwayCIA/");
+            helper.deleteRecursive(mainDirectory);
+            getInputName("image");
+            /*System.out.println("Where: In ELse if");
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             imageFilePath = saveImage(thumbnail);
-            /*Uri tempUri = getImageUri(getApplicationContext(), thumbnail);
+            *//*Uri tempUri = getImageUri(getApplicationContext(), thumbnail);
 
             // CALL THIS METHOD TO GET THE ACTUAL PATH
             File finalFile = new File(getRealPathFromURI(tempUri));
-            finalFile.delete();*/
+            finalFile.delete();*//*
             getApplicationContext().getContentResolver().delete(data.getData(), null, null);
             getInputName("image");
-            System.out.println("File Path: "+imageFilePath);
+            System.out.println("File Path: "+imageFilePath);*/
         }
 
         else{
@@ -439,8 +457,10 @@ public class CardDetails extends AppCompatActivity {
                         text = input.toString();
                         if(flag.equalsIgnoreCase("image")){
                             timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                            image.clear();
                             image.add(imageFilePath);
                             CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,image,null,text);
+                            System.out.println("CardEntityMade: "+cardEntity);
                             cardEntityToUploads = sharedData.getCardEntityList();
                             if(cardEntityToUploads==null)
                                 cardEntityToUploads = new ArrayList<CardEntityToUpload>();
@@ -463,8 +483,10 @@ public class CardDetails extends AppCompatActivity {
                         }
                         else{
                             timeStamp = new java.text.SimpleDateFormat("yyyyMMdd_HHmmss").format(new java.util.Date());
+                            audio.clear();
                             audio.add(audioFilePath);
                             CardEntity cardEntity = new CardEntity(timeStamp,userName,trainNumber,placeOfInspection,null,audio,text);
+                            System.out.println("CardEntityMade: "+cardEntity);
                             cardEntityToUploads = sharedData.getCardEntityList();
                             if(cardEntityToUploads==null)
                                 cardEntityToUploads = new ArrayList<CardEntityToUpload>();
@@ -554,8 +576,23 @@ public class CardDetails extends AppCompatActivity {
 
     }
 
-    private void takePhotoFromCamera() {
+   /* private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA);
+    }*/
+
+    public void takePhotoFromCamera(){
+        File mainDirectory=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/RailwayCIA/");
+        if (!mainDirectory.exists())
+            mainDirectory.mkdirs();
+
+        Calendar calendar = Calendar.getInstance();
+
+        camera_name = "IMG_" + calendar.getTimeInMillis()+".jpg";
+        uriFilePath = Uri.fromFile(new File(mainDirectory, camera_name));
+        sharedData.setUriFilePath(uriFilePath.toString());
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFilePath);
         startActivityForResult(intent, CAMERA);
     }
 
@@ -677,6 +714,13 @@ public class CardDetails extends AppCompatActivity {
     public void onPause(){
         super.onPause();
         //sharedData.setCardEntityToUpload(cardEntities);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (uriFilePath != null)
+            outState.putString("uri_file_path", uriFilePath.toString());
+        super.onSaveInstanceState(outState);
     }
 
     public void checkInternetConnection(){

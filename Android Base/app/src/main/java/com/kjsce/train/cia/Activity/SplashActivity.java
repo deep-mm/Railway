@@ -3,6 +3,7 @@ package com.kjsce.train.cia.Activity;
 import android.app.ActivityManager;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
@@ -26,6 +27,7 @@ import com.kjsce.train.cia.Utilities.TrainListUtility;
 import com.kjsce.train.cia.Utilities.TrainUtility;
 import com.kjsce.train.cia.Utilities.UserUtility;
 
+import java.io.File;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
@@ -59,6 +61,11 @@ public class SplashActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
+                    /*if(sharedData.getCardEntityList().size()==0){
+                        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+                        File myDir=contextWrapper.getFilesDir();
+                        helper.deleteRecursive(myDir);
+                    }*/
                     checkLoggedIn();
                 }
 

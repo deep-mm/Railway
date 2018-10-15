@@ -57,6 +57,7 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
     private List<CardEntityToUpload> cardEntityToUploads;
     private Helper helper;
     private static int i,x;
+    private static boolean uploadStarted = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -169,25 +170,33 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
         if(cardEntityToUploads==null)
             cardEntityToUploads = new ArrayList<CardEntityToUpload>();
 
-        for(i=0;i<cardEntityToUploads.size() && helper.isInternetConnected();i++) {
+        System.out.println("Number of entities to upload: " + cardEntityToUploads.size());
 
-            CardEntityToUpload cardEntityToUpload = cardEntityToUploads.get(i);
-            cardUtility.uploadCard(cardEntityToUpload.getCardEntity(), new CardReferenceEntity(cardEntityToUpload.getBogeyNumber(),
-                    cardEntityToUpload.getProblem(), cardEntityToUpload.getId(), cardEntityToUpload.getProblemStatus(), cardEntityToUpload.getSubTypeSelected()), new AddCardListner() {
-                @Override
-                public void onCompleteTask(CardEntity cardEntity) {
-                    try {
-                        List<CardEntityToUpload> list = sharedData.getCardEntityList();
-                        System.out.println("deleted:" +cardEntity);
-                        list.remove(getIndex(cardEntity, list));
-                        sharedData.setCardEntityList(list);
-                        //TODO: How to find if completed and the only upload other
+            for (i = 0; i < cardEntityToUploads.size() && helper.isInternetConnected(); i++) {
+                CardEntityToUpload cardEntityToUpload = cardEntityToUploads.get(i);
+                System.out.println("UploadingCard:" + cardEntityToUpload.getCardEntity());
+                cardUtility.uploadCard(cardEntityToUpload.getCardEntity(), new CardReferenceEntity(cardEntityToUpload.getBogeyNumber(),
+                        cardEntityToUpload.getProblem(), cardEntityToUpload.getId(), cardEntityToUpload.getProblemStatus(), cardEntityToUpload.getSubTypeSelected()), new AddCardListner() {
+                    @Override
+                    public void onCompleteTask(CardEntity cardEntity) {
+                        try {
+                            List<CardEntityToUpload> list = sharedData.getCardEntityList();
+                            System.out.println("deletedUploadedCard:" + cardEntity);
+                            int index = getIndex(cardEntity, list);
+                            if(index==999) {
+                                //Nothing
+                            }
+                            else{
+                                System.out.println("RemovedUploadedCard:" + list.get(index).getCardEntity());
+                                list.remove(index);
+                            }
+                            sharedData.setCardEntityList(list);
+                            //TODO: How to find if completed and the only upload other
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
+                });
         }
     }
 
@@ -199,7 +208,7 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
             if(cardEntity.getDateTime().equals(c.getCardEntity().getDateTime()))
                 return j;
         }
-        return 0;
+        return 999;
     }
 
 

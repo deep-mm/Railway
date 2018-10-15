@@ -2,6 +2,7 @@ package com.kjsce.train.cia.Activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -298,6 +299,15 @@ public class SharedData {
         Type listType = new TypeToken<List<CardEntityToUpload>>() {}.getType();
         List<CardEntityToUpload> type_list = gson.fromJson(json, listType);
         return type_list;
+    }
+
+    public String getUriFilePath(){
+        String json = pref.getString("UriFilePath", "");
+        return json;
+    }
+
+    public void setUriFilePath(String uriFilePath){
+        editor.putString("UriFilePath",uriFilePath).commit();
     }
 
 

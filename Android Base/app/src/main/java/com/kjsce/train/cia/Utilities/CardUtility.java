@@ -226,6 +226,7 @@ public class CardUtility
 
     }
 
+
     public void removeCard(CardEntity cardEntity,CardReferenceEntity cardReferenceEntity){
         removeIdIndex(cardReferenceEntity);
         createReference(cardEntity,cardReferenceEntity);
