@@ -218,7 +218,6 @@ public class CardUtility
                     public void onCompleteTask(List<String> audioS) {
                         createReference(cardEntity,cardReferenceEntity);
                         cardEntity.setAudio(audioS);
-                        System.out.println("AudioUploaded: "+audioS.get(0));
                         mTrainDatabaseReference.setValue(cardEntity);
                         listner.onCompleteTask(cardEntity);
                     }

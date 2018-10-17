@@ -157,15 +157,12 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {
-                if(!uploadStarted){
-                    uploadStarted = true;
-                    uploadCards();
-                }
-                handler.postDelayed(runnable, 3000);
+                uploadCards();
+                handler.postDelayed(runnable, 2000);
             }
         };
 
-        handler.postDelayed(runnable, 3000);
+        handler.postDelayed(runnable, 2000);
         //uploadCards();
         return START_STICKY;
     }
@@ -178,7 +175,6 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
         System.out.println("Number of entities to upload: " + cardEntityToUploads.size());
 
             for (i = 0; i < cardEntityToUploads.size() && helper.isInternetConnected(); i++) {
-                cardEntityToUploads = sharedData.getCardEntityList();
                 CardEntityToUpload cardEntityToUpload = cardEntityToUploads.get(i);
                 System.out.println("UploadingCard:" + cardEntityToUpload.getCardEntity());
                 cardUtility.uploadCard(cardEntityToUpload.getCardEntity(), new CardReferenceEntity(cardEntityToUpload.getBogeyNumber(),
@@ -186,7 +182,6 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
                     @Override
                     public void onCompleteTask(CardEntity cardEntity) {
                         try {
-                            count++;
                             List<CardEntityToUpload> list = sharedData.getCardEntityList();
                             System.out.println("deletedUploadedCard:" + cardEntity);
                             int index = getIndex(cardEntity, cardEntityToUploads);
@@ -195,16 +190,10 @@ public class BackgroundService extends Service implements NetworkStateReceiver.N
                             }
                             else{
                                 System.out.println("RemovedUploadedCard:" + cardEntityToUploads.get(index).getCardEntity());
-                                cardEntityToUploads.remove(index);
                                 list.remove(index);
                                 sharedData.setCardEntityList(list);
                             }
                             //TODO: How to find if completed and the only upload other
-
-                            if(count == cardEntityToUploads.size() - 1) {
-                                count=0;
-                                uploadStarted = false;
-                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
