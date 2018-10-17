@@ -56,6 +56,12 @@ public class AnalysisActivity extends AppCompatActivity {
 
         initialize();
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         AnalysisUtility analysisUtility = new AnalysisUtility();
         analysisUtility.getBogeyAnalysis(coach, new GetBogeyAnalysisListener() {
             @Override
@@ -165,5 +171,10 @@ public class AnalysisActivity extends AppCompatActivity {
         short_type_list.add("Electricals");
         short_type_list.add("Windows");
         short_type_list.add("Others");
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
     }
 }

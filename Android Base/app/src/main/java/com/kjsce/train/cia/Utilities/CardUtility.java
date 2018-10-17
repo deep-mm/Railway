@@ -208,7 +208,7 @@ public class CardUtility
 
     public void uploadCard(final CardEntity cardEntity, final CardReferenceEntity cardReferenceEntity, AddCardListner listner){
         createIdIndex(cardReferenceEntity);
-        createReference(cardEntity,cardReferenceEntity);
+
         imageUtility.uploadImage(cardEntity.getImage(), cardReferenceEntity.getBogeyNumber(), new AddImageListener() {
             @Override
             public void onCompleteTask(List<String> imageS) {
@@ -216,7 +216,9 @@ public class CardUtility
                 audioUtility.uploadAudio(cardEntity.getAudio(), cardReferenceEntity.getBogeyNumber(), new AddAudioListener() {
                     @Override
                     public void onCompleteTask(List<String> audioS) {
+                        createReference(cardEntity,cardReferenceEntity);
                         cardEntity.setAudio(audioS);
+                        System.out.println("AudioUploaded: "+audioS.get(0));
                         mTrainDatabaseReference.setValue(cardEntity);
                         listner.onCompleteTask(cardEntity);
                     }

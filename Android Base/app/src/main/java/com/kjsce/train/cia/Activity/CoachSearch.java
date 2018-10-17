@@ -153,7 +153,8 @@ public class CoachSearch extends AppCompatActivity implements SearchView.OnQuery
                 coach_list = newTrainEntity.getBogeyList();
                 System.out.println("SEtting: "+coach_list);
                 sharedData.setCoachList(coach_list);
-                coach_list.add("General");
+                String[] train = sharedData.getTrain().split("\\s");
+                coach_list.add("General-"+train[0]);
                 allCoaches = coach_list;
                 coachAdapter = new CoachAdapter(coach_list, CoachSearch.this, "coach");
                 System.out.println("SEtting: "+coach_list);

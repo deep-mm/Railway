@@ -78,7 +78,7 @@ public class FilterActivity extends AppCompatActivity {
                 //dateOption.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 problemStatusOption.setVisibility(View.GONE);
                 problemTypeOption.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                Toast.makeText(getApplicationContext(),"Select a maximum of 4 sub-types",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Select a maximum of 3 sub-types",Toast.LENGTH_LONG).show();
                 showSubOptions();
             }
         }
@@ -86,7 +86,7 @@ public class FilterActivity extends AppCompatActivity {
             dateOption.setVisibility(View.GONE);
             problemStatusOption.setVisibility(View.GONE);
             problemTypeOption.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-            Toast.makeText(getApplicationContext(),"Select a maximum of 4 sub-types",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Select a maximum of 3 sub-types",Toast.LENGTH_LONG).show();
             showSubOptions();
         }
 
