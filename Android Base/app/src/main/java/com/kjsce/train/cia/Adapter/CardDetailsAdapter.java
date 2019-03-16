@@ -97,7 +97,9 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.text_left.setVisibility(View.GONE);
 
                 System.out.println("mmmmm: "+cardEntity.getImage().get(0));
-                Picasso.with(context).load(cardEntity.getImage().get(0)).into(holder.image_left);
+                Picasso.get()
+                        .load(cardEntity.getImage().get(0))
+                        .into(holder.image_left);
             }
 
             else{
@@ -127,7 +129,10 @@ public class CardDetailsAdapter extends RecyclerView.Adapter<com.kjsce.train.cia
                 holder.image_right.setVisibility(View.VISIBLE);
                 holder.text_right.setVisibility(View.GONE);
 
-                Picasso.with(context).load(cardEntity.getImage().get(0)).into(holder.image_right);
+                Picasso.get()
+                        .load(cardEntity.getImage().get(0))
+                        .into(holder.image_right);
+
             }
 
             else{

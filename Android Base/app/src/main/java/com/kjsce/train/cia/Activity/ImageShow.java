@@ -40,7 +40,10 @@ public class ImageShow extends AppCompatActivity {
             title = getIntent().getExtras().getString("title");
         }
 
-        Picasso.with(getApplicationContext()).load(url).into(imageView);
+        Picasso.get()
+                .load(url)
+                .into(imageView);
+
         titleText.setText(title);
 
         backButton.setOnClickListener(new View.OnClickListener() {
