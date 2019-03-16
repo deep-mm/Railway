@@ -14,6 +14,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -589,10 +590,11 @@ public class CardDetails extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
 
         camera_name = "IMG_" + calendar.getTimeInMillis()+".jpg";
-        uriFilePath = Uri.fromFile(new File(mainDirectory, camera_name));
+        uriFilePath = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", new File(mainDirectory, camera_name));
         sharedData.setUriFilePath(uriFilePath.toString());
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFilePath);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, CAMERA);
     }
 

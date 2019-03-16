@@ -103,7 +103,10 @@ public class TrainAdapter extends RecyclerView.Adapter<TrainAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-        return Mvalues.size();
+        if(Mvalues!=null)
+            return Mvalues.size();
+        else
+            return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder

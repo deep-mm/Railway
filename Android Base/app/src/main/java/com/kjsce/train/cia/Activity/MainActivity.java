@@ -104,9 +104,11 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.creport);
 
         userEntity = sharedData.getUserEntity();
-        name.setText(userEntity.getName());
-        designation.setText(userEntity.getDesignation());
-        mobile.setText(userEntity.getMobileNumber());
+        if(userEntity!=null) {
+            name.setText(userEntity.getName());
+            designation.setText(userEntity.getDesignation());
+            mobile.setText(userEntity.getMobileNumber());
+        }
 
         searchView.setOnQueryTextListener(this);
 
@@ -360,10 +362,13 @@ public class MainActivity extends AppCompatActivity
         checkInternetConnection();
         navigationView.setCheckedItem(R.id.creport);
         firstTime = sharedData.getFirstTime();
-        if(firstTime.get(0)) {
-            sequence();
-            firstTime.set(0, false);
-            sharedData.setFirstTime(firstTime);
+
+        if(firstTime!=null) {
+            if (firstTime.get(0)) {
+                sequence();
+                firstTime.set(0, false);
+                sharedData.setFirstTime(firstTime);
+            }
         }
 
         sharedData.setUserEntityList(userEntities);
