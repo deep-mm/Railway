@@ -1,5 +1,5 @@
 # CIA
-Coach Inspection App
+**Coach Inspection App**
 
 **Aim:** Develop a system, that can aid the supervisors and the handyman in getting the inspection and maintenance of the coaches done as swiftly as possible.
 
@@ -9,7 +9,7 @@ This app also lets users get a detailed graphical analysis, of problems in a par
 
 <img src="https://user-images.githubusercontent.com/29853549/119224491-4a99bd80-bb1c-11eb-9f76-b215ad460cbc.png" alt="app screen 1" width="200" height="400"/><img src="https://user-images.githubusercontent.com/29853549/119224496-54bbbc00-bb1c-11eb-90d8-699219ba87d8.png" alt="app screen 2" width="200" height="400"/><img src="https://user-images.githubusercontent.com/29853549/119224512-61d8ab00-bb1c-11eb-8267-156ae47f04fd.png" alt="app screen 3" width="200" height="400"/><img src="https://user-images.githubusercontent.com/29853549/119224522-68672280-bb1c-11eb-9ef0-cd831179bf02.png" alt="app screen 4" width="200" height="400"/><img src="https://user-images.githubusercontent.com/29853549/119224525-6b621300-bb1c-11eb-835c-33ab63e77940.png" alt="app screen 5" width="200" height="400"/>
 
-Tools/Softwares used:
+**Tools/Softwares used:**
 
 Developing the Application: Android (Java + XML)
 
