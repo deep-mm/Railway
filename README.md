@@ -7,6 +7,8 @@ Each coach that comes in for routine maintenance in the terminal, is given a fix
 This App replaces this kind of paper work, by providing an interface whereby, the inspection supervisors can directly capture photos, record audios, and add text to a particular issue. All this data is sorted coach wise thus making it easier for the handyman to track the faults and solve them accordingly and also click pictures as a proof of getting that issue resolved.
 This app also lets users get a detailed graphical analysis, of problems in a particular coach/train over a period of time.
 
+<img src="https://user-images.githubusercontent.com/29853549/119224491-4a99bd80-bb1c-11eb-9f76-b215ad460cbc.png" alt="app screen 1" width="100" height="200"/>
+
 ![App Screen 1](https://user-images.githubusercontent.com/29853549/119224491-4a99bd80-bb1c-11eb-9f76-b215ad460cbc.png)
 
 ![App Screen 2](https://user-images.githubusercontent.com/29853549/119224496-54bbbc00-bb1c-11eb-90d8-699219ba87d8.png)
