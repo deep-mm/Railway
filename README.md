@@ -12,7 +12,11 @@ This app also lets users get a detailed graphical analysis, of problems in a par
 Tools/Softwares used:
 
 Developing the Application: Android (Java + XML)
+
 Database: NoSQL (Firebase Database – Google)
+
 FTP Storage: Firebase Storage – Google
+
 Authentication: Firebase Authentication - Google
+
 Designing the Application: Adobe XD
